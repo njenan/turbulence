@@ -34,4 +34,9 @@ node_modules
 
 .idea
 
+**/*.js
+**/*.js.map
+
 turbulence.iml
+
+typings

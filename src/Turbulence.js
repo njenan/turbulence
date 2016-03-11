@@ -1,33 +1,33 @@
-var TurbulenceTest = require('./TurbulenceTest');
-
-var Turbulence = function (http) {
-    this.http = http;
-    this.tests = [];
-    this.status = {
-        inProgress: false
+"use strict";
+var UserJourney_1 = require("./UserJourney");
+var Turbulence = (function () {
+    function Turbulence(http) {
+        this.journeys = [];
+        this.http = http;
+    }
+    ;
+    Turbulence.prototype.startTest = function () {
+        var userJourney = new UserJourney_1.UserJourney(this);
+        this.journeys.push(userJourney);
+        return userJourney;
     };
-};
-
-Turbulence.prototype.startTest = function () {
-    var test = new TurbulenceTest(this);
-    this.tests.push(test);
-    return test;
-};
-
-Turbulence.prototype.run = function () {
-    var self = this;
-
-    this.status.inProgress = true;
-    this.tests.forEach(function (test) {
-        self.http
-            .get(test.url)
-            .then(function (data) {
-
-            })
-            .catch(function (err) {
-
+    Turbulence.prototype.run = function (cb) {
+        this.journeys
+            .reduce(function (lastPromise, nextJourney) {
+            return lastPromise.then(function (result) {
+                return nextJourney.run(result);
             });
-    });
-};
-
-module.exports = Turbulence;
+        }, this.journeys.pop().run())
+            .then(function (result) {
+            cb(result);
+        })
+            .catch(function (err) {
+            console.error(err);
+        });
+        /*this.journeys.pop().run().then(function (result) {
+         cb(result)
+         });*/
+    };
+    return Turbulence;
+}());
+exports.Turbulence = Turbulence;
