@@ -31,9 +31,5 @@ export class Turbulence {
             .catch(function (err) {
                 console.error(err);
             });
-
-        /*this.journeys.pop().run().then(function (result) {
-         cb(result)
-         });*/
     }
 }

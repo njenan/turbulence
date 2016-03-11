@@ -199,5 +199,34 @@ describe('Turbulence', function () {
                     done();
                 });
         });
+
+        xit('should allow multiple steps in a test', function (done) {
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                alpha: 'first'
+            }));
+            http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse({
+                alpha: 'second'
+            }));
+
+            turbulence
+                .startTest()
+                .get('http://localhost:8080/url1')
+                .assertResponse(function (resp) {
+                    return resp.body.alpha === 'first';
+                })
+                .get('http://localhost:8080/url2')
+                .assertResponse(function (resp) {
+                    return resp.body.alpha === 'first';
+                })
+                .endTest()
+
+                .run(function (results) {
+                    assert.equal(1, results.errors);
+                    done();
+                });
+
+        });
+
     });
+
 });

@@ -34,8 +34,8 @@ node_modules
 
 .idea
 
-**/*.js
-**/*.js.map
+src/**/*.js
+src/**/*.js.map
 
 turbulence.iml
 
