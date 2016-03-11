@@ -1,6 +1,7 @@
 import {HttpClient} from './HttpClient';
 import {HttpResponse} from "./HttpResponse";
 import {UserJourney} from "./UserJourney";
+import {SummaryResults} from "./SummaryResults";
 
 export class Turbulence {
     http:HttpClient;
@@ -24,7 +25,7 @@ export class Turbulence {
                 return lastPromise.then(function (result) {
                     return nextJourney.run(result);
                 });
-            }, this.journeys.pop().run())
+            }, this.journeys.pop().run(new SummaryResults()))
             .then(function (result) {
                 cb(result);
             })

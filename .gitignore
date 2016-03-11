@@ -40,3 +40,5 @@ src/**/*.js.map
 turbulence.iml
 
 typings
+
+output.log

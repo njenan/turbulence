@@ -1,71 +1,73 @@
-import Q = require('q');
-
 import {Turbulence} from "./Turbulence";
 import {HttpResponse} from "./HttpResponse";
 import {HttpClient} from "./HttpClient";
+import {JourneyStep} from "./JourneyStep";
+import {SummaryResults} from "./SummaryResults";
+import {ExecutionState} from "./ExecutionState";
 
 export class UserJourney {
     parent:Turbulence;
-    url:String;
-    predicates:Array<(resp:HttpResponse) => boolean>;
-    expectedStatusCode:Number;
+    steps:Array<JourneyStep>;
     http:HttpClient;
 
     constructor(parent) {
         this.parent = parent;
         this.http = parent.http;
-        this.predicates = [];
+        this.steps = [];
     }
 
     get(url) {
-        this.url = url;
-        return this;
-    }
+        var journeyStep = new JourneyStep(this, url);
+        this.steps.unshift(journeyStep);
 
-    assertResponse(predicate) {
-        this.predicates.push(predicate);
-        return this;
-    }
-
-    expectStatus(code) {
-        this.expectedStatusCode = code;
-        return this;
+        return journeyStep;
     }
 
     endTest() {
         return this.parent;
     }
 
-    run(lastResult?) {
+    run(results:SummaryResults):Q.Promise<SummaryResults> {
         var self = this;
 
-        if (!lastResult) {
-            lastResult = {
-                errors: 0
-            };
+        var firstStep = self.steps.pop();
+
+        return self.steps.reduce(function (promise:Q.Promise<ExecutionState>, nextStep:JourneyStep) {
+                return promise
+                    .then(function (resp) {
+                        return resp.resp
+                    })
+                    .then(function (resp) {
+                        return new ExecutionState(resp, nextStep, results);
+                    })
+                    .then(self.validateResult);
+            },
+            this.http.get(firstStep.url)
+                .then(function (resp:HttpResponse) {
+                    return new ExecutionState(resp, firstStep, results);
+                })
+                .then(self.validateResult))
+            .then(function (state) {
+                return state.result;
+            });
+    }
+
+    validateResult(resp:ExecutionState):ExecutionState {
+        if (resp.resp.statusCode > 399 && resp.resp.statusCode !== resp.step.expectedStatusCode) {
+            ++resp.result.errors;
         }
 
-        return self.http.get(self.url).then(function (resp) {
-            if (resp.statusCode > 399 && resp.statusCode !== self.expectedStatusCode) {
-                lastResult.errors = 1;
-            }
+        if (resp.step.predicates.length > 0) {
+            resp.result.errors = resp.step.predicates.reduce(function (last, next) {
+                if (!next(resp.resp)) {
+                    ++last;
+                }
 
-            if (self.predicates.length > 0) {
-                lastResult.errors = self.predicates.reduce(function (last, next) {
-                    if (!next(resp)) {
-                        last++;
-                    }
+                return last;
+            }, resp.result.errors);
+        }
 
-                    return last;
-                }, lastResult.errors);
-            }
+        return resp;
 
-            return {
-                errors: lastResult.errors
-            };
-        }).catch(function (err) {
-            console.error(err);
-            throw err;
-        });
     }
 }

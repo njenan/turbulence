@@ -200,11 +200,14 @@ describe('Turbulence', function () {
                 });
         });
 
-        xit('should allow multiple steps in a test', function (done) {
+        it('should allow multiple steps in a test', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
-                alpha: 'first'
+                alpha: 'second'
             }));
             http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse({
+                alpha: 'second'
+            }));
+            http.whenGet('http://localhost:8080/url3').thenReturn(new HttpResponse({
                 alpha: 'second'
             }));
 
@@ -218,10 +221,14 @@ describe('Turbulence', function () {
                 .assertResponse(function (resp) {
                     return resp.body.alpha === 'first';
                 })
+                .get('http://localhost:8080/url3')
+                .assertResponse(function (resp) {
+                    return resp.body.alpha === 'second';
+                })
                 .endTest()
 
                 .run(function (results) {
-                    assert.equal(1, results.errors);
+                    assert.equal(2, results.errors);
                     done();
                 });
 
