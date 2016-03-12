@@ -8,14 +8,15 @@ import {StubHttp} from './StubHttp';
 import {HttpResponse} from "../HttpResponse";
 
 describe('Turbulence', function () {
-    describe('Start Test', function () {
-        var turbulence;
-        var http;
+    var turbulence;
+    var http;
 
-        beforeEach(function () {
-            http = new StubHttp();
-            turbulence = new Turbulence(http);
-        });
+    beforeEach(function () {
+        http = new StubHttp();
+        turbulence = new Turbulence(http);
+    });
+
+    describe('Running Tests', function () {
 
         it('should allow a http get request to be defined', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
@@ -202,20 +203,20 @@ describe('Turbulence', function () {
 
         it('should allow multiple steps in a test', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
-                alpha: 'second'
+                alpha: 'first'
             }));
             http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse({
                 alpha: 'second'
             }));
             http.whenGet('http://localhost:8080/url3').thenReturn(new HttpResponse({
-                alpha: 'second'
+                alpha: 'first'
             }));
 
             turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .assertResponse(function (resp) {
-                    return resp.body.alpha === 'first';
+                    return resp.body.alpha === 'second';
                 })
                 .get('http://localhost:8080/url2')
                 .assertResponse(function (resp) {
@@ -223,7 +224,7 @@ describe('Turbulence', function () {
                 })
                 .get('http://localhost:8080/url3')
                 .assertResponse(function (resp) {
-                    return resp.body.alpha === 'second';
+                    return resp.body.alpha === 'first';
                 })
                 .endTest()
 
@@ -235,5 +236,99 @@ describe('Turbulence', function () {
         });
 
     });
+    xdescribe('Http options', function () {
+        it('should allow get requests', function () {
 
+        });
+
+        it('should allow post requests', function () {
+
+        });
+
+        it('should allow put requests', function () {
+
+        });
+
+        it('should allow head requests', function () {
+
+        });
+
+        it('should allow delete requests', function () {
+
+        });
+    });
+
+    xdescribe('Assertions', function () {
+
+    });
+
+    describe('Control flow', function () {
+        it('should allow pauses', function (done) {
+            var start = new Date().getTime();
+
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse());
+
+            turbulence
+                .startTest()
+                .get('http://localhost:8080/url1')
+                .pause(50)
+                .get('http://localhost:8080/url1')
+                .endTest()
+                .run(function () {
+                    var duration = new Date().getTime() - start;
+                    assert(duration > 50, 'test finished too quickly');
+                    assert(duration < 100, 'test took too long');
+
+                    done();
+                });
+        });
+
+        xit('should allow loops', function (done) {
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                alpha: 'first'
+            }, new HttpResponse({
+                alpha: 'second'
+            })));
+
+            turbulence
+                //.loop()
+                .startTest()
+                .get('http://localhost:8080/url1')
+                .assertResponse(function (resp) {
+                    return resp.body.alpha === 'first';
+                })
+                .endTest()
+                //.endLoop()
+                .run(function (results) {
+                    //assert.equal(1, results.errors);
+                    done();
+                });
+        })
+    });
+
+    describe('Reporting', function () {
+        it('should report a single http request result', function (done) {
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                key: 'value'
+            }));
+
+            turbulence
+                .startTest()
+                .get('http://localhost:8080/url1')
+                .endTest()
+                .run(function (results) {
+                    var request = results.requests.pop();
+                    assert.equal('GET', request.type);
+                    assert.equal('http://localhost:8080/url1', request.url);
+                    assert.equal(200, request.status);
+                    assert.equal(false, request.error);
+                    assert(request.duration > 0, 'duration should be greater than 0');
+                    done();
+                });
+        });
+    });
+
+    xdescribe('Distributed Testing', function () {
+
+    });
 });

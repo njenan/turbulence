@@ -1,15 +1,18 @@
 import {UserJourney} from "./UserJourney";
 import {HttpResponse} from "./HttpResponse";
+import {Step} from "./Step";
 
-export class JourneyStep {
+export class HttpGetStep implements Step {
     parent:UserJourney;
     url:String;
     predicates:Array<(resp:HttpResponse) => boolean>;
     expectedStatusCode:Number;
+    type:String;
 
-    constructor(parent, url) {
+    constructor(parent, url, type) {
         this.parent = parent;
         this.url = url;
+        this.type = type;
         this.predicates = [];
         this.expectedStatusCode = 200;
     }
@@ -30,5 +33,13 @@ export class JourneyStep {
 
     endTest() {
         return this.parent.endTest();
+    }
+
+    pause(milliseconds:Number) {
+        return this.parent.pause(milliseconds);
+    }
+
+    execute() {
+        return this.parent.http.get(this.url)
     }
 }

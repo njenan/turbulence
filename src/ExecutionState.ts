@@ -1,5 +1,5 @@
 import {HttpResponse} from "./HttpResponse";
-import {JourneyStep} from "./JourneyStep";
+import {HttpGetStep} from "./HttpGetStep";
 import {SummaryResults} from "./SummaryResults";
 
 export class ExecutionState {
@@ -7,7 +7,7 @@ export class ExecutionState {
     step;
     result;
 
-    constructor(resp:HttpResponse, step:JourneyStep, result:SummaryResults) {
+    constructor(resp:HttpResponse, step:HttpGetStep, result:SummaryResults) {
         this.resp = resp;
         this.step = step;
         this.result = result;

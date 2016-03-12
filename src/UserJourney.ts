@@ -1,13 +1,15 @@
 import {Turbulence} from "./Turbulence";
 import {HttpResponse} from "./HttpResponse";
 import {HttpClient} from "./HttpClient";
-import {JourneyStep} from "./JourneyStep";
+import {HttpGetStep} from "./HttpGetStep";
 import {SummaryResults} from "./SummaryResults";
 import {ExecutionState} from "./ExecutionState";
+import {PauseStep} from "./PauseStep";
+import {Step} from "./Step";
 
 export class UserJourney {
     parent:Turbulence;
-    steps:Array<JourneyStep>;
+    steps:Array<Step>;
     http:HttpClient;
 
     constructor(parent) {
@@ -17,10 +19,16 @@ export class UserJourney {
     }
 
     get(url) {
-        var journeyStep = new JourneyStep(this, url);
+        var journeyStep = new HttpGetStep(this, url, 'GET');
         this.steps.unshift(journeyStep);
 
         return journeyStep;
+    }
+
+    pause(milliseconds:Number) {
+        var pauseStep = new PauseStep(milliseconds);
+        this.steps.unshift(pauseStep);
+        return this;
     }
 
     endTest() {
@@ -29,45 +37,54 @@ export class UserJourney {
 
     run(results:SummaryResults):Q.Promise<SummaryResults> {
         var self = this;
-
         var firstStep = self.steps.pop();
+        var firstStart = new Date();
 
-        return self.steps.reduce(function (promise:Q.Promise<ExecutionState>, nextStep:JourneyStep) {
+        return self.steps.reduce(function (promise:Q.Promise<ExecutionState>, nextStep:HttpGetStep) {
+                var start = new Date();
                 return promise
-                    .then(function (resp) {
-                        return resp.resp
+                    .then(function () {
+                        return nextStep.execute();
                     })
-                    .then(function (resp) {
-                        return new ExecutionState(resp, nextStep, results);
-                    })
-                    .then(self.validateResult);
+                    .then(self.validateResult(nextStep, results, start));
             },
-            this.http.get(firstStep.url)
-                .then(function (resp:HttpResponse) {
-                    return new ExecutionState(resp, firstStep, results);
-                })
-                .then(self.validateResult))
+            firstStep.execute()
+                .then(self.validateResult(firstStep, results, firstStart)))
             .then(function (state) {
                 return state.result;
             });
     }
 
-    validateResult(resp:ExecutionState):ExecutionState {
-        if (resp.resp.statusCode > 399 && resp.resp.statusCode !== resp.step.expectedStatusCode) {
-            ++resp.result.errors;
-        }
+    validateResult(step, result, start):(resp:HttpResponse) => ExecutionState {
+        return function (resp:HttpResponse):ExecutionState {
+            var end = new Date();
+            var startingErrors = result.errors;
 
-        if (resp.step.predicates.length > 0) {
-            resp.result.errors = resp.step.predicates.reduce(function (last, next) {
-                if (!next(resp.resp)) {
-                    ++last;
+            if (resp) {
+                if (resp.statusCode > 399 && resp.statusCode !== step.expectedStatusCode) {
+                    ++result.errors;
                 }
 
-                return last;
-            }, resp.result.errors);
+                if (step.predicates.length > 0) {
+                    result.errors = step.predicates.reduce(function (last, next) {
+                        if (!next(resp)) {
+                            ++last;
+                        }
+
+                        return last;
+                    }, result.errors);
+                }
+
+                result.requests.push({
+                    error: startingErrors !== result.errors,
+                    url: step.url,
+                    type: step.type,
+                    status: resp.statusCode,
+                    duration: (end.getTime() - start.getTime())
+                });
+            }
+
+            return new ExecutionState(resp, step, result);
         }
-
-        return resp;
-
     }
 }
