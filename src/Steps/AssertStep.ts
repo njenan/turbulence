@@ -1,4 +1,4 @@
-/// <reference path="../../typings/q/Q.d.ts" />f
+/// <reference path="../../typings/main/ambient/q/index.d.ts" />
 
 import Q = require('q');
 

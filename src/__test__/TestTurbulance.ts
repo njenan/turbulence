@@ -1,6 +1,6 @@
-/// <reference path="../../typings/mocha/mocha.d.ts" />
-/// <reference path="../../typings/assert/assert.d.ts" />
-/// <reference path="../../typings/q/Q.d.ts" />
+/// <reference path="../../typings/main/ambient/q/index.d.ts" />
+/// <reference path="../../typings/main/ambient/mocha/index.d.ts" />
+/// <reference path="../../typings/main/ambient/assert/index.d.ts" />
 
 import assert = require('power-assert');
 import Q = require('q');

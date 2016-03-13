@@ -1,4 +1,4 @@
-/// <reference path="../typings/q/Q.d.ts" />
+/// <reference path="../typings/main/ambient/q/index.d.ts" />
 
 import Q = require('q');
 
@@ -41,13 +41,10 @@ export class Turbulence {
                 });
             }, deferred.promise)
             .then(function ():SummaryResults {
-
-                var summaryResults = allResults.reduce(function (left, right) {
+                return allResults.reduce(function (left, right) {
                     right.errors = right.errors + left.errors;
                     return right;
                 });
-
-                return summaryResults;
             });
 
     }
