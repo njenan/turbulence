@@ -45,6 +45,6 @@ class StubbedResponse {
     }
 
     nextResponse() {
-        return this.responses.length > 1 ? this.responses.pop() : this.responses[0];
+        return this.responses.length > 1 ? this.responses.shift() : this.responses[0];
     }
 }

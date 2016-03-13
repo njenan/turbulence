@@ -1,5 +1,5 @@
 export class SummaryResults {
-    errors:Number;
+    errors:number;
     requests;
 
     constructor() {

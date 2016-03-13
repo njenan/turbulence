@@ -1,11 +1,15 @@
 /// <reference path="../../typings/mocha/mocha.d.ts" />
 /// <reference path="../../typings/assert/assert.d.ts" />
+/// <reference path="../../typings/q/Q.d.ts" />
 
 import assert = require('power-assert');
+import Q = require('q');
 
 import {Turbulence} from '../Turbulence';
 import {StubHttp} from './StubHttp';
 import {HttpResponse} from "../HttpResponse";
+
+Q.longStackSupport = true;
 
 describe('Turbulence', function () {
     var turbulence;
@@ -23,11 +27,12 @@ describe('Turbulence', function () {
                 key: 'value'
             }));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .endTest()
-                .run(function () {
+                .run()
+                .then(function () {
                     done();
                 });
         });
@@ -37,14 +42,15 @@ describe('Turbulence', function () {
                 key: 'value'
             }));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .assertResponse(function (resp) {
                     return resp.body.key === 'value';
                 })
                 .endTest()
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(0, results.errors);
                     done();
                 });
@@ -55,14 +61,15 @@ describe('Turbulence', function () {
                 key: 'value'
             }));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .assertResponse(function (resp) {
                     return resp.body.key === 'wrong';
                 })
                 .endTest()
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(1, results.errors);
                     done();
                 });
@@ -71,11 +78,13 @@ describe('Turbulence', function () {
         it('should report errors when http calls fail', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(undefined, 400));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
+                .expectStatus(200)
                 .endTest()
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(1, results.errors);
                     done();
                 });
@@ -84,12 +93,13 @@ describe('Turbulence', function () {
         it('should pass when failure codes are expected', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(undefined, 500));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .expectStatus(500)
                 .endTest()
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(0, results.errors);
                     done();
                 });
@@ -101,7 +111,7 @@ describe('Turbulence', function () {
                 beta: 'second'
             }));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .assertResponse(function (resp) {
@@ -111,7 +121,8 @@ describe('Turbulence', function () {
                     return resp.body.beta === 'second';
                 })
                 .endTest()
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(1, results.errors);
                     done();
                 });
@@ -124,7 +135,7 @@ describe('Turbulence', function () {
                 gamma: 'third'
             }));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .assertResponse(function (resp) {
@@ -137,7 +148,8 @@ describe('Turbulence', function () {
                     return resp.body.gamma === 'second';
                 })
                 .endTest()
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(2, results.errors);
                     done();
                 });
@@ -147,7 +159,7 @@ describe('Turbulence', function () {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse());
             http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse());
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .endTest()
@@ -156,7 +168,8 @@ describe('Turbulence', function () {
                 .get('http://localhost:8080/url2')
                 .endTest()
 
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(0, results.errors);
                     done();
                 });
@@ -173,7 +186,7 @@ describe('Turbulence', function () {
                 alpha: 'first'
             }));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .assertResponse(function (resp) {
@@ -195,13 +208,14 @@ describe('Turbulence', function () {
                 })
                 .endTest()
 
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(2, results.errors);
                     done();
                 });
         });
 
-        it('should allow multiple steps in a test', function (done) {
+        it('should allow multiple steps in a testPlans', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first'
             }));
@@ -212,7 +226,7 @@ describe('Turbulence', function () {
                 alpha: 'first'
             }));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .assertResponse(function (resp) {
@@ -228,7 +242,8 @@ describe('Turbulence', function () {
                 })
                 .endTest()
 
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     assert.equal(2, results.errors);
                     done();
                 });
@@ -268,42 +283,92 @@ describe('Turbulence', function () {
 
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse());
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .pause(50)
                 .get('http://localhost:8080/url1')
                 .endTest()
-                .run(function () {
+                .run()
+                .then(function () {
                     var duration = new Date().getTime() - start;
-                    assert(duration > 50, 'test finished too quickly');
-                    assert(duration < 100, 'test took too long');
+                    assert(duration > 50, 'testPlans finished too quickly');
+                    assert(duration < 100, 'testPlans took too long');
 
                     done();
                 });
         });
 
-        xit('should allow loops', function (done) {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
-                alpha: 'first'
-            }, new HttpResponse({
-                alpha: 'second'
-            })));
+        describe('loops', function () {
+            it('should allow looping 1 time', function (done) {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                    alpha: 'first'
+                }), new HttpResponse({
+                    alpha: 'second'
+                }));
 
-            turbulence
-                //.loop()
-                .startTest()
-                .get('http://localhost:8080/url1')
-                .assertResponse(function (resp) {
-                    return resp.body.alpha === 'first';
-                })
-                .endTest()
-                //.endLoop()
-                .run(function (results) {
-                    //assert.equal(1, results.errors);
-                    done();
-                });
-        })
+                return turbulence
+                    .startTest()
+                    .loop(1)
+                    .get('http://localhost:8080/url1')
+                    .assertResponse(function (resp) {
+                        return resp.body.alpha === 'first';
+                    })
+                    .endLoop()
+                    .endTest()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(0, results.errors);
+                        done();
+                    });
+            });
+
+            it('should allow looping 2 times', function (done) {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                    alpha: 'first'
+                }), new HttpResponse({
+                    alpha: 'second'
+                }));
+
+                return turbulence
+                    .startTest()
+                    .loop(2)
+                    .get('http://localhost:8080/url1')
+                    .assertResponse(function (resp) {
+                        return resp.body.alpha === 'first';
+                    })
+                    .endLoop()
+                    .endTest()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(1, results.errors);
+                        done();
+                    });
+            });
+
+            it('should allow looping 3 times', function (done) {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                    alpha: 'first'
+                }), new HttpResponse({
+                    alpha: 'second'
+                }));
+
+                return turbulence
+                    .startTest()
+                    .loop(3)
+                    .get('http://localhost:8080/url1')
+                    .assertResponse(function (resp) {
+                        return resp.body.alpha === 'first';
+                    })
+                    .endLoop()
+                    .endTest()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(2, results.errors);
+                        done();
+                    });
+            });
+        });
     });
 
     describe('Reporting', function () {
@@ -312,11 +377,12 @@ describe('Turbulence', function () {
                 key: 'value'
             }));
 
-            turbulence
+            return turbulence
                 .startTest()
                 .get('http://localhost:8080/url1')
                 .endTest()
-                .run(function (results) {
+                .run()
+                .then(function (results) {
                     var request = results.requests.pop();
                     assert.equal('GET', request.type);
                     assert.equal('http://localhost:8080/url1', request.url);
