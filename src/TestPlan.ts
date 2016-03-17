@@ -75,5 +75,7 @@ export class TestPlan implements StepCreator {
             .then(function () {
                 return self.results;
             });
+
     }
+
 }

@@ -8,6 +8,7 @@ import Q = require('q');
 import {Turbulence} from '../Turbulence';
 import {StubHttp} from './StubHttp';
 import {HttpResponse} from "../HttpResponse";
+import {LocalExecutor} from "../LocalExecutor";
 
 Q.longStackSupport = true;
 
@@ -17,7 +18,7 @@ describe('Turbulence', function () {
 
     beforeEach(function () {
         http = new StubHttp();
-        turbulence = new Turbulence(http);
+        turbulence = new Turbulence(http, new LocalExecutor());
     });
 
     describe('Running Tests', function () {
@@ -389,6 +390,22 @@ describe('Turbulence', function () {
                     assert.equal(200, request.status);
                     assert.equal(false, request.error);
                     assert(request.duration > 0, 'duration should be greater than 0');
+                    done();
+                });
+        });
+
+        it('should report average response time of http requests', function (done) {
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                key: 'value'
+            }));
+
+            return turbulence
+                .startTest()
+                .get('http://localhost:8080/url1')
+                .endTest()
+                .run()
+                .then(function (results) {
+                    assert(results.averageResponseTime());
                     done();
                 });
         });

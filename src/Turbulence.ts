@@ -6,15 +6,18 @@ import {HttpClient} from './HttpClient';
 import {HttpResponse} from "./HttpResponse";
 import {SummaryResults} from "./SummaryResults";
 import {TestPlan} from "./TestPlan";
-import all = Q.all;
+import {LocalExecutor} from "./LocalExecutor";
+import {Executor} from "./Executor";
 
 export class Turbulence {
     http:HttpClient;
     testPlans:Array<TestPlan>;
+    executor:Executor;
 
 
-    constructor(http) {
+    constructor(http, executor) {
         this.http = http;
+        this.executor = executor;
         this.testPlans = [];
     };
 
@@ -25,28 +28,7 @@ export class Turbulence {
     }
 
     run():Q.Promise<SummaryResults> {
-        var deferred = Q.defer<SummaryResults>();
-        deferred.resolve();
-
-        var allResults:SummaryResults[] = [];
-
-        return this.testPlans.reduce(function (promise:Q.Promise<SummaryResults>, nextTestPlan:TestPlan):Q.Promise<SummaryResults> {
-                return promise.then(function ():Q.Promise<SummaryResults> {
-                    var result = nextTestPlan.run();
-
-                    return result.then(function (results) {
-                        allResults.push(results);
-                        return results;
-                    });
-                });
-            }, deferred.promise)
-            .then(function ():SummaryResults {
-                return allResults.reduce(function (left, right) {
-                    right.errors = right.errors + left.errors;
-                    return right;
-                });
-            });
-
+        return this.executor.run(this.testPlans);
     }
 
 }
