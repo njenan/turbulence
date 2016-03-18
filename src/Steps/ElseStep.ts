@@ -3,36 +3,25 @@
 import Q = require('q');
 
 import {TestStep} from "./TestStep";
-import {StepCreator} from "./StepCreator";
 import {IStepCreator} from "./IStepCreator";
+import {StepCreator} from "./StepCreator";
 import {SummaryResults} from "../SummaryResults";
-import {ElseStep} from "./ElseStep";
-import {HttpClient} from "../HttpClient";
+import {IfStep} from "./IfStep";
 
-export class IfStep implements TestStep, IStepCreator {
+export class ElseStep implements TestStep, IStepCreator {
 
-    parent:IStepCreator;
-    predicate:(data) => boolean;
+    parent:IfStep;
     creator:StepCreator;
     results:SummaryResults;
-    http:HttpClient;
-    elseStep:ElseStep;
 
-    constructor(parent, http, results, predicate) {
+    constructor(parent, http, results) {
         this.parent = parent;
-        this.http = http;
         this.results = results;
-        this.predicate = predicate;
         this.creator = new StepCreator(http, results);
     }
 
-    else() {
-        this.elseStep = new ElseStep(this, this.http, this.results);
-        return this.elseStep;
-    }
-
     endIf() {
-        return this.parent;
+        return this.parent.endIf();
     }
 
     execute(data):Q.Promise<any> {
@@ -40,18 +29,14 @@ export class IfStep implements TestStep, IStepCreator {
         var deferred = Q.defer();
         deferred.resolve();
 
-        if (this.predicate(data)) {
-            return this.creator.steps.reduce(function (promise, nextStep) {
-                    return promise.then(function (data) {
-                        return nextStep.execute(data);
-                    });
-                }, deferred.promise)
-                .then(function () {
-                    return self.results;
+        return this.creator.steps.reduce(function (promise, nextStep) {
+                return promise.then(function (data) {
+                    return nextStep.execute(data);
                 });
-        } else if (this.elseStep) {
-            return this.elseStep.execute(data);
-        }
+            }, deferred.promise)
+            .then(function () {
+                return self.results;
+            });
     }
 
     loop(times:number):IStepCreator {

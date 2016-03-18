@@ -313,7 +313,6 @@ describe('Turbulence', function () {
                     .if(function (resp) {
                         return resp.body.alpha === 'first';
                     })
-                    .then()
                     .get('http://localhost:8080/url1')
                     .endIf()
                     .endTest()
@@ -321,6 +320,52 @@ describe('Turbulence', function () {
                     .then(function (results) {
                         assert.equal(2, results.requests.length);
                         done();
+                    });
+            });
+
+            it('should not allow an if statement to take the true branch if predicate is false', function (done) {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                    alpha: 'first'
+                }));
+
+                return turbulence
+                    .startTest()
+                    .get('http://localhost:8080/url1')
+                    .if(function (resp) {
+                        return resp.body.alpha === 'second';
+                    })
+                    .get('http://localhost:8080/url1')
+                    .endIf()
+                    .endTest()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(1, results.requests.length);
+                        done();
+                    });
+            });
+
+            it('should execute an else branch if the predicate is false', function (done) {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                    alpha: 'first'
+                }));
+
+                return turbulence
+                    .startTest()
+                    .get('http://localhost:8080/url1')
+                    .if(function (resp) {
+                        return resp.body.alpha === 'first';
+                    })
+                    .get('http://localhost:8080/url1')
+                    .else()
+                    .get('http://localhost:8080/url1')
+                    .endIf()
+                    .endTest()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(2, results.requests.length);
+                        done();
+                    }).catch(function (err) {
+                        console.error(err);
                     });
             });
         });
