@@ -430,8 +430,10 @@ describe('Turbulence', function () {
                 .endTest()
                 .run()
                 .then(function (results) {
-                    assert(results.averageResponseTime());
+                    assert(results.averageResponseTime() || results.averageResponseTime() === 0);
                     done();
+                }).catch(function (err) {
+                    console.error(err);
                 });
         });
     });
