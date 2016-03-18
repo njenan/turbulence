@@ -432,8 +432,6 @@ describe('Turbulence', function () {
                 .then(function (results) {
                     assert(results.averageResponseTime() || results.averageResponseTime() === 0);
                     done();
-                }).catch(function (err) {
-                    console.error(err);
                 });
         });
     });
