@@ -3,5 +3,5 @@ import {SummaryResults} from "./SummaryResults";
 
 export interface Executor {
 
-    run(tests:Array<TestPlan>):Q.Promise<SummaryResults>;
+     run(tests:Array<TestPlan>):Q.Promise<SummaryResults>;
 }

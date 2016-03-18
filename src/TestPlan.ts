@@ -1,4 +1,5 @@
 /// <reference path="../typings/main/ambient/q/index.d.ts" />
+/// <reference path='./Steps/StepCreator.ts' />
 
 import Q = require('q');
 
@@ -8,12 +9,13 @@ import {StepCreator} from "./Steps/StepCreator";
 import {HttpGetStep} from "./Steps/HttpGetStep";
 import {HttpClient} from "./HttpClient";
 import {Turbulence} from "./Turbulence";
-import {AssertStep} from "./Steps/AssertStep";
+import {AssertHttpResponseStep} from "./Steps/AssertHttpResponseStep";
 import {SummaryResults} from "./SummaryResults";
 import {AssertStatusStep} from "./Steps/AssertStatusStep";
 import {PauseStep} from "./Steps/PauseStep";
+import {IfStep} from "./Steps/IfStep";
 
-export class TestPlan implements StepCreator {
+export class TestPlan extends StepCreator {
     parent:Turbulence;
     name:String;
     steps:Array<TestStep>;
@@ -21,41 +23,16 @@ export class TestPlan implements StepCreator {
     results:SummaryResults;
 
     constructor(parent, http, name?) {
+        var results = new SummaryResults();
+
+        super(http, results);
+
         this.parent = parent;
         this.name = name;
         this.steps = [];
         this.http = http;
         this.results = new SummaryResults();
-    }
 
-    addStep(step:TestStep) {
-        this.steps.push(step);
-    }
-
-    loop(times:number) {
-        var loop = new LoopStep(this, this.results, times);
-        this.steps.push(loop);
-        return loop;
-    }
-
-    get(url) {
-        this.steps.push(new HttpGetStep(this, this.results, this.http, url));
-        return this;
-    }
-
-    assertResponse(predicate) {
-        this.steps.push(new AssertStep(this.results, predicate));
-        return this;
-    }
-
-    expectStatus(code) {
-        this.steps.push(new AssertStatusStep(this.results, code));
-        return this;
-    }
-
-    pause(time) {
-        this.steps.push(new PauseStep(time));
-        return this;
     }
 
     endTest() {

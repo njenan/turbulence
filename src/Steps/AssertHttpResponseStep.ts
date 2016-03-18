@@ -6,7 +6,7 @@ import {TestStep} from "./TestStep";
 import {HttpResponse} from "../HttpResponse";
 import {SummaryResults} from "../SummaryResults";
 
-export class AssertStep implements TestStep {
+export class AssertHttpResponseStep implements TestStep {
 
     results:SummaryResults;
     validator:(resp:HttpResponse) => boolean;

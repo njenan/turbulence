@@ -252,6 +252,7 @@ describe('Turbulence', function () {
         });
 
     });
+
     xdescribe('Http options', function () {
         it('should allow get requests', function () {
 
@@ -298,6 +299,30 @@ describe('Turbulence', function () {
 
                     done();
                 });
+        });
+
+        describe('if', function () {
+            it('should allow an if statement to take the true branch', function (done) {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                    alpha: 'first'
+                }));
+
+                return turbulence
+                    .startTest()
+                    .get('http://localhost:8080/url1')
+                    .if(function (resp) {
+                        return resp.body.alpha === 'first';
+                    })
+                    .then()
+                    .get('http://localhost:8080/url1')
+                    .endIf()
+                    .endTest()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(2, results.requests.length);
+                        done();
+                    });
+            });
         });
 
         describe('loops', function () {

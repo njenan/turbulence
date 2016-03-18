@@ -3,7 +3,7 @@ import {HttpResponse} from "../HttpResponse";
 import {HttpClient} from "../HttpClient";
 import {SummaryResults} from "../SummaryResults";
 import {StepCreator} from "./StepCreator";
-import {AssertStep} from "./AssertStep";
+import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
 
 export class HttpGetStep implements TestStep {

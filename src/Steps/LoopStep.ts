@@ -8,23 +8,24 @@ import {HttpGetStep} from "./HttpGetStep";
 import {SummaryResults} from "../SummaryResults";
 import {PauseStep} from "./PauseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
-import {AssertStep} from "./AssertStep";
+import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {HttpClient} from "../HttpClient";
+import {IStepCreator} from "./IStepCreator";
 
-export class LoopStep<T> implements TestStep, StepCreator {
+export class LoopStep<T> implements TestStep, IStepCreator {
 
     parent:T;
     results:SummaryResults;
-    steps:Array<TestStep>;
     times:number;
     http:HttpClient;
+    creator:StepCreator;
 
-    constructor(parent, results, times) {
+    constructor(parent, http, results, times) {
         this.parent = parent;
-        this.http = parent.http;
+        this.http = http;
         this.results = results;
-        this.steps = [];
         this.times = times;
+        this.creator = new StepCreator(http, results);
     }
 
     execute():Q.Promise<any> {
@@ -40,7 +41,7 @@ export class LoopStep<T> implements TestStep, StepCreator {
             if (i === 0) {
                 return promise;
             } else {
-                return chainPromiseNTimes(i - 1, self.steps.reduce(function (promise, nextStep):Q.Promise<any> {
+                return chainPromiseNTimes(i - 1, self.creator.steps.reduce(function (promise, nextStep):Q.Promise<any> {
                     return promise.then(function (data):Q.Promise<any> {
                         return nextStep.execute(data);
                     });
@@ -51,36 +52,38 @@ export class LoopStep<T> implements TestStep, StepCreator {
         return chainPromiseNTimes(this.times, deferred.promise);
     }
 
-    addStep(step) {
-        this.steps.push(step);
-    }
-
-    loop() {
-        return this;
-    }
-
-    get(url) {
-        this.steps.push(new HttpGetStep(this, this.results, this.http, url));
-        return this;
-    }
-
-    assertResponse(predicate) {
-        this.steps.push(new AssertStep(this.results, predicate));
-        return this;
-    }
-
-    expectStatus(code) {
-        this.steps.push(new AssertStatusStep(this.results, code));
-        return this;
-    }
-
-    pause(time) {
-        this.steps.push(new PauseStep(time));
-        return this;
-    }
-
     endLoop():T {
         return this.parent;
+    }
+
+    loop(times:number):IStepCreator {
+        this.creator.loop(times);
+        return this;
+    }
+
+    if(predicate):IStepCreator {
+        this.creator.if(predicate);
+        return this;
+    }
+
+    get(url:String):IStepCreator {
+        this.creator.get(url);
+        return this;
+    }
+
+    pause(time:number):IStepCreator {
+        this.creator.pause(time);
+        return this;
+    }
+
+    assertResponse(predicate):IStepCreator {
+        this.creator.assertResponse(predicate);
+        return this;
+    }
+
+    expectStatus(code):IStepCreator {
+        this.creator.expectStatus(code);
+        return this;
     }
 
 }
