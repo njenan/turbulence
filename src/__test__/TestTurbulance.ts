@@ -353,9 +353,9 @@ describe('Turbulence', function () {
                     .startTest()
                     .get('http://localhost:8080/url1')
                     .if(function (resp) {
-                        return resp.body.alpha === 'first';
+                        return resp.body.alpha === 'second';
                     })
-                    .get('http://localhost:8080/url1')
+                    .get('http://localhost:8080/url2')
                     .else()
                     .get('http://localhost:8080/url1')
                     .endIf()
