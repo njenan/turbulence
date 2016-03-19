@@ -251,6 +251,14 @@ describe('Turbulence', function () {
 
         });
 
+        xit('should allow multiple users to run concurrently', function () {
+
+        });
+
+        xit('should provide a global scope object for storing variables between steps', function () {
+
+        });
+
     });
 
     xdescribe('Http options', function () {
@@ -368,6 +376,14 @@ describe('Turbulence', function () {
                         console.error(err);
                     });
             });
+
+            xit('should execute an if else branch', function () {
+
+            });
+
+            xit('should evaluate multiple if else branches in order', function () {
+
+            });
         });
 
         describe('loops', function () {
@@ -439,6 +455,10 @@ describe('Turbulence', function () {
                         done();
                     });
             });
+
+            xit('should allow looping until a condition is satisfied', function () {
+
+            });
         });
     });
 
@@ -479,9 +499,37 @@ describe('Turbulence', function () {
                     done();
                 });
         });
+
+        xit('should generate an html report', function () {
+
+        });
     });
 
     xdescribe('Distributed Testing', function () {
+        xit('should send the test plan to the executor', function () {
 
+        });
+
+        xit('should distribute the number of users equally between executors', function () {
+
+        });
+    });
+
+    xdescribe('CLI', function () {
+        it('should run the specified .js file', function () {
+
+        });
+
+        it('should all .js files when given no args', function () {
+
+        });
+
+        it('should allow patterns to be included', function () {
+
+        });
+
+        it('should allow patterns to be excluded', function () {
+
+        });
     });
 });
