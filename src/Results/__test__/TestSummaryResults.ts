@@ -1,8 +1,8 @@
-/// <reference path="../../typings/main/ambient/assert/index.d.ts" />
+/// <reference path="../../../typings/main/ambient/assert/index.d.ts" />
 
 import assert = require('power-assert');
 
-import {SummaryResults} from "../Results/SummaryResults";
+import {SummaryResults} from "../SummaryResults";
 
 describe('Summary Results', function () {
     describe('averageResponseTime', function () {

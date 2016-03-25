@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "typings install",
-    "package": "tsc src/*.ts src/**/*.ts --module commonjs",
-    "test": "tsc src/*.ts src/**/*.ts --module commonjs && mocha src/**/__test__/*.js",
-    "watch": "watch --wait 5 --filter watchFilter.js 'tsc src/*.ts src/**/*.ts && mocha src/**/__test__/*.js' src/"
+    "package": "tsc",
+    "test": "tsc && mocha \"src/**/__test__/*.js\"",
+    "watch": "watch --wait 5 --filter watchFilter.js 'tsc src/*.ts src/**/*.ts && mocha \"src/**/__test__/*.js\"' src/"
   },
   "repository": {
     "type": "git",
