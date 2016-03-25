@@ -2,7 +2,7 @@
 
 import Q = require('q');
 
-import {SummaryResults} from "../SummaryResults";
+import {SummaryResults} from "../Results/SummaryResults";
 
 
 export interface TestStep {

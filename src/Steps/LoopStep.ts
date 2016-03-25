@@ -5,11 +5,11 @@ import Q = require('q');
 import {TestStep} from "./TestStep";
 import {StepCreator} from "./StepCreator";
 import {HttpGetStep} from "./HttpGetStep";
-import {SummaryResults} from "../SummaryResults";
+import {SummaryResults} from "../Results/SummaryResults";
 import {PauseStep} from "./PauseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
 import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
-import {HttpClient} from "../HttpClient";
+import {HttpClient} from "../Http/HttpClient";
 import {IStepCreator} from "./IStepCreator";
 
 export class LoopStep<T> implements TestStep, IStepCreator {

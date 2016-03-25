@@ -3,8 +3,8 @@
 import Q = require('q');
 
 import {TestStep} from "./TestStep";
-import {SummaryResults} from "../SummaryResults";
-import {HttpResponse} from "../HttpResponse";
+import {SummaryResults} from "../Results/SummaryResults";
+import {HttpResponse} from "../Http/HttpResponse";
 
 export class AssertStatusStep implements TestStep {
 

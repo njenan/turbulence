@@ -2,8 +2,8 @@
 
 import Q = require('q');
 
-import {HttpClient} from "../HttpClient";
-import {HttpResponse} from "../HttpResponse";
+import {HttpClient} from "../Http/HttpClient";
+import {HttpResponse} from "../Http/HttpResponse";
 
 export class StubHttp implements HttpClient {
     resp;

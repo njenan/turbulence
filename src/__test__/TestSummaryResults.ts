@@ -2,7 +2,7 @@
 
 import assert = require('power-assert');
 
-import {SummaryResults} from "../SummaryResults";
+import {SummaryResults} from "../Results/SummaryResults";
 
 describe('Summary Results', function () {
     describe('averageResponseTime', function () {

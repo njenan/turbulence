@@ -1,16 +1,22 @@
 /// <reference path="../../typings/main/ambient/q/index.d.ts" />
 /// <reference path="../../typings/main/ambient/mocha/index.d.ts" />
 /// <reference path="../../typings/main/ambient/assert/index.d.ts" />
+/// <reference path="../../typings/main/ambient/xmldom/index.d.ts" />
+/// <reference path="../../typings/main/ambient/xpath/index.d.ts" />
 
 import assert = require('power-assert');
 import Q = require('q');
+import xpath = require('xpath');
+import xmldom = require('xmldom');
 
 import {Turbulence} from '../Turbulence';
 import {StubHttp} from './StubHttp';
-import {HttpResponse} from "../HttpResponse";
-import {LocalExecutor} from "../LocalExecutor";
+import {HttpResponse} from "../Http/HttpResponse";
+import {LocalExecutor} from "../Executors/LocalExecutor";
 
 Q.longStackSupport = true;
+
+var domParser = new xmldom.DOMParser();
 
 describe('Turbulence', function () {
     var turbulence;
@@ -500,8 +506,23 @@ describe('Turbulence', function () {
                 });
         });
 
-        xit('should generate an html report', function () {
+        it('should generate an html report', function (done) {
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                key: 'value'
+            }));
 
+            return turbulence
+                .startTest()
+                .get('http://localhost:8080/url1')
+                .endTest()
+                .run()
+                .report()
+                .then(function (report) {
+                    var doc = domParser.parseFromString(report);
+                    assert.equal('Total Requests: 1', xpath.select('//*[@class="TotalRequests"]', doc)[0].firstChild.data);
+
+                    done();
+                });
         });
     });
 

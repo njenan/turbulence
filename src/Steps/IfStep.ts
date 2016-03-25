@@ -5,9 +5,9 @@ import Q = require('q');
 import {TestStep} from "./TestStep";
 import {StepCreator} from "./StepCreator";
 import {IStepCreator} from "./IStepCreator";
-import {SummaryResults} from "../SummaryResults";
+import {SummaryResults} from "../Results/SummaryResults";
 import {ElseStep} from "./ElseStep";
-import {HttpClient} from "../HttpClient";
+import {HttpClient} from "../Http/HttpClient";
 
 export class IfStep implements TestStep, IStepCreator {
 

@@ -4,7 +4,11 @@
   "dependencies": {},
   "ambientDependencies": {
     "assert": "registry:dt/assert#0.0.0+20141113144614",
+    "jade": "registry:dt/jade#0.0.0+20160316155526",
     "mocha": "registry:dt/mocha#2.2.5+20151023103246",
-    "q": "registry:dt/q#0.0.0+20160215162030"
+    "q": "registry:dt/q#0.0.0+20160215162030",
+    "xml2js": "registry:dt/xml2js#0.0.0+20160317120654",
+    "xmldom": "registry:dt/xmldom#0.1.22+20160319053438",
+    "xpath": "registry:dt/xpath#0.0.7+20160316155526"
   }
 }

@@ -1,9 +1,9 @@
-/// <reference path="../typings/main/ambient/q/index.d.ts" />
+/// <reference path="../../typings/main/ambient/q/index.d.ts" />
 
 import Q = require('q');
 
-import {TestPlan} from "./TestPlan";
-import {SummaryResults} from "./SummaryResults";
+import {TestPlan} from "./../TestPlan";
+import {SummaryResults} from "./../Results/SummaryResults";
 import {Executor} from "./Executor";
 
 export class LocalExecutor implements Executor {
