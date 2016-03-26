@@ -3,8 +3,8 @@
 import Q = require('q');
 
 import {TestStep} from "./TestStep";
-import {IStepCreator} from "./IStepCreator";
-import {StepCreator} from "./StepCreator";
+import {IStepCreator} from "./StepCreator";
+import {StepCreator} from "./EmbeddableStepCreator";
 import {SummaryResults} from "../Results/SummaryResults";
 import {IfStep} from "./IfStep";
 

@@ -2,7 +2,7 @@ import {TestStep} from "./TestStep";
 import {HttpResponse} from "../Http/HttpResponse";
 import {HttpClient} from "../Http/HttpClient";
 import {SummaryResults} from "../Results/SummaryResults";
-import {StepCreator} from "./StepCreator";
+import {StepCreator} from "./EmbeddableStepCreator";
 import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
 

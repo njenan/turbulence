@@ -1,11 +1,11 @@
 /// <reference path="../typings/main/ambient/q/index.d.ts" />
-/// <reference path='./Steps/StepCreator.ts' />
+/// <reference path='./Steps/EmbeddableStepCreator.ts' />
 
 import Q = require('q');
 
 import {TestStep} from "./Steps/TestStep";
 import {LoopStep} from "./Steps/LoopStep";
-import {StepCreator} from "./Steps/StepCreator";
+import {StepCreator} from "./Steps/EmbeddableStepCreator";
 import {HttpGetStep} from "./Steps/HttpGetStep";
 import {HttpClient} from "./Http/HttpClient";
 import {Turbulence} from "./Turbulence";

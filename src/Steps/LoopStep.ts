@@ -3,14 +3,14 @@
 import Q = require('q');
 
 import {TestStep} from "./TestStep";
-import {StepCreator} from "./StepCreator";
+import {StepCreator} from "./EmbeddableStepCreator";
 import {HttpGetStep} from "./HttpGetStep";
 import {SummaryResults} from "../Results/SummaryResults";
 import {PauseStep} from "./PauseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
 import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {HttpClient} from "../Http/HttpClient";
-import {IStepCreator} from "./IStepCreator";
+import {IStepCreator} from "./StepCreator";
 
 export class LoopStep<T> implements TestStep, IStepCreator {
 
