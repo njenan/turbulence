@@ -5,7 +5,7 @@ import Q = require('q');
 
 import {TestStep} from "./Steps/TestStep";
 import {LoopStep} from "./Steps/LoopStep";
-import {StepCreator} from "./Steps/EmbeddableStepCreator";
+import {EmbeddableStepCreator} from "./Steps/EmbeddableStepCreator";
 import {HttpGetStep} from "./Steps/HttpGetStep";
 import {HttpClient} from "./Http/HttpClient";
 import {Turbulence} from "./Turbulence";
@@ -15,7 +15,7 @@ import {AssertStatusStep} from "./Steps/AssertStatusStep";
 import {PauseStep} from "./Steps/PauseStep";
 import {IfStep} from "./Steps/IfStep";
 
-export class TestPlan extends StepCreator {
+export class TestPlan extends EmbeddableStepCreator {
     parent:Turbulence;
     name:String;
     steps:Array<TestStep>;

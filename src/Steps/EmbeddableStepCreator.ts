@@ -10,7 +10,7 @@ import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
 import {IStepCreator} from "./StepCreator";
 
-export class StepCreator implements IStepCreator {
+export class EmbeddableStepCreator implements IStepCreator {
 
     http:HttpClient;
     results:SummaryResults;

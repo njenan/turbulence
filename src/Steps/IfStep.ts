@@ -3,7 +3,7 @@
 import Q = require('q');
 
 import {TestStep} from "./TestStep";
-import {StepCreator} from "./EmbeddableStepCreator";
+import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
 import {IStepCreator} from "./StepCreator";
 import {SummaryResults} from "../Results/SummaryResults";
 import {ElseStep} from "./ElseStep";
@@ -13,7 +13,7 @@ export class IfStep implements TestStep, IStepCreator {
 
     parent:IStepCreator;
     predicate:(data) => boolean;
-    creator:StepCreator;
+    creator:EmbeddableStepCreator;
     results:SummaryResults;
     http:HttpClient;
     elseStep:ElseStep;
@@ -23,7 +23,7 @@ export class IfStep implements TestStep, IStepCreator {
         this.http = http;
         this.results = results;
         this.predicate = predicate;
-        this.creator = new StepCreator(http, results);
+        this.creator = new EmbeddableStepCreator(http, results);
     }
 
     else() {

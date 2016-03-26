@@ -2,18 +2,18 @@ import {TestStep} from "./TestStep";
 import {HttpResponse} from "../Http/HttpResponse";
 import {HttpClient} from "../Http/HttpClient";
 import {SummaryResults} from "../Results/SummaryResults";
-import {StepCreator} from "./EmbeddableStepCreator";
+import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
 import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
 
 export class HttpGetStep implements TestStep {
 
-    parent:StepCreator;
+    parent:EmbeddableStepCreator;
     url:string;
     http:HttpClient;
     results:SummaryResults;
 
-    constructor(parent:StepCreator, results, http, url) {
+    constructor(parent:EmbeddableStepCreator, results, http, url) {
         this.parent = parent;
         this.url = url;
         this.http = http;

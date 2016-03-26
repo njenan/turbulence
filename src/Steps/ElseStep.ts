@@ -4,20 +4,20 @@ import Q = require('q');
 
 import {TestStep} from "./TestStep";
 import {IStepCreator} from "./StepCreator";
-import {StepCreator} from "./EmbeddableStepCreator";
+import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
 import {SummaryResults} from "../Results/SummaryResults";
 import {IfStep} from "./IfStep";
 
 export class ElseStep implements TestStep, IStepCreator {
 
     parent:IfStep;
-    creator:StepCreator;
+    creator:EmbeddableStepCreator;
     results:SummaryResults;
 
     constructor(parent, http, results) {
         this.parent = parent;
         this.results = results;
-        this.creator = new StepCreator(http, results);
+        this.creator = new EmbeddableStepCreator(http, results);
     }
 
     endIf() {
