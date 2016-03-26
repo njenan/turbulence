@@ -1,9 +1,9 @@
-/// <reference path="../../typings/main/ambient/q/index.d.ts" />
+/// <reference path="../../../typings/main/ambient/q/index.d.ts" />
 
 import Q = require('q');
 
-import {HttpClient} from "../Http/HttpClient";
-import {HttpResponse} from "../Http/HttpResponse";
+import {HttpClient} from "../HttpClient";
+import {HttpResponse} from "../HttpResponse";
 
 export class StubHttp implements HttpClient {
     resp;

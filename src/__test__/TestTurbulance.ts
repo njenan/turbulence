@@ -10,7 +10,7 @@ import xpath = require('xpath');
 import xmldom = require('xmldom');
 
 import {Turbulence} from '../Turbulence';
-import {StubHttp} from './StubHttp';
+import {StubHttp} from './../Http/__test__/StubHttp';
 import {HttpResponse} from "../Http/HttpResponse";
 import {LocalExecutor} from "../Executors/LocalExecutor";
 
