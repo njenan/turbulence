@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 console.log('Hello world');
 
-process.exit(0);
+//process.exit(0);
