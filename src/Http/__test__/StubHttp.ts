@@ -25,7 +25,7 @@ export class StubHttp implements HttpClient {
 
         setTimeout(function () {
             deferred.resolve(self.resp[url].nextResponse());
-        }, 0);
+        }, self.resp[url].delay);
 
         return deferred.promise;
     }
@@ -34,6 +34,7 @@ export class StubHttp implements HttpClient {
 class StubbedResponse {
     url:String;
     responses:Array<HttpResponse>;
+    delay:number;
 
     constructor(url) {
         this.url = url;
@@ -42,6 +43,11 @@ class StubbedResponse {
 
     thenReturn(...resp) {
         this.responses = this.responses.concat(resp);
+        return this;
+    }
+
+    delayResponse(ms) {
+        this.delay = ms;
     }
 
     nextResponse() {

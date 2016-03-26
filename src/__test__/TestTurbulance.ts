@@ -8,6 +8,7 @@ import assert = require('power-assert');
 import Q = require('q');
 import xpath = require('xpath');
 import xmldom = require('xmldom');
+import child_process = require('child_process');
 
 import {Turbulence} from '../Turbulence';
 import {StubHttp} from './../Http/__test__/StubHttp';
@@ -17,6 +18,8 @@ import {LocalExecutor} from "../Executors/LocalExecutor";
 Q.longStackSupport = true;
 
 var domParser = new xmldom.DOMParser();
+var exec = child_process.exec;
+
 
 describe('Turbulence', function () {
     var turbulence;
@@ -493,7 +496,7 @@ describe('Turbulence', function () {
         it('should report average response time of http requests', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            }));
+            })).delayResponse(10);
 
             return turbulence
                 .startTest()
@@ -501,7 +504,7 @@ describe('Turbulence', function () {
                 .endTest()
                 .run()
                 .then(function (results) {
-                    assert(results.averageResponseTime() || results.averageResponseTime() === 0);
+                    assert(results.averageResponseTime());
                     done();
                 });
         });
@@ -536,21 +539,33 @@ describe('Turbulence', function () {
         });
     });
 
-    xdescribe('CLI', function () {
-        it('should run the specified .js file', function () {
+    describe('CLI', function () {
+        xit('should run the specified .js file', function () {
 
         });
 
-        it('should all .js files when given no args', function () {
+        xit('should all .js files when given no args', function () {
 
         });
 
-        it('should allow patterns to be included', function () {
+        xit('should allow patterns to be included', function () {
 
         });
 
-        it('should allow patterns to be excluded', function () {
+        xit('should allow patterns to be excluded', function () {
 
         });
+
+        it('should write an html report after executing', function (done) {
+            exec('node ./src/index.js', function (err, out, code) {
+                console.error(err);
+                console.log(out);
+                console.log(code);
+                done()
+            });
+
+        });
+
     });
+
 });
