@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "typings install",
     "package": "tsc",
-    "test": "tsc && mocha \"src/**/__test__/*.js\"",
+    "test": "tsc && mocha \"src/**/__test__/Test*.js\"",
     "watch": "watch --wait 5 --filter watchFilter.js 'tsc src/*.ts src/**/*.ts && mocha \"src/**/__test__/*.js\"' src/"
   },
   "repository": {

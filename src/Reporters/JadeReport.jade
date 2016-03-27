@@ -5,4 +5,8 @@ html(lang="en")
 
     body
         h1 Turbulence Run Report
-        p(class="TotalRequests") Total Requests: #{totalRequests}
+        p(class="TotalRequests") Total Requests: #{requests.length}
+
+        h2 Detailed Breakdown
+        each req in requests
+            p(class="Url") Url: #{req.url} Invocations: #{req.invocations}

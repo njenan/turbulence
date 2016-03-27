@@ -1,6 +1,7 @@
 /// <reference path="../typings/main/ambient/q/index.d.ts" />
 
 import Q = require('q');
+import fs = require('fs');
 
 import {HttpClient} from './Http/HttpClient';
 import {HttpResponse} from "./Http/HttpResponse";
@@ -18,11 +19,11 @@ export class Turbulence {
     reportGenerator:ReportGenerator;
 
 
-    constructor(http, executor) {
+    constructor(http, executor, reportGenerator) {
         this.http = http;
         this.executor = executor;
         this.testPlans = [];
-        this.reportGenerator = new JadeHtmlReportGenerator();
+        this.reportGenerator = reportGenerator;
     };
 
     startTest() {
