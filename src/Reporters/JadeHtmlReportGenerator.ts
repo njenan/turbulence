@@ -20,10 +20,19 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
     toReport(results:SummaryResults) {
         var requests = results.requests.reduce(function (map, nextRequest) {
             if (!map[nextRequest.url]) {
-                map[nextRequest.url] = 0;
+                map[nextRequest.url] = {};
+                map[nextRequest.url].invocations = 0;
             }
 
-            map[nextRequest.url]++;
+            map[nextRequest.url].invocations++;
+
+            if (!map[nextRequest.url].errors) {
+                map[nextRequest.url].errors = 0;
+            }
+
+            if (nextRequest.error) {
+                map[nextRequest.url].errors++;
+            }
 
             return map;
         }, {});
@@ -33,7 +42,8 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
         for (var k in requests) {
             array.push({
                 url: k,
-                invocations: requests[k]
+                invocations: requests[k].invocations,
+                errorRate: requests[k] === 0 ? 0 : requests[k].errors / requests[k].invocations
             });
         }
 

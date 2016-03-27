@@ -2,11 +2,27 @@ doctype html
 html(lang="en")
     head
         title= "Turbulence Run Report"
+        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7", crossorigin="anonymous")
 
     body
-        h1 Turbulence Run Report
-        p(class="TotalRequests") Total Requests: #{requests.length}
+        nav(class="navbar navbar-default")
+            h3 Turbulence Run Report
+        div(class="container")
+            p(class="TotalRequests") Total Requests: #{requests.length}
 
-        h2 Detailed Breakdown
-        each req in requests
-            p(class="Url") Url: #{req.url} Invocations: #{req.invocations}
+        div(class="container")
+            h4 Detailed Breakdown
+
+            table(class="table")
+                thead
+                    tr
+                        th Url
+                        th Invocations
+                        th Error Rate
+                tbody
+                    each req in requests
+                        tr
+                            th(class="Url") #{req.url}
+                            th(class="Invocations") #{req.invocations}
+                            - var errorRate = Math.round(req.errorRate * 10000) / 100
+                            th(class="ErrorRate") #{errorRate}%

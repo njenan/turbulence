@@ -479,7 +479,7 @@ describe('Turbulence', function () {
         it('should report a single http request result', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            }));
+            })).delayResponse(10);
 
             return turbulence
                 .startTest()
@@ -494,6 +494,8 @@ describe('Turbulence', function () {
                     assert.equal(false, request.error);
                     assert(request.duration > 0, 'duration should be greater than 0');
                     done();
+                }).catch(function (err) {
+                    console.error(err);
                 });
         });
 
