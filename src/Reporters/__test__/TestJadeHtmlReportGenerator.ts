@@ -143,4 +143,27 @@ describe('JadeHtmlReportGenerator', function () {
         assert.equal('33.33%', xpath.select('//*[@class="ErrorRate"]', doc)[0].firstChild.data);
     });
 
+    it('should calculate the total average response time', function () {
+        var results = new SummaryResults();
+        results.requests.push({
+            url: 'http://localhost:8080/',
+            duration: 10
+        });
+        results.requests.push({
+            url: 'http://localhost:8081/',
+            duration: 20
+        });
+        results.requests.push({
+            url: 'http://localhost:8082/',
+            duration: 30
+        });
+
+        generator.toReport(results);
+
+        var html = stubFs.data;
+        var doc = new xmldom.DOMParser().parseFromString(html);
+
+        assert.equal('20', xpath.select('//*[@class="TotalAverageResponseTime"]', doc)[0].firstChild.data);
+    });
+
 });
