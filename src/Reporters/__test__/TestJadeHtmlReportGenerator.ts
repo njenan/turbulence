@@ -43,7 +43,7 @@ describe('JadeHtmlReportGenerator', function () {
         var html = stubFs.data;
         var doc = new xmldom.DOMParser().parseFromString(html);
 
-        assert.equal('Total Requests: 2', xpath.select('//*[@class="TotalRequests"]', doc)[0].firstChild.data);
+        assert.equal('2', xpath.select('//*[@class="TotalRequests"]', doc)[0].firstChild.data);
     });
 
     it('should report each step separately', function () {

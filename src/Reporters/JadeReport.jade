@@ -9,7 +9,10 @@ html(lang="en")
             h3 Turbulence Run Report
         div(class="container")
             h4 Summary
-            p(class="TotalRequests") Total Requests: #{requests.length}
+            p Total Requests: 
+                span(class="TotalRequests") #{requests.length}
+            p Total Average Response Time: 
+                span(class="TotalAverageResponseTime") #{averageResponseTime}
 
         div(class="container")
             h4 Detailed Breakdown

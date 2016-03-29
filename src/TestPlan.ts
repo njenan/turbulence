@@ -35,7 +35,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     }
 
-    endTest() {
+    endUserSteps() {
         return this.parent;
     }
 

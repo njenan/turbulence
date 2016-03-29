@@ -48,7 +48,8 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
         }
 
         this.fs.writeFile('Report.html', this.generator({
-                requests: array
+                requests: array,
+                averageResponseTime: results.averageResponseTime()
             }),
             function (err, result) {
                 console.log(err, result);
