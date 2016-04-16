@@ -1,6 +1,6 @@
 export class HttpResponse {
     body;
-    statusCode:Number;
+    statusCode:number;
 
     constructor(body?, statusCode?) {
         this.body = body ? body : {};

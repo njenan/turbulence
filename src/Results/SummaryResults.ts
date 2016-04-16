@@ -1,6 +1,7 @@
+import {HttpRequestRecord} from "../Steps/HttpRequestRecord";
 export class SummaryResults {
     errors:number;
-    requests;
+    requests:Array<HttpRequestRecord>;
 
     constructor() {
         this.errors = 0;

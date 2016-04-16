@@ -5,8 +5,10 @@ import {SummaryResults} from "../Results/SummaryResults";
 import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
 import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
+import {HttpRequestRecord} from "./HttpRequestRecord";
+import {HttpStep} from "./HttpStep";
 
-export class HttpGetStep implements TestStep {
+export class HttpGetStep implements TestStep, HttpStep {
 
     parent:EmbeddableStepCreator;
     url:string;
@@ -30,15 +32,13 @@ export class HttpGetStep implements TestStep {
             var end = new Date().getTime();
             var duration = end - start;
 
-            self.results.requests.push({
-                type: 'GET',
-                url: self.url,
-                label: self.label,
-                status: resp.statusCode,
-                error: false,
-                duration: duration
-            });
+            var requestRecord = new HttpRequestRecord(self, resp, duration);
+            self.results.requests.push(requestRecord);
             return resp;
         });
+    }
+
+    getType() {
+        return 'GET';
     }
 }
