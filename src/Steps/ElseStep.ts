@@ -3,12 +3,12 @@
 import Q = require('q');
 
 import {TestStep} from "./TestStep";
-import {IStepCreator} from "./StepCreator";
+import {StepCreator} from "./StepCreator";
 import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
 import {SummaryResults} from "../Results/SummaryResults";
 import {IfStep} from "./IfStep";
 
-export class ElseStep implements TestStep, IStepCreator {
+export class ElseStep implements TestStep, StepCreator {
 
     parent:IfStep;
     creator:EmbeddableStepCreator;
@@ -39,32 +39,32 @@ export class ElseStep implements TestStep, IStepCreator {
             });
     }
 
-    loop(times:number):IStepCreator {
+    loop(times:number):StepCreator {
         this.creator.loop(times);
         return this;
     }
 
-    if(predicate):IStepCreator {
+    if(predicate):StepCreator {
         this.creator.if(predicate);
         return this;
     }
 
-    get(url:String):IStepCreator {
+    get(url:string):StepCreator {
         this.creator.get(url);
         return this;
     }
 
-    pause(time:number):IStepCreator {
+    pause(time:number):StepCreator {
         this.creator.pause(time);
         return this;
     }
 
-    assertResponse(predicate):IStepCreator {
+    assertResponse(predicate):StepCreator {
         this.creator.assertResponse(predicate);
         return this;
     }
 
-    expectStatus(code):IStepCreator {
+    expectStatus(code):StepCreator {
         this.creator.expectStatus(code);
         return this;
     }

@@ -4,10 +4,11 @@
   "description": "A plug-in based, distributed performance testing tool for developers",
   "main": "index.js",
   "scripts": {
+    "clean": "find ./src -name \"*.js\" -delete",
     "postinstall": "typings install",
-    "package": "tsc",
-    "test": "tsc && mocha \"src/**/__test__/Test*.js\"",
-    "watch": "watch --wait 5 --filter watchFilter.js 'tsc src/*.ts src/**/*.ts && mocha \"src/**/__test__/*.js\"' src/"
+    "package": "npm run clean && tsc",
+    "test": "npm run package && mocha \"src/**/__test__/Test*.js\"",
+    "watch": "watch --wait 5 --filter watchFilter.js 'npm test' **/*"
   },
   "repository": {
     "type": "git",

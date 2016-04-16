@@ -13,26 +13,30 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
 
     constructor(fileWriter) {
         this.fs = fileWriter;
+        //Code is synchronous... shouldn't be a problem because this won't execute during the performance test
         this.generator = Jade.compileFile("src/Reporters/JadeReport.jade");
     }
 
 
     toReport(results:SummaryResults) {
         var requests = results.requests.reduce(function (map, nextRequest) {
-            if (!map[nextRequest.url]) {
-                map[nextRequest.url] = {};
-                map[nextRequest.url].invocations = 0;
+            var key = nextRequest.url;
+            if (!map[key]) {
+                map[key] = {};
+                map[key].invocations = 0;
             }
 
-            map[nextRequest.url].invocations++;
+            map[key].invocations++;
 
-            if (!map[nextRequest.url].errors) {
-                map[nextRequest.url].errors = 0;
+            if (!map[key].errors) {
+                map[key].errors = 0;
             }
 
             if (nextRequest.error) {
-                map[nextRequest.url].errors++;
+                map[key].errors++;
             }
+
+            map[key].name = nextRequest.label;
 
             return map;
         }, {});
@@ -40,10 +44,12 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
         var array = [];
 
         for (var k in requests) {
+            var request = requests[k];
             array.push({
                 url: k,
-                invocations: requests[k].invocations,
-                errorRate: requests[k] === 0 ? 0 : requests[k].errors / requests[k].invocations
+                name: request.name,
+                invocations: request.invocations,
+                errorRate: request === 0 ? 0 : request.errors / request.invocations
             });
         }
 

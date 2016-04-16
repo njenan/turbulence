@@ -515,6 +515,25 @@ describe('Turbulence', function () {
                 });
         });
 
+        it('should allow http requests to be labeled', function (done) {
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                key: 'value'
+            })).delayResponse(10);
+
+            return turbulence
+                .startUserSteps()
+                .get('http://localhost:8080/url1', 'Retrieve User Information')
+                .endUserSteps()
+                .run()
+                .report()
+                .then(function () {
+                    var doc = domParser.parseFromString(stubFs.data);
+                    assert.equal('Retrieve User Information', xpath.select('//*[@class="Name"]', doc)[0].firstChild.data);
+
+                    done();
+                });
+        });
+
         it('should generate an html report', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'

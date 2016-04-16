@@ -24,12 +24,14 @@ html(lang="en")
             table(class="table")
                 thead
                     tr
+                        th Label
                         th Url
                         th Invocations
                         th Error Rate
                 tbody
                     each req in requests
                         tr
+                            th(class="Name") #{req.name}
                             th(class="Url") #{req.url}
                             th(class="Invocations") #{req.invocations}
                             - var errorRate = Math.round(req.errorRate * 10000) / 100

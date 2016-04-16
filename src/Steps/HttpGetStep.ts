@@ -12,12 +12,14 @@ export class HttpGetStep implements TestStep {
     url:string;
     http:HttpClient;
     results:SummaryResults;
+    label:string;
 
-    constructor(parent:EmbeddableStepCreator, results, http, url) {
+    constructor(parent:EmbeddableStepCreator, results, http, url, label) {
         this.parent = parent;
         this.url = url;
         this.http = http;
         this.results = results;
+        this.label = label;
     }
 
     execute():Q.Promise<HttpResponse> {
@@ -31,6 +33,7 @@ export class HttpGetStep implements TestStep {
             self.results.requests.push({
                 type: 'GET',
                 url: self.url,
+                label: self.label,
                 status: resp.statusCode,
                 error: false,
                 duration: duration

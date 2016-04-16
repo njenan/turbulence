@@ -4,14 +4,14 @@ import Q = require('q');
 
 import {TestStep} from "./TestStep";
 import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
-import {IStepCreator} from "./StepCreator";
+import {StepCreator} from "./StepCreator";
 import {SummaryResults} from "../Results/SummaryResults";
 import {ElseStep} from "./ElseStep";
 import {HttpClient} from "../Http/HttpClient";
 
-export class IfStep implements TestStep, IStepCreator {
+export class IfStep implements TestStep, StepCreator {
 
-    parent:IStepCreator;
+    parent:StepCreator;
     predicate:(data) => boolean;
     creator:EmbeddableStepCreator;
     results:SummaryResults;
@@ -54,32 +54,32 @@ export class IfStep implements TestStep, IStepCreator {
         }
     }
 
-    loop(times:number):IStepCreator {
+    loop(times:number):StepCreator {
         this.creator.loop(times);
         return this;
     }
 
-    if(predicate):IStepCreator {
+    if(predicate):StepCreator {
         this.creator.if(predicate);
         return this;
     }
 
-    get(url:String):IStepCreator {
+    get(url:string):StepCreator {
         this.creator.get(url);
         return this;
     }
 
-    pause(time:number):IStepCreator {
+    pause(time:number):StepCreator {
         this.creator.pause(time);
         return this;
     }
 
-    assertResponse(predicate):IStepCreator {
+    assertResponse(predicate):StepCreator {
         this.creator.assertResponse(predicate);
         return this;
     }
 
-    expectStatus(code):IStepCreator {
+    expectStatus(code):StepCreator {
         this.creator.expectStatus(code);
         return this;
     }

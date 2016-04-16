@@ -1,17 +1,15 @@
-import {TestStep} from "./TestStep";
+export interface StepCreator {
 
-export interface IStepCreator {
+    loop(times:number):StepCreator;
 
-    loop(times:number):IStepCreator;
+    if(predicate):StepCreator;
 
-    if(predicate):IStepCreator;
+    get(url:String, label?:String):StepCreator;
 
-    get(url:String):IStepCreator;
+    pause(time:number):StepCreator;
 
-    pause(time:number):IStepCreator;
+    assertResponse(predicate):StepCreator;
 
-    assertResponse(predicate):IStepCreator;
-
-    expectStatus(code):IStepCreator;
+    expectStatus(code):StepCreator;
 
 }

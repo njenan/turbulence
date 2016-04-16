@@ -1,4 +1,3 @@
-import {HttpResponse} from "../Http/HttpResponse";
 import {TestStep} from "./TestStep";
 import {HttpGetStep} from "./HttpGetStep";
 import {HttpClient} from "../Http/HttpClient";
@@ -8,9 +7,9 @@ import {IfStep} from "./IfStep";
 import {PauseStep} from "./PauseStep";
 import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
-import {IStepCreator} from "./StepCreator";
+import {StepCreator} from "./StepCreator";
 
-export class EmbeddableStepCreator implements IStepCreator {
+export class EmbeddableStepCreator implements StepCreator {
 
     http:HttpClient;
     results:SummaryResults;
@@ -22,24 +21,24 @@ export class EmbeddableStepCreator implements IStepCreator {
         this.steps = [];
     }
 
-    loop(times:number):IStepCreator {
+    loop(times:number):StepCreator {
         var loop = new LoopStep(this, this.http, this.results, times);
         this.addStep(loop);
         return loop;
     }
 
-    if(predicate):IStepCreator {
+    if(predicate):StepCreator {
         var ifStep = new IfStep(this, this.http, this.results, predicate);
         this.addStep(ifStep);
         return ifStep;
     }
 
-    get(url:String):IStepCreator {
-        this.addStep(new HttpGetStep(this, this.results, this.http, url));
+    get(url:string, label?:string):StepCreator {
+        this.addStep(new HttpGetStep(this, this.results, this.http, url, label));
         return this;
     }
 
-    pause(time:number):IStepCreator {
+    pause(time:number):StepCreator {
         this.addStep(new PauseStep(time));
         return this;
     }
@@ -48,12 +47,12 @@ export class EmbeddableStepCreator implements IStepCreator {
         this.steps.push(step);
     }
 
-    assertResponse(predicate):IStepCreator {
+    assertResponse(predicate):StepCreator {
         this.addStep(new AssertHttpResponseStep(this.results, predicate));
         return this;
     }
 
-    expectStatus(code):IStepCreator {
+    expectStatus(code):StepCreator {
         this.addStep(new AssertStatusStep(this.results, code));
         return this;
     }
