@@ -1,9 +1,9 @@
-import {TestStep} from "./TestStep";
+import {TestStep} from "../TestStep";
 import {HttpStep} from "./HttpStep";
-import {HttpResponse} from "../Http/HttpResponse";
-import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
-import {HttpClient} from "../Http/HttpClient";
-import {SummaryResults} from "../Results/SummaryResults";
+import {HttpResponse} from "../../Http/HttpResponse";
+import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
+import {HttpClient} from "../../Http/HttpClient";
+import {SummaryResults} from "../../Results/SummaryResults";
 import {HttpRequestRecord} from "./HttpRequestRecord";
 
 export class HttpPostStep implements TestStep, HttpStep {

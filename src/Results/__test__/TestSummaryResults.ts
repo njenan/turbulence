@@ -3,8 +3,8 @@
 import assert = require('power-assert');
 
 import {SummaryResults} from "../SummaryResults";
-import {HttpRequestRecord} from "../../Steps/HttpRequestRecord";
-import {HttpGetStep} from "../../Steps/HttpGetStep";
+import {HttpRequestRecord} from "../../Steps/Http/HttpRequestRecord";
+import {HttpGetStep} from "../../Steps/Http/HttpGetStep";
 import {HttpResponse} from "../../Http/HttpResponse";
 
 describe('Summary Results', function () {

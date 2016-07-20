@@ -9,8 +9,8 @@ import assert = require('power-assert');
 import {JadeHtmlReportGenerator} from "../JadeHtmlReportGenerator";
 import {SummaryResults} from "../../Results/SummaryResults";
 import {StubFs} from "./StubFs";
-import {HttpGetStep} from "../../Steps/HttpGetStep";
-import {HttpRequestRecord} from "../../Steps/HttpRequestRecord";
+import {HttpGetStep} from "../../Steps/Http/HttpGetStep";
+import {HttpRequestRecord} from "../../Steps/Http/HttpRequestRecord";
 import {HttpResponse} from "../../Http/HttpResponse";
 
 describe('JadeHtmlReportGenerator', function () {

@@ -1,10 +1,10 @@
-/// <reference path="../../typings/main/ambient/q/index.d.ts" />
+/// <reference path="../../../typings/main/ambient/q/index.d.ts" />
 
 import Q = require('q');
 
-import {TestStep} from "./TestStep";
-import {HttpResponse} from "../Http/HttpResponse";
-import {SummaryResults} from "../Results/SummaryResults";
+import {TestStep} from "../TestStep";
+import {HttpResponse} from "../../Http/HttpResponse";
+import {SummaryResults} from "../../Results/SummaryResults";
 
 export class AssertHttpResponseStep implements TestStep {
 

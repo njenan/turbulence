@@ -1,18 +1,18 @@
-/// <reference path="./ElseStep.ts" />
-/// <reference path="./LoopStep.ts" />
-/// <reference path="./IfStep.ts" />
+/// <reference path="./Conditionals/ElseStep.ts" />
+/// <reference path="./Conditionals/LoopStep.ts" />
+/// <reference path="./Conditionals/IfStep.ts" />
 
 import {TestStep} from "./TestStep";
-import {HttpGetStep} from "./HttpGetStep";
+import {HttpGetStep} from "./Http/HttpGetStep";
 import {HttpClient} from "../Http/HttpClient";
 import {SummaryResults} from "../Results/SummaryResults";
 import {PauseStep} from "./PauseStep";
-import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
-import {AssertStatusStep} from "./AssertStatusStep";
+import {AssertHttpResponseStep} from "./Assertions/AssertHttpResponseStep";
+import {AssertStatusStep} from "./Assertions/AssertStatusStep";
 import {StepCreator} from "./StepCreator";
-import {HttpPostStep} from "./HttpPostStep";
-import {IfStep} from "./IfStep";
-import {LoopStep} from "./LoopStep";
+import {HttpPostStep} from "./Http/HttpPostStep";
+import {IfStep} from "./Conditionals/IfStep";
+import {LoopStep} from "./Conditionals/LoopStep";
 
 export class EmbeddableStepCreator implements StepCreator {
 

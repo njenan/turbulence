@@ -1,14 +1,15 @@
-/// <reference path="../../typings/main/ambient/q/index.d.ts" />
+/// <reference path="../../../typings/main/ambient/q/index.d.ts" />
 
 import Q = require('q');
 
-import {TestStep} from "./TestStep";
-import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
-import {StepCreator} from "./StepCreator";
-import {SummaryResults} from "../Results/SummaryResults";
+import {TestStep} from "../TestStep";
+import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
+import {StepCreator} from "../StepCreator";
+import {SummaryResults} from "../../Results/SummaryResults";
 import {ElseStep} from "./ElseStep";
-import {HttpClient} from "../Http/HttpClient";
+import {HttpClient} from "../../Http/HttpClient";
 
+//Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will result
 export class IfStep implements TestStep, StepCreator {
 
     parent:StepCreator;

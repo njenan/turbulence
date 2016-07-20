@@ -1,8 +1,8 @@
-import {TestStep} from "./TestStep";
-import {HttpResponse} from "../Http/HttpResponse";
-import {HttpClient} from "../Http/HttpClient";
-import {SummaryResults} from "../Results/SummaryResults";
-import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
+import {TestStep} from "../TestStep";
+import {HttpResponse} from "../../Http/HttpResponse";
+import {HttpClient} from "../../Http/HttpClient";
+import {SummaryResults} from "../../Results/SummaryResults";
+import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
 import {HttpRequestRecord} from "./HttpRequestRecord";
 import {HttpStep} from "./HttpStep";
 

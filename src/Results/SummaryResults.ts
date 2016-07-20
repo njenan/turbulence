@@ -1,4 +1,4 @@
-import {HttpRequestRecord} from "../Steps/HttpRequestRecord";
+import {HttpRequestRecord} from "../Steps/Http/HttpRequestRecord";
 export class SummaryResults {
     errors:number;
     requests:Array<HttpRequestRecord>;

@@ -1,4 +1,4 @@
-import {HttpResponse} from "../Http/HttpResponse";
+import {HttpResponse} from "../../Http/HttpResponse";
 import {HttpGetStep} from "./HttpGetStep";
 
 export class HttpRequestRecord {
