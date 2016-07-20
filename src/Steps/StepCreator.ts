@@ -4,7 +4,9 @@ export interface StepCreator {
 
     if(predicate):StepCreator;
 
-    get(url:String, label?:String):StepCreator;
+    get(url:string, label?:String):StepCreator;
+
+    post(url:string, body:any, label?:String):StepCreator;
 
     pause(time:number):StepCreator;
 

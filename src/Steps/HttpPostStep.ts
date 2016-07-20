@@ -1,24 +1,26 @@
 import {TestStep} from "./TestStep";
+import {HttpStep} from "./HttpStep";
 import {HttpResponse} from "../Http/HttpResponse";
+import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
 import {HttpClient} from "../Http/HttpClient";
 import {SummaryResults} from "../Results/SummaryResults";
-import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
 import {HttpRequestRecord} from "./HttpRequestRecord";
-import {HttpStep} from "./HttpStep";
 
-export class HttpGetStep implements TestStep, HttpStep {
+export class HttpPostStep implements TestStep, HttpStep {
 
     parent:EmbeddableStepCreator;
     url:string;
     http:HttpClient;
     results:SummaryResults;
     label:string;
+    body:any;
 
-    constructor(parent:EmbeddableStepCreator, results, http, url, label) {
+    constructor(parent:EmbeddableStepCreator, results, http, url, body, label) {
         this.parent = parent;
-        this.url = url;
-        this.http = http;
         this.results = results;
+        this.http = http;
+        this.url = url;
+        this.body = body;
         this.label = label;
     }
 
@@ -26,7 +28,7 @@ export class HttpGetStep implements TestStep, HttpStep {
         var self = this;
         var start = new Date().getTime();
 
-        return this.http.get(this.url).then(function (resp) {
+        return this.http.post(this.url, this.body).then(function (resp) {
             var end = new Date().getTime();
             var duration = end - start;
 
@@ -37,6 +39,6 @@ export class HttpGetStep implements TestStep, HttpStep {
     }
 
     getType() {
-        return 'GET';
+        return 'POST';
     }
 }

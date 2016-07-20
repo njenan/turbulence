@@ -274,24 +274,38 @@ describe('Turbulence', function () {
 
     });
 
-    xdescribe('Http options', function () {
-        it('should allow get requests', function () {
+    describe('Http options', function () {
+        xit('should allow get requests', function () {
 
         });
 
-        it('should allow post requests', function () {
+        describe('post', function () {
+
+            it('should allow post requests', function (done) {
+                http.whenPost('http://localhost:8080/url1', 'The Body').thenReturn(new HttpResponse(undefined, 200));
+
+                return turbulence
+                    .startUserSteps()
+                    .post('http://localhost:8080/url1', 'The Body')
+                    .expectStatus(200)
+                    .endUserSteps()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(0, results.errors);
+                        done();
+                    });
+            });
+        });
+
+        xit('should allow put requests', function () {
 
         });
 
-        it('should allow put requests', function () {
+        xit('should allow head requests', function () {
 
         });
 
-        it('should allow head requests', function () {
-
-        });
-
-        it('should allow delete requests', function () {
+        xit('should allow delete requests', function () {
 
         });
     });
@@ -586,7 +600,7 @@ describe('Turbulence', function () {
                 console.error(err);
                 console.log(out);
                 console.log(code);
-                done()
+                done();
             });
 
         });

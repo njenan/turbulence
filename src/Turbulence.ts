@@ -18,7 +18,6 @@ export class Turbulence {
     executor:Executor;
     reportGenerator:ReportGenerator;
 
-
     constructor(http, executor, reportGenerator) {
         this.http = http;
         this.executor = executor;
@@ -48,7 +47,7 @@ export class Turbulence {
                     then: function (func) {
                         return promise2.then(func);
                     }
-                }
+                };
             }
         };
     }

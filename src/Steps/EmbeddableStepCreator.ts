@@ -8,6 +8,7 @@ import {PauseStep} from "./PauseStep";
 import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {AssertStatusStep} from "./AssertStatusStep";
 import {StepCreator} from "./StepCreator";
+import {HttpPostStep} from "./HttpPostStep";
 
 export class EmbeddableStepCreator implements StepCreator {
 
@@ -35,6 +36,11 @@ export class EmbeddableStepCreator implements StepCreator {
 
     get(url:string, label?:string):StepCreator {
         this.addStep(new HttpGetStep(this, this.results, this.http, url, label));
+        return this;
+    }
+
+    post(url:string, body:any, label?:string):StepCreator {
+        this.addStep(new HttpPostStep(this, this.results, this.http, url, body, label));
         return this;
     }
 

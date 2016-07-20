@@ -5,5 +5,6 @@ import Q = require('q');
 import {HttpResponse} from './HttpResponse';
 
 export interface HttpClient {
-    get(url:String): Q.Promise<HttpResponse>
+    get(url:String):Q.Promise<HttpResponse>
+    post(url:String, body:any):Q.Promise<HttpResponse>
 }

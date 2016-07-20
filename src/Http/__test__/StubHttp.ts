@@ -19,6 +19,19 @@ export class StubHttp implements HttpClient {
         return stubbedResponse;
     }
 
+    whenPost(url, body) {
+        var stubbedResponse = new StubbedResponse(url, body);
+        var bodyKey = JSON.stringify(body);
+
+        if (!this.resp[url]) {
+            this.resp[url] = {};
+        }
+
+        this.resp[url][bodyKey] = stubbedResponse;
+
+        return stubbedResponse;
+    }
+
     get(url:string) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
@@ -29,15 +42,29 @@ export class StubHttp implements HttpClient {
 
         return deferred.promise;
     }
+
+    post(url:string, body:any) {
+        var self = this;
+        var deferred = Q.defer<HttpResponse>();
+        var response = self.resp[url][JSON.stringify(body)];
+
+        setTimeout(function () {
+            deferred.resolve(response.nextResponse());
+        }, response.delay);
+
+        return deferred.promise;
+    }
 }
 
 class StubbedResponse {
     url:String;
+    body:any;
     responses:Array<HttpResponse>;
     delay:number;
 
-    constructor(url) {
+    constructor(url, body?) {
         this.url = url;
+        this.body = body;
         this.responses = [];
     }
 
