@@ -42,10 +42,10 @@ export class IfStep implements TestStep, StepCreator {
 
         if (this.predicate(data)) {
             return this.creator.steps.reduce(function (promise, nextStep) {
-                    return promise.then(function (data) {
-                        return nextStep.execute(data);
-                    });
-                }, deferred.promise)
+                return promise.then(function (data) {
+                    return nextStep.execute(data);
+                });
+            }, deferred.promise)
                 .then(function () {
                     return self.results;
                 });
@@ -66,6 +66,11 @@ export class IfStep implements TestStep, StepCreator {
 
     get(url:string):StepCreator {
         this.creator.get(url);
+        return this;
+    }
+
+    post(url:string, body:any):StepCreator {
+        this.creator.post(url, body);
         return this;
     }
 

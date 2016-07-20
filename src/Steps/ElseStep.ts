@@ -3,10 +3,10 @@
 import Q = require('q');
 
 import {TestStep} from "./TestStep";
-import {StepCreator} from "./StepCreator";
 import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
 import {SummaryResults} from "../Results/SummaryResults";
 import {IfStep} from "./IfStep";
+import {StepCreator} from "./StepCreator";
 
 export class ElseStep implements TestStep, StepCreator {
 
@@ -30,10 +30,10 @@ export class ElseStep implements TestStep, StepCreator {
         deferred.resolve();
 
         return this.creator.steps.reduce(function (promise, nextStep) {
-                return promise.then(function (data) {
-                    return nextStep.execute(data);
-                });
-            }, deferred.promise)
+            return promise.then(function (data) {
+                return nextStep.execute(data);
+            });
+        }, deferred.promise)
             .then(function () {
                 return self.results;
             });
@@ -51,6 +51,11 @@ export class ElseStep implements TestStep, StepCreator {
 
     get(url:string):StepCreator {
         this.creator.get(url);
+        return this;
+    }
+
+    post(url:string, body:any):StepCreator {
+        this.creator.post(url, body);
         return this;
     }
 

@@ -1,14 +1,11 @@
 /// <reference path="../../typings/main/ambient/q/index.d.ts" />
+/// <reference path="./EmbeddableStepCreator.ts" />
 
 import Q = require('q');
 
 import {TestStep} from "./TestStep";
 import {EmbeddableStepCreator} from "./EmbeddableStepCreator";
-import {HttpGetStep} from "./HttpGetStep";
 import {SummaryResults} from "../Results/SummaryResults";
-import {PauseStep} from "./PauseStep";
-import {AssertStatusStep} from "./AssertStatusStep";
-import {AssertHttpResponseStep} from "./AssertHttpResponseStep";
 import {HttpClient} from "../Http/HttpClient";
 import {StepCreator} from "./StepCreator";
 
@@ -68,6 +65,11 @@ export class LoopStep<T> implements TestStep, StepCreator {
 
     get(url:string):StepCreator {
         this.creator.get(url);
+        return this;
+    }
+
+    post(url:string, body:any):StepCreator {
+        this.creator.post(url, body);
         return this;
     }
 
