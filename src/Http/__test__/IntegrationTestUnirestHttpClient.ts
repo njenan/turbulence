@@ -87,7 +87,6 @@ describe('Unirest Http Client', function () {
 
     it('should send a DELETE request', function (done) {
         client.delete('http://localhost:4545').then(function (resp) {
-            console.log(resp);
             assert.equal(resp.statusCode, 204);
             done();
         });
