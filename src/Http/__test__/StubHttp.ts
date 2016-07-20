@@ -32,6 +32,33 @@ export class StubHttp implements HttpClient {
         return stubbedResponse;
     }
 
+    whenPut(url, body) {
+        var stubbedResponse = new StubbedResponse(url, body);
+        var bodyKey = JSON.stringify(body);
+
+        if (!this.resp[url]) {
+            this.resp[url] = {};
+        }
+
+        this.resp[url][bodyKey] = stubbedResponse;
+
+        return stubbedResponse;
+    }
+
+    whenHead(url) {
+        var stubbedResponse = new StubbedResponse(url);
+        this.resp[url] = stubbedResponse;
+
+        return stubbedResponse;
+    }
+
+    whenDelete(url) {
+        var stubbedResponse = new StubbedResponse(url);
+        this.resp[url] = stubbedResponse;
+
+        return stubbedResponse;
+    }
+
     get(url:string) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
@@ -51,6 +78,40 @@ export class StubHttp implements HttpClient {
         setTimeout(function () {
             deferred.resolve(response.nextResponse());
         }, response.delay);
+
+        return deferred.promise;
+    }
+
+    put(url:string, body:any) {
+        var self = this;
+        var deferred = Q.defer<HttpResponse>();
+        var response = self.resp[url][JSON.stringify(body)];
+
+        setTimeout(function () {
+            deferred.resolve(response.nextResponse());
+        }, response.delay);
+
+        return deferred.promise;
+    }
+
+    head(url:string) {
+        var self = this;
+        var deferred = Q.defer<HttpResponse>();
+
+        setTimeout(function () {
+            deferred.resolve(self.resp[url].nextResponse());
+        }, self.resp[url].delay);
+
+        return deferred.promise;
+    }
+
+    delete(url:string) {
+        var self = this;
+        var deferred = Q.defer<HttpResponse>();
+
+        setTimeout(function () {
+            deferred.resolve(self.resp[url].nextResponse());
+        }, self.resp[url].delay);
 
         return deferred.promise;
     }

@@ -74,6 +74,21 @@ export class LoopStep<T> implements TestStep, StepCreator {
         return this;
     }
 
+    put(url:string, body:any):StepCreator {
+        this.creator.put(url, body);
+        return this;
+    }
+
+    head(url:string):StepCreator {
+        this.creator.head(url);
+        return this;
+    }
+
+    delete(url:string):StepCreator {
+        this.creator.delete(url);
+        return this;
+    }
+
     pause(time:number):StepCreator {
         this.creator.pause(time);
         return this;

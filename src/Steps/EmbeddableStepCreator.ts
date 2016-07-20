@@ -13,6 +13,9 @@ import {StepCreator} from "./StepCreator";
 import {HttpPostStep} from "./Http/HttpPostStep";
 import {IfStep} from "./Conditionals/IfStep";
 import {LoopStep} from "./Conditionals/LoopStep";
+import {HttpPutStep} from "./Http/HttpPutStep";
+import {HttpHeadStep} from "./Http/HttpHeadStep";
+import {HttpDeleteStep} from "./Http/HttpDeleteStep";
 
 export class EmbeddableStepCreator implements StepCreator {
 
@@ -45,6 +48,21 @@ export class EmbeddableStepCreator implements StepCreator {
 
     post(url:string, body:any, label?:string):StepCreator {
         this.addStep(new HttpPostStep(this, this.results, this.http, url, body, label));
+        return this;
+    }
+
+    put(url:string, body:any, label?:string):StepCreator {
+        this.addStep(new HttpPutStep(this, this.results, this.http, url, body, label));
+        return this;
+    }
+
+    head(url:string, label?:string):StepCreator {
+        this.addStep(new HttpHeadStep(this, this.results, this.http, url, label));
+        return this;
+    }
+
+    delete(url:string, label?:string):StepCreator {
+        this.addStep(new HttpDeleteStep(this, this.results, this.http, url, label));
         return this;
     }
 

@@ -278,7 +278,7 @@ describe('Turbulence', function () {
         xit('should allow get requests', function () {
 
         });
-        
+
         it('should allow post requests', function (done) {
             http.whenPost('http://localhost:8080/url1', 'The Body').thenReturn(new HttpResponse(undefined, 200));
 
@@ -294,16 +294,49 @@ describe('Turbulence', function () {
                 });
         });
 
-        xit('should allow put requests', function () {
+        it('should allow put requests', function (done) {
+            http.whenPut('http://localhost:8080/url1/1234', 'The Body').thenReturn(new HttpResponse(undefined, 200));
 
+            return turbulence
+                .startUserSteps()
+                .put('http://localhost:8080/url1/1234', 'The Body')
+                .expectStatus(200)
+                .endUserSteps()
+                .run()
+                .then(function (results) {
+                    assert.equal(0, results.errors);
+                    done();
+                });
         });
 
-        xit('should allow head requests', function () {
+        it('should allow head requests', function (done) {
+            http.whenHead('http://localhost:8080/url1/').thenReturn(new HttpResponse(undefined, 200));
 
+            return turbulence
+                .startUserSteps()
+                .head('http://localhost:8080/url1/')
+                .expectStatus(200)
+                .endUserSteps()
+                .run()
+                .then(function (results) {
+                    assert.equal(0, results.errors);
+                    done();
+                });
         });
 
-        xit('should allow delete requests', function () {
+        it('should allow delete requests', function (done) {
+            http.whenDelete('http://localhost:8080/url1/1234').thenReturn(new HttpResponse(undefined, 200));
 
+            return turbulence
+                .startUserSteps()
+                .delete('http://localhost:8080/url1/1234')
+                .expectStatus(200)
+                .endUserSteps()
+                .run()
+                .then(function (results) {
+                    assert.equal(0, results.errors);
+                    done();
+                });
         });
     });
 
