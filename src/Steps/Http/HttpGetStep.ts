@@ -1,39 +1,21 @@
 import {TestStep} from "../TestStep";
-import {HttpResponse} from "../../Http/HttpResponse";
+import {AbstractHttpStep} from "./HttpStep";
 import {HttpClient} from "../../Http/HttpClient";
-import {SummaryResults} from "../../Results/SummaryResults";
-import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
-import {HttpRequestRecord} from "./HttpRequestRecord";
-import {HttpStep} from "./HttpStep";
 
-export class HttpGetStep implements TestStep, HttpStep {
+export class HttpGetStep extends AbstractHttpStep implements TestStep {
 
-    parent:EmbeddableStepCreator;
-    url:string;
     http:HttpClient;
-    results:SummaryResults;
-    label:string;
+    url:string;
 
-    constructor(parent:EmbeddableStepCreator, results, http, url, label) {
-        this.parent = parent;
-        this.url = url;
+    constructor(parent, results, http, url, label) {
+        super(parent, results, url, label);
+
         this.http = http;
-        this.results = results;
-        this.label = label;
+        this.url = url;
     }
 
-    execute():Q.Promise<HttpResponse> {
-        var self = this;
-        var start = new Date().getTime();
-
-        return this.http.get(this.url).then(function (resp) {
-            var end = new Date().getTime();
-            var duration = end - start;
-
-            var requestRecord = new HttpRequestRecord(self, resp, duration);
-            self.results.requests.push(requestRecord);
-            return resp;
-        });
+    makeCall() {
+        return this.http.get(this.url);
     }
 
     getType() {

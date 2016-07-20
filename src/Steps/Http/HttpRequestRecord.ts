@@ -1,5 +1,5 @@
 import {HttpResponse} from "../../Http/HttpResponse";
-import {HttpGetStep} from "./HttpGetStep";
+import {AbstractHttpStep} from "./HttpStep";
 
 export class HttpRequestRecord {
     type:string;
@@ -9,7 +9,7 @@ export class HttpRequestRecord {
     error:boolean;
     duration:number;
 
-    constructor(step:HttpGetStep, response:HttpResponse, duration:number) {
+    constructor(step:AbstractHttpStep, response:HttpResponse, duration:number) {
         this.type = step.getType();
         this.url = step.url;
         this.label = step.label;
