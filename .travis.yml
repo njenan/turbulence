@@ -12,3 +12,5 @@ deploy:
   on:
     tags: true
     repo: njenan/turbulence
+script:
+  - npm run all
