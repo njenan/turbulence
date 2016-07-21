@@ -7,6 +7,7 @@ export class HttpPutStep extends AbstractHttpStep implements TestStep {
     http:HttpClient;
     url:string;
     body:any;
+    headers:any;
 
     constructor(parent, results, http, url, body, label) {
         super(parent, results, url, label);

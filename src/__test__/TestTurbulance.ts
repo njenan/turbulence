@@ -11,7 +11,7 @@ import xmldom = require('xmldom');
 import child_process = require('child_process');
 
 import {Turbulence} from '../Turbulence';
-import {StubHttp} from './../Http/__test__/StubHttp';
+import {StubHttpClient} from './../Http/__test__/StubHttpClient';
 import {HttpResponse} from "../Http/HttpResponse";
 import {LocalExecutor} from "../Executors/LocalExecutor";
 import {JadeHtmlReportGenerator} from "../Reporters/JadeHtmlReportGenerator";
@@ -19,7 +19,15 @@ import {StubFs} from "../Reporters/__test__/StubFs";
 
 Q.longStackSupport = true;
 
-var domParser = new xmldom.DOMParser();
+var domParser = new xmldom.DOMParser({
+    errorHandler: {
+        warning: function () {
+        }, error: function () {
+        }, fatalError: function () {
+        }
+    }
+});
+
 var exec = child_process.exec;
 
 
@@ -30,7 +38,7 @@ describe('Turbulence', function () {
 
     beforeEach(function () {
         stubFs = new StubFs();
-        http = new StubHttp();
+        http = new StubHttpClient();
         turbulence = new Turbulence(http, new LocalExecutor(), new JadeHtmlReportGenerator(stubFs));
     });
 
@@ -338,6 +346,30 @@ describe('Turbulence', function () {
                     done();
                 });
         });
+
+        ['Get', 'Head', 'Delete'].forEach(function (entry) {
+            it('should allow headers to be passed', function (done) {
+                http['when' + entry]('http://localhost:8080/url1/1234', {
+                    headers: {
+                        header1: 'value1',
+                        header2: 'value2'
+                    }
+                }).thenReturn(new HttpResponse(undefined, 200));
+
+                return turbulence
+                    .startUserSteps()
+                    [entry.toLowerCase()]('http://localhost:8080/url1/1234', {header1: 'value1', header2: 'value2'})
+                    .expectStatus(200)
+                    [entry.toLowerCase()]('http://localhost:8080/url1/1234', {header1: 'value1', header2: 'value1'})
+                    .expectStatus(200)
+                    .endUserSteps()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(1, results.errors);
+                        done();
+                    });
+            });
+        });
     });
 
     xdescribe('Assertions', function () {
@@ -566,7 +598,7 @@ describe('Turbulence', function () {
 
             return turbulence
                 .startUserSteps()
-                .get('http://localhost:8080/url1', 'Retrieve User Information')
+                .get('http://localhost:8080/url1', undefined, 'Retrieve User Information')
                 .endUserSteps()
                 .run()
                 .report()
@@ -637,4 +669,5 @@ describe('Turbulence', function () {
 
     });
 
-});
+})
+;

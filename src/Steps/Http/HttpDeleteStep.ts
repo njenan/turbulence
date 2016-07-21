@@ -6,16 +6,18 @@ export class HttpDeleteStep extends AbstractHttpStep implements TestStep {
 
     http:HttpClient;
     url:string;
+    headers:string;
 
-    constructor(parent, results, http, url, label) {
+    constructor(parent, results, http, url, headers?, label?) {
         super(parent, results, url, label);
 
         this.http = http;
         this.url = url;
+        this.headers = headers;
     }
 
     makeCall() {
-        return this.http.delete(this.url);
+        return this.http.delete(this.url, this.headers);
     }
 
     getType() {

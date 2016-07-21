@@ -41,8 +41,8 @@ export class EmbeddableStepCreator implements StepCreator {
         return ifStep;
     }
 
-    get(url:string, label?:string):StepCreator {
-        this.addStep(new HttpGetStep(this, this.results, this.http, url, label));
+    get(url:string, headers?:any, label?:string):StepCreator {
+        this.addStep(new HttpGetStep(this, this.results, this.http, url, headers, label));
         return this;
     }
 
@@ -56,13 +56,13 @@ export class EmbeddableStepCreator implements StepCreator {
         return this;
     }
 
-    head(url:string, label?:string):StepCreator {
-        this.addStep(new HttpHeadStep(this, this.results, this.http, url, label));
+    head(url:string, headers?:string, label?:string):StepCreator {
+        this.addStep(new HttpHeadStep(this, this.results, this.http, url, headers, label));
         return this;
     }
 
-    delete(url:string, label?:string):StepCreator {
-        this.addStep(new HttpDeleteStep(this, this.results, this.http, url, label));
+    delete(url:string, headers?:string, label?:string):StepCreator {
+        this.addStep(new HttpDeleteStep(this, this.results, this.http, url, headers, label));
         return this;
     }
 
