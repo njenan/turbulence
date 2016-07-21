@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-- '5.1'
+- '5.11.x'
+- '6.1.x'
 before_deploy:
 - git config user.email "njenan@gmail.com"
 - git config user.name "Travis CI"
