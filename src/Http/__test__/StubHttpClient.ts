@@ -26,7 +26,7 @@ export class StubHttpClient implements HttpClient {
         return stubbedResponse;
     }
 
-    whenPost(url, body) {
+    whenPost(url, body, options?) {
         var stubbedResponse = new StubbedResponse(url, body);
         var bodyKey = JSON.stringify(body);
 
@@ -34,20 +34,30 @@ export class StubHttpClient implements HttpClient {
             this.resp[url] = {};
         }
 
-        this.resp[url][bodyKey] = stubbedResponse;
+        if (options && options.headers) {
+            this.resp[url][bodyKey] = {};
+            this.resp[url][bodyKey][JSON.stringify(options.headers)] = stubbedResponse;
+        } else {
+            this.resp[url][bodyKey] = stubbedResponse;
+        }
 
         return stubbedResponse;
     }
 
-    whenPut(url, body) {
+    whenPut(url, body, options?) {
         var stubbedResponse = new StubbedResponse(url, body);
         var bodyKey = JSON.stringify(body);
 
         if (!this.resp[url]) {
             this.resp[url] = {};
         }
-
-        this.resp[url][bodyKey] = stubbedResponse;
+        
+        if (options && options.headers) {
+            this.resp[url][bodyKey] = {};
+            this.resp[url][bodyKey][JSON.stringify(options.headers)] = stubbedResponse;
+        } else {
+            this.resp[url][bodyKey] = stubbedResponse;
+        }
 
         return stubbedResponse;
     }
@@ -94,25 +104,35 @@ export class StubHttpClient implements HttpClient {
         return deferred.promise;
     }
 
-    post(url:string, body:any) {
+    post(url:string, body:any, headers?:any) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
         var response = self.resp[url][JSON.stringify(body)];
 
         setTimeout(function () {
-            deferred.resolve(response.nextResponse());
+            if (headers) {
+                var any = response[JSON.stringify(headers)];
+                deferred.resolve(any ? any.nextResponse() : {});
+            } else {
+                deferred.resolve(response.nextResponse());
+            }
         }, response.delay);
 
         return deferred.promise;
     }
 
-    put(url:string, body:any) {
+    put(url:string, body:any, headers?:any) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
         var response = self.resp[url][JSON.stringify(body)];
 
         setTimeout(function () {
-            deferred.resolve(response.nextResponse());
+            if (headers) {
+                var any = response[JSON.stringify(headers)];
+                deferred.resolve(any ? any.nextResponse() : {});
+            } else {
+                deferred.resolve(response.nextResponse());
+            }
         }, response.delay);
 
         return deferred.promise;

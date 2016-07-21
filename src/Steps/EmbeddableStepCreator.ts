@@ -46,13 +46,13 @@ export class EmbeddableStepCreator implements StepCreator {
         return this;
     }
 
-    post(url:string, body:any, label?:string):StepCreator {
-        this.addStep(new HttpPostStep(this, this.results, this.http, url, body, label));
+    post(url:string, body:any, headers?:any, label?:string):StepCreator {
+        this.addStep(new HttpPostStep(this, this.results, this.http, url, body, headers, label));
         return this;
     }
 
-    put(url:string, body:any, label?:string):StepCreator {
-        this.addStep(new HttpPutStep(this, this.results, this.http, url, body, label));
+    put(url:string, body:any, headers?:any, label?:string):StepCreator {
+        this.addStep(new HttpPutStep(this, this.results, this.http, url, body, headers, label));
         return this;
     }
 

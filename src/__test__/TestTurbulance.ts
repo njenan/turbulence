@@ -348,7 +348,7 @@ describe('Turbulence', function () {
         });
 
         ['Get', 'Head', 'Delete'].forEach(function (entry) {
-            it('should allow headers to be passed', function (done) {
+            it('should allow headers to be passed for ' + entry, function (done) {
                 http['when' + entry]('http://localhost:8080/url1/1234', {
                     headers: {
                         header1: 'value1',
@@ -367,6 +367,38 @@ describe('Turbulence', function () {
                     .then(function (results) {
                         assert.equal(1, results.errors);
                         done();
+                    });
+            });
+        });
+
+        ['Post', 'Put'].forEach(function (entry) {
+            it('should allow headers to be passed for ' + entry, function (done) {
+                http['when' + entry]('http://localhost:8080/url1/1234', 'the body', {
+                    headers: {
+                        header1: 'value1',
+                        header2: 'value2'
+                    }
+                }).thenReturn(new HttpResponse(undefined, 200));
+
+                return turbulence
+                    .startUserSteps()
+                    [entry.toLowerCase()]('http://localhost:8080/url1/1234', 'the body', {
+                    header1: 'value1',
+                    header2: 'value2'
+                })
+                    .expectStatus(200)
+                    [entry.toLowerCase()]('http://localhost:8080/url1/1234', 'the body', {
+                    header1: 'value1',
+                    header2: 'value1'
+                })
+                    .expectStatus(200)
+                    .endUserSteps()
+                    .run()
+                    .then(function (results) {
+                        assert.equal(1, results.errors);
+                        done();
+                    }).catch(function (err) {
+                        console.error(err);
                     });
             });
         });
