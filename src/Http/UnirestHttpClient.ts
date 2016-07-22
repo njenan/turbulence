@@ -2,7 +2,7 @@
 
 import Q = require('q');
 
-//No typings exist for unirest
+//No typings exist for unirest TODO write them
 var unirest = require('unirest');
 
 import {HttpClient} from "./HttpClient";
