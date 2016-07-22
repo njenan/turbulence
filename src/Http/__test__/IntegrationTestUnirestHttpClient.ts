@@ -20,23 +20,35 @@ describe('Unirest Http Client', function () {
                     protocol: 'http',
                     stubs: [
                         {
-                            predicates: [{equals: {method: 'GET'}}],
+                            predicates: [{equals: {method: 'GET', headers: {headerOne: 'valueOne'}}}],
                             responses: [{is: {statusCode: 200, body: 'Get response'}}]
                         },
                         {
-                            predicates: [{equals: {method: 'POST', body: 'post body'}}],
+                            predicates: [{
+                                equals: {
+                                    method: 'POST',
+                                    body: 'post body',
+                                    headers: {headerTwo: 'valueTwo'}
+                                }
+                            }],
                             responses: [{is: {statusCode: 201, body: 'Post response'}}]
                         },
                         {
-                            predicates: [{equals: {method: 'PUT', body: 'put body'}}],
+                            predicates: [{
+                                equals: {
+                                    method: 'PUT',
+                                    body: 'put body',
+                                    headers: {headerThree: 'valueThree'}
+                                }
+                            }],
                             responses: [{is: {statusCode: 202, body: 'Put response'}}]
                         },
                         {
-                            predicates: [{equals: {method: 'HEAD'}}],
+                            predicates: [{equals: {method: 'HEAD', headers: {headerFour: 'valueFour'}}}],
                             responses: [{is: {statusCode: 203, body: 'Head response'}}]
                         },
                         {
-                            predicates: [{equals: {method: 'DELETE'}}],
+                            predicates: [{equals: {method: 'DELETE', headers: {headerFive: 'valueFive'}}}],
                             responses: [{is: {statusCode: 204}}]
                         }
                     ]
@@ -55,7 +67,7 @@ describe('Unirest Http Client', function () {
     });
 
     it('should send a GET request', function (done) {
-        client.get('http://localhost:4545').then(function (resp) {
+        client.get('http://localhost:4545', {headerOne: 'valueOne'}).then(function (resp) {
             assert.equal(resp.statusCode, 200);
             assert.equal(resp.body, 'Get response');
             done();
@@ -63,7 +75,7 @@ describe('Unirest Http Client', function () {
     });
 
     it('should send a POST request', function (done) {
-        client.post('http://localhost:4545', 'post body').then(function (resp) {
+        client.post('http://localhost:4545', 'post body', {headerTwo: 'valueTwo'}).then(function (resp) {
             assert.equal(resp.statusCode, 201);
             assert.equal(resp.body, 'Post response');
             done();
@@ -71,7 +83,7 @@ describe('Unirest Http Client', function () {
     });
 
     it('should send a PUT request', function (done) {
-        client.put('http://localhost:4545', 'put body').then(function (resp) {
+        client.put('http://localhost:4545', 'put body', {headerThree: 'valueThree'}).then(function (resp) {
             assert.equal(resp.statusCode, 202);
             assert.equal(resp.body, 'Put response');
             done();
@@ -79,14 +91,14 @@ describe('Unirest Http Client', function () {
     });
 
     it('should send a HEAD request', function (done) {
-        client.head('http://localhost:4545').then(function (resp) {
+        client.head('http://localhost:4545', {headerFour: 'valueFour'}).then(function (resp) {
             assert.equal(resp.statusCode, 203);
             done();
         });
     });
 
     it('should send a DELETE request', function (done) {
-        client.delete('http://localhost:4545').then(function (resp) {
+        client.delete('http://localhost:4545', {headerFive: 'valueFive'}).then(function (resp) {
             assert.equal(resp.statusCode, 204);
             done();
         });
