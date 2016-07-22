@@ -11,76 +11,32 @@ import {HttpResponse} from "./HttpResponse";
 export class UnirestHttpClient implements HttpClient {
 
     get(url:string, headers?:any):Q.Promise<HttpResponse> {
-        var deferred = Q.defer<HttpResponse>();
-
-        var request = unirest.get(url);
-
-        if (headers) {
-            request = request.headers(headers);
-        }
-
-        request.end(function (response) {
-            deferred.resolve(new HttpResponse(response.body, response.statusCode));
-        });
-
-        return deferred.promise;
+        return this.request(unirest.get, url, null, headers);
     }
 
     post(url:string, body:any, headers?:any):Q.Promise<HttpResponse> {
-        var deferred = Q.defer<HttpResponse>();
-
-        var request = unirest.post(url);
-
-        if (headers) {
-            request = request.headers(headers);
-        }
-
-        request.send(body).end(function (response) {
-            deferred.resolve(new HttpResponse(response.body, response.statusCode));
-        });
-
-        return deferred.promise;
+        return this.request(unirest.post, url, body, headers);
     }
 
     put(url:string, body:any, headers?:any):Q.Promise<HttpResponse> {
-        var deferred = Q.defer<HttpResponse>();
-
-        var request = unirest.put(url);
-
-        if (headers) {
-            request = request.headers(headers);
-        }
-
-        request.send(body).end(function (response) {
-            deferred.resolve(new HttpResponse(response.body, response.statusCode));
-        });
-
-        return deferred.promise;
+        return this.request(unirest.put, url, body, headers);
     }
 
     head(url:string, headers?:any):Q.Promise<HttpResponse> {
-        var deferred = Q.defer<HttpResponse>();
-
-        var request = unirest.head(url);
-
-        if (headers) {
-            request = request.headers(headers);
-        }
-
-        request.end(function (response) {
-            deferred.resolve(new HttpResponse(response.body, response.statusCode));
-        });
-
-        return deferred.promise;
+        return this.request(unirest.head, url, null, headers);
     }
 
     delete(url:string, headers?:any):Q.Promise<HttpResponse> {
+        return this.request(unirest.delete, url, null, headers);
+    }
+
+    request(request, url, body, headers) {
         var deferred = Q.defer<HttpResponse>();
 
-        var request = unirest.delete(url);
+        request = request(url).headers(headers);
 
-        if (headers) {
-            request = request.headers(headers);
+        if (body) {
+            request = request.send(body);
         }
 
         request.end(function (response) {
