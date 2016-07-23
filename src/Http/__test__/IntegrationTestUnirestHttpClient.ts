@@ -50,6 +50,9 @@ describe('Unirest Http Client', function () {
                         {
                             predicates: [{equals: {method: 'DELETE', headers: {headerFive: 'valueFive'}}}],
                             responses: [{is: {statusCode: 204}}]
+                        },
+                        {
+                            responses: [{is: {statusCode: 205}}]
                         }
                     ]
                 }
@@ -101,6 +104,15 @@ describe('Unirest Http Client', function () {
         client.delete('http://localhost:4545', {headerFive: 'valueFive'}).then(function (resp) {
             assert.equal(resp.statusCode, 204);
             done();
+        });
+    });
+
+    ['get', 'post', 'put', 'delete', 'head'].forEach(function (entry) {
+        it('should send ' + entry + ' requests without headers', function (done) {
+            client[entry]('http://localhost:4545').then(function (resp) {
+                assert.equal(resp.statusCode, 205);
+                done();
+            });
         });
     });
 });

@@ -33,7 +33,11 @@ export class UnirestHttpClient implements HttpClient {
     request(request, url, body, headers) {
         var deferred = Q.defer<HttpResponse>();
 
-        request = request(url).headers(headers);
+        request = request(url);
+
+        if (headers) {
+            request = request.headers(headers);
+        }
 
         if (body) {
             request = request.send(body);
