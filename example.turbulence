@@ -1,0 +1,8 @@
+//My First Test
+turbulence
+    .startUserSteps()
+        .loop(10)
+            .get('http://localhost:8080/url1')
+        .endLoop()
+    .endUserSteps()
+    .run();
