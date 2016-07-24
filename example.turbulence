@@ -2,7 +2,10 @@
 turbulence
     .startUserSteps()
         .loop(10)
-            .get('http://localhost:8080/url1')
+            .get('http://turbulence.io/')
+            .expectStatus(200)
+            .pause(1500)
         .endLoop()
+        .concurrentUsers(10)
     .endUserSteps()
-    .run();
+    .run()

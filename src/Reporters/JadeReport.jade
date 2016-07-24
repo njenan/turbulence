@@ -6,20 +6,26 @@ html(lang="en")
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css",
         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7",
         crossorigin="anonymous")
+        link(rel="stylesheet", href="./style.css")
+        script(type="text/javascript" src="./node_modules/moment/min/moment.min.js")
+        script(type="text/javascript" src="./node_modules/chart.js/dist/Chart.min.js")
 
     body
-        nav(class="navbar navbar-default")
-            h3 Turbulence Run Report
+        nav(class="navbar navbar-default header")
+            div(class="container-fluid")
+                a(class="navbar-brand", href="./")
+                    img(alt="Brand", height="30", src="./turbulence-logo.png")
+                h2(class="navbar-left") turbulence run report
 
         div(class="container")
-            h4 Summary
+            h3 Summary
             p Total Requests: 
                 span(class="TotalRequests") #{requests.length}
             p Total Average Response Time: 
                 span(class="TotalAverageResponseTime") #{averageResponseTime}
 
         div(class="container")
-            h4 Detailed Breakdown
+            h3 Detailed Breakdown
 
             table(class="table")
                 thead
@@ -36,3 +42,9 @@ html(lang="en")
                             th(class="Invocations") #{req.invocations}
                             - var errorRate = Math.round(req.errorRate * 10000) / 100
                             th(class="ErrorRate") #{errorRate}%
+        div(class="container")
+            h3 Response Times Over Time
+            canvas(id="responseTimesChart")
+        script(type="text/javascript").
+            dataPoints = !{JSON.stringify(dataPoints)};
+        script(type="text/javascript", src="./chart.js")

@@ -1,0 +1,62 @@
+html {
+    height: 100%;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background: -webkit-linear-gradient(0deg, #2C5071, #A8BBCD);
+    background: -moz-linear-gradient(0deg, #2C5071, #A8BBCD);
+    background: -ms-linear-gradient(0deg, #2C5071, #A8BBCD);
+    background: -o-linear-gradient(0deg, #2C5071, #A8BBCD);
+    background: linear-gradient(0deg, #2C5071, #A8BBCD);
+}
+
+body {
+    background-color: transparent;
+    color: white;
+}
+
+h2 {
+    text-transform: lowercase;
+}
+
+h3 {
+    text-transform: lowercase;
+}
+
+h4 {
+    text-transform: lowercase;
+}
+
+#logo {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 120px;
+    min-width: 120px;
+}
+
+#hero {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.jumbotron {
+    background-color: transparent;
+}
+
+.header {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.footer {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.title-text {
+    display: inline-block;
+    vertical-align: middle;
+}

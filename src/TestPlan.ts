@@ -43,20 +43,30 @@ export class TestPlan extends EmbeddableStepCreator {
     run():Q.Promise<SummaryResults> {
         var self = this;
         var promises = [];
+        var j = 0;
 
         for (var i = 0; i < this.users; i++) {
-
             var deferred = Q.defer();
-            deferred.resolve();
 
             promises.push(this.steps.reduce((promise, nextStep) => {
                 return promise.then((data) => {
                     return nextStep.execute(data);
                 });
             }, deferred.promise));
+
+            //setTimeout(() => {
+                deferred.resolve();
+                console.log('Resolved count is:', ++j);
+                console.log('promises pushed:', promises);
+            //}, 1);
         }
 
+        setTimeout(() => {
+            console.log('promises after 1.5 secs', promises);
+        }, 1000);
+
         return Q.all(promises).then(() => {
+            console.log('All have resolved', promises);
             return self.results;
         });
     }

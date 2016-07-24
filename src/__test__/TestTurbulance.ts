@@ -663,7 +663,7 @@ describe('Turbulence', () => {
     });
 
     describe('Multi-User simulation', () => {
-        it('should allow multiple users to be simulated', (done) => {
+        it.only('should allow multiple users to be simulated', function (done) {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
             }));
@@ -678,6 +678,7 @@ describe('Turbulence', () => {
                 .endUserSteps()
                 .run()
                 .then((report) => {
+                    console.log('finsihed!');
                     var end = Date.now();
 
                     var elapsed = end - start;
@@ -685,6 +686,9 @@ describe('Turbulence', () => {
                     assert.equal(true, elapsed < 2000);
                     assert.equal(10, report.requests.length);
                     done();
+                })
+                .catch((err) => {
+                    console.error(err);
                 });
         });
     });
