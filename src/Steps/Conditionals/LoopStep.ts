@@ -29,18 +29,18 @@ export class LoopStep<T> implements TestStep, StepCreator {
     execute():Q.Promise<any> {
         var deferred = Q.defer();
 
-        setTimeout(function () {
+        setTimeout(() => {
             deferred.resolve();
         }, 0);
 
         var self = this;
 
-        var chainPromiseNTimes = function (i, promise):Q.Promise<any> {
+        var chainPromiseNTimes = (i, promise):Q.Promise<any> => {
             if (i === 0) {
                 return promise;
             } else {
-                return chainPromiseNTimes(i - 1, self.creator.steps.reduce(function (promise, nextStep):Q.Promise<any> {
-                    return promise.then(function (data):Q.Promise<any> {
+                return chainPromiseNTimes(i - 1, self.creator.steps.reduce((promise, nextStep):Q.Promise<any> => {
+                    return promise.then((data):Q.Promise<any> => {
                         return nextStep.execute(data);
                     });
                 }, promise));

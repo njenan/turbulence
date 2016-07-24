@@ -92,7 +92,7 @@ export class StubHttpClient implements HttpClient {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
 
-        setTimeout(function () {
+        setTimeout(() => {
             if (headers) {
                 var any = self.resp[url][JSON.stringify(headers)];
                 deferred.resolve(any ? any.nextResponse() : {});
@@ -109,7 +109,7 @@ export class StubHttpClient implements HttpClient {
         var deferred = Q.defer<HttpResponse>();
         var response = self.resp[url][JSON.stringify(body)];
 
-        setTimeout(function () {
+        setTimeout(() => {
             if (headers) {
                 var any = response[JSON.stringify(headers)];
                 deferred.resolve(any ? any.nextResponse() : {});
@@ -126,7 +126,7 @@ export class StubHttpClient implements HttpClient {
         var deferred = Q.defer<HttpResponse>();
         var response = self.resp[url][JSON.stringify(body)];
 
-        setTimeout(function () {
+        setTimeout(() => {
             if (headers) {
                 var any = response[JSON.stringify(headers)];
                 deferred.resolve(any ? any.nextResponse() : {});
@@ -142,7 +142,7 @@ export class StubHttpClient implements HttpClient {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
 
-        setTimeout(function () {
+        setTimeout(() => {
             if (headers) {
                 var any = self.resp[url][JSON.stringify(headers)];
                 deferred.resolve(any ? any.nextResponse() : {});
@@ -158,7 +158,7 @@ export class StubHttpClient implements HttpClient {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
 
-        setTimeout(function () {
+        setTimeout(() => {
             if (headers) {
                 var any = self.resp[url][JSON.stringify(headers)];
                 deferred.resolve(any ? any.nextResponse() : {});

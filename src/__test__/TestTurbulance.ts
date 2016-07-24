@@ -21,30 +21,28 @@ Q.longStackSupport = true;
 
 var domParser = new xmldom.DOMParser({
     errorHandler: {
-        warning: function () {
-        }, error: function () {
-        }, fatalError: function () {
+        warning: () => {
+        }, error: () => {
+        }, fatalError: () => {
         }
     }
 });
 
-var exec = child_process.exec;
 
-
-describe('Turbulence', function () {
+describe('Turbulence', () => {
     var turbulence;
     var http;
     var stubFs;
 
-    beforeEach(function () {
+    beforeEach(() => {
         stubFs = new StubFs();
         http = new StubHttpClient();
         turbulence = new Turbulence(http, new LocalExecutor(), new JadeHtmlReportGenerator(stubFs));
     });
 
-    describe('Running Tests', function () {
+    describe('Running Tests', () => {
 
-        it('should allow a http get request to be defined', function (done) {
+        it('should allow a http get request to be defined', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
             }));
@@ -54,12 +52,12 @@ describe('Turbulence', function () {
                 .get('http://localhost:8080/url1')
                 .endUserSteps()
                 .run()
-                .then(function () {
+                .then(() => {
                     done();
                 });
         });
 
-        it('should report no errors when the assertion passes', function (done) {
+        it('should report no errors when the assertion passes', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
             }));
@@ -67,18 +65,20 @@ describe('Turbulence', function () {
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.key === 'value';
                 })
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(0, results.errors);
                     done();
+                }).catch((err) => {
+                    console.error(err);
                 });
         });
 
-        it('should report errors when the assertion fails', function (done) {
+        it('should report errors when the assertion fails', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
             }));
@@ -86,18 +86,18 @@ describe('Turbulence', function () {
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.key === 'wrong';
                 })
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(1, results.errors);
                     done();
                 });
         });
 
-        it('should report errors when http calls fail', function (done) {
+        it('should report errors when http calls fail', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(undefined, 400));
 
             return turbulence
@@ -106,13 +106,13 @@ describe('Turbulence', function () {
                 .expectStatus(200)
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(1, results.errors);
                     done();
                 });
         });
 
-        it('should pass when failure codes are expected', function (done) {
+        it('should pass when failure codes are expected', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(undefined, 500));
 
             return turbulence
@@ -121,13 +121,13 @@ describe('Turbulence', function () {
                 .expectStatus(500)
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(0, results.errors);
                     done();
                 });
         });
 
-        it('should allow multiple assertions to be made', function (done) {
+        it('should allow multiple assertions to be made', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first',
                 beta: 'second'
@@ -136,21 +136,21 @@ describe('Turbulence', function () {
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.alpha === 'second';
                 })
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.beta === 'second';
                 })
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(1, results.errors);
                     done();
                 });
         });
 
-        it('should count the number of failures', function (done) {
+        it('should count the number of failures', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first',
                 beta: 'second',
@@ -160,24 +160,24 @@ describe('Turbulence', function () {
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.alpha === 'second';
                 })
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.beta === 'second';
                 })
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.gamma === 'second';
                 })
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(2, results.errors);
                     done();
                 });
         });
 
-        it('should allow multiple tests to be defined', function (done) {
+        it('should allow multiple tests to be defined', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse());
             http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse());
 
@@ -191,13 +191,13 @@ describe('Turbulence', function () {
                 .endUserSteps()
 
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(0, results.errors);
                     done();
                 });
         });
 
-        it('should sum failures in final result', function (done) {
+        it('should sum failures in final result', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first'
             }));
@@ -211,33 +211,33 @@ describe('Turbulence', function () {
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.alpha === 'second';
                 })
                 .endUserSteps()
 
                 .startUserSteps()
                 .get('http://localhost:8080/url2')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.alpha === 'second';
                 })
                 .endUserSteps()
 
                 .startUserSteps()
                 .get('http://localhost:8080/url3')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.alpha === 'first';
                 })
                 .endUserSteps()
 
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(2, results.errors);
                     done();
                 });
         });
 
-        it('should allow multiple steps in a testPlans', function (done) {
+        it('should allow multiple steps in a testPlans', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first'
             }));
@@ -251,43 +251,43 @@ describe('Turbulence', function () {
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.alpha === 'second';
                 })
                 .get('http://localhost:8080/url2')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.alpha === 'first';
                 })
                 .get('http://localhost:8080/url3')
-                .assertResponse(function (resp) {
+                .assertResponse((resp) => {
                     return resp.body.alpha === 'first';
                 })
                 .endUserSteps()
 
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(2, results.errors);
                     done();
                 });
 
         });
 
-        xit('should allow multiple users to run concurrently', function () {
+        xit('should allow multiple users to run concurrently', () => {
 
         });
 
-        xit('should provide a global scope object for storing variables between steps', function () {
+        xit('should provide a global scope object for storing variables between steps', () => {
 
         });
 
     });
 
-    describe('Http options', function () {
-        xit('should allow get requests', function () {
+    describe('Http options', () => {
+        xit('should allow get requests', () => {
 
         });
 
-        it('should allow post requests', function (done) {
+        it('should allow post requests', (done) => {
             http.whenPost('http://localhost:8080/url1', 'The Body').thenReturn(new HttpResponse(undefined, 200));
 
             return turbulence
@@ -296,13 +296,13 @@ describe('Turbulence', function () {
                 .expectStatus(200)
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(0, results.errors);
                     done();
                 });
         });
 
-        it('should allow put requests', function (done) {
+        it('should allow put requests', (done) => {
             http.whenPut('http://localhost:8080/url1/1234', 'The Body').thenReturn(new HttpResponse(undefined, 200));
 
             return turbulence
@@ -311,13 +311,13 @@ describe('Turbulence', function () {
                 .expectStatus(200)
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(0, results.errors);
                     done();
                 });
         });
 
-        it('should allow head requests', function (done) {
+        it('should allow head requests', (done) => {
             http.whenHead('http://localhost:8080/url1/').thenReturn(new HttpResponse(undefined, 200));
 
             return turbulence
@@ -326,13 +326,13 @@ describe('Turbulence', function () {
                 .expectStatus(200)
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(0, results.errors);
                     done();
                 });
         });
 
-        it('should allow delete requests', function (done) {
+        it('should allow delete requests', (done) => {
             http.whenDelete('http://localhost:8080/url1/1234').thenReturn(new HttpResponse(undefined, 200));
 
             return turbulence
@@ -341,14 +341,14 @@ describe('Turbulence', function () {
                 .expectStatus(200)
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert.equal(0, results.errors);
                     done();
                 });
         });
 
-        ['Get', 'Head', 'Delete'].forEach(function (entry) {
-            it('should allow headers to be passed for ' + entry, function (done) {
+        ['Get', 'Head', 'Delete'].forEach((entry) => {
+            it('should allow headers to be passed for ' + entry, (done) => {
                 http['when' + entry]('http://localhost:8080/url1/1234', {
                     headers: {
                         header1: 'value1',
@@ -364,15 +364,15 @@ describe('Turbulence', function () {
                     .expectStatus(200)
                     .endUserSteps()
                     .run()
-                    .then(function (results) {
+                    .then((results) => {
                         assert.equal(1, results.errors);
                         done();
                     });
             });
         });
 
-        ['Post', 'Put'].forEach(function (entry) {
-            it('should allow headers to be passed for ' + entry, function (done) {
+        ['Post', 'Put'].forEach((entry) => {
+            it('should allow headers to be passed for ' + entry, (done) => {
                 http['when' + entry]('http://localhost:8080/url1/1234', 'the body', {
                     headers: {
                         header1: 'value1',
@@ -394,22 +394,22 @@ describe('Turbulence', function () {
                     .expectStatus(200)
                     .endUserSteps()
                     .run()
-                    .then(function (results) {
+                    .then((results) => {
                         assert.equal(1, results.errors);
                         done();
-                    }).catch(function (err) {
+                    }).catch((err) => {
                         console.error(err);
                     });
             });
         });
     });
 
-    xdescribe('Assertions', function () {
+    xdescribe('Assertions', () => {
 
     });
 
-    describe('Control flow', function () {
-        it('should allow pauses', function (done) {
+    describe('Control flow', () => {
+        it('should allow pauses', (done) => {
             var start = new Date().getTime();
 
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse());
@@ -421,7 +421,7 @@ describe('Turbulence', function () {
                 .get('http://localhost:8080/url1')
                 .endUserSteps()
                 .run()
-                .then(function () {
+                .then(() => {
                     var duration = new Date().getTime() - start;
                     assert(duration > 50, 'testPlans finished too quickly');
                     assert(duration < 100, 'testPlans took too long');
@@ -430,8 +430,8 @@ describe('Turbulence', function () {
                 });
         });
 
-        describe('if', function () {
-            it('should allow an if statement to take the true branch', function (done) {
+        describe('if', () => {
+            it('should allow an if statement to take the true branch', (done) => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
                 }));
@@ -439,20 +439,20 @@ describe('Turbulence', function () {
                 return turbulence
                     .startUserSteps()
                     .get('http://localhost:8080/url1')
-                    .if(function (resp) {
+                    .if((resp) => {
                         return resp.body.alpha === 'first';
                     })
                     .get('http://localhost:8080/url1')
                     .endIf()
                     .endUserSteps()
                     .run()
-                    .then(function (results) {
+                    .then((results) => {
                         assert.equal(2, results.requests.length);
                         done();
                     });
             });
 
-            it('should not allow an if statement to take the true branch if predicate is false', function (done) {
+            it('should not allow an if statement to take the true branch if predicate is false', (done) => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
                 }));
@@ -460,20 +460,20 @@ describe('Turbulence', function () {
                 return turbulence
                     .startUserSteps()
                     .get('http://localhost:8080/url1')
-                    .if(function (resp) {
+                    .if((resp) => {
                         return resp.body.alpha === 'second';
                     })
                     .get('http://localhost:8080/url1')
                     .endIf()
                     .endUserSteps()
                     .run()
-                    .then(function (results) {
+                    .then((results) => {
                         assert.equal(1, results.requests.length);
                         done();
                     });
             });
 
-            it('should execute an else branch if the predicate is false', function (done) {
+            it('should execute an else branch if the predicate is false', (done) => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
                 }));
@@ -481,7 +481,7 @@ describe('Turbulence', function () {
                 return turbulence
                     .startUserSteps()
                     .get('http://localhost:8080/url1')
-                    .if(function (resp) {
+                    .if((resp) => {
                         return resp.body.alpha === 'second';
                     })
                     .get('http://localhost:8080/url2')
@@ -490,25 +490,25 @@ describe('Turbulence', function () {
                     .endIf()
                     .endUserSteps()
                     .run()
-                    .then(function (results) {
+                    .then((results) => {
                         assert.equal(2, results.requests.length);
                         done();
-                    }).catch(function (err) {
+                    }).catch((err) => {
                         console.error(err);
                     });
             });
 
-            xit('should execute an if else branch', function () {
+            xit('should execute an if else branch', () => {
 
             });
 
-            xit('should evaluate multiple if else branches in order', function () {
+            xit('should evaluate multiple if else branches in order', () => {
 
             });
         });
 
-        describe('loops', function () {
-            it('should allow looping 1 time', function (done) {
+        describe('loops', () => {
+            it('should allow looping 1 time', (done) => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
                 }), new HttpResponse({
@@ -519,19 +519,19 @@ describe('Turbulence', function () {
                     .startUserSteps()
                     .loop(1)
                     .get('http://localhost:8080/url1')
-                    .assertResponse(function (resp) {
+                    .assertResponse((resp) => {
                         return resp.body.alpha === 'first';
                     })
                     .endLoop()
                     .endUserSteps()
                     .run()
-                    .then(function (results) {
+                    .then((results) => {
                         assert.equal(0, results.errors);
                         done();
                     });
             });
 
-            it('should allow looping 2 times', function (done) {
+            it('should allow looping 2 times', (done) => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
                 }), new HttpResponse({
@@ -542,19 +542,19 @@ describe('Turbulence', function () {
                     .startUserSteps()
                     .loop(2)
                     .get('http://localhost:8080/url1')
-                    .assertResponse(function (resp) {
+                    .assertResponse((resp) => {
                         return resp.body.alpha === 'first';
                     })
                     .endLoop()
                     .endUserSteps()
                     .run()
-                    .then(function (results) {
+                    .then((results) => {
                         assert.equal(1, results.errors);
                         done();
                     });
             });
 
-            it('should allow looping 3 times', function (done) {
+            it('should allow looping 3 times', (done) => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
                 }), new HttpResponse({
@@ -565,26 +565,26 @@ describe('Turbulence', function () {
                     .startUserSteps()
                     .loop(3)
                     .get('http://localhost:8080/url1')
-                    .assertResponse(function (resp) {
+                    .assertResponse((resp) => {
                         return resp.body.alpha === 'first';
                     })
                     .endLoop()
                     .endUserSteps()
                     .run()
-                    .then(function (results) {
+                    .then((results) => {
                         assert.equal(2, results.errors);
                         done();
                     });
             });
 
-            xit('should allow looping until a condition is satisfied', function () {
+            xit('should allow looping until a condition is satisfied', () => {
 
             });
         });
     });
 
-    describe('Reporting', function () {
-        it('should report a single http request result', function (done) {
+    describe('Reporting', () => {
+        it('should report a single http request result', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
             })).delayResponse(10);
@@ -594,7 +594,7 @@ describe('Turbulence', function () {
                 .get('http://localhost:8080/url1')
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     var request = results.requests.pop();
                     assert.equal('GET', request.type);
                     assert.equal('http://localhost:8080/url1', request.url);
@@ -602,12 +602,12 @@ describe('Turbulence', function () {
                     assert.equal(false, request.error);
                     assert(request.duration > 0, 'duration should be greater than 0');
                     done();
-                }).catch(function (err) {
+                }).catch((err) => {
                     console.error(err);
                 });
         });
 
-        it('should report average response time of http requests', function (done) {
+        it('should report average response time of http requests', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
             })).delayResponse(10);
@@ -617,13 +617,13 @@ describe('Turbulence', function () {
                 .get('http://localhost:8080/url1')
                 .endUserSteps()
                 .run()
-                .then(function (results) {
+                .then((results) => {
                     assert(results.averageResponseTime());
                     done();
                 });
         });
 
-        it('should allow http requests to be labeled', function (done) {
+        it('should allow http requests to be labeled', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
             })).delayResponse(10);
@@ -634,7 +634,7 @@ describe('Turbulence', function () {
                 .endUserSteps()
                 .run()
                 .report()
-                .then(function () {
+                .then(() => {
                     var doc = domParser.parseFromString(stubFs.data);
                     assert.equal('Retrieve User Information', xpath.select('//*[@class="Name"]', doc)[0].firstChild.data);
 
@@ -642,7 +642,7 @@ describe('Turbulence', function () {
                 });
         });
 
-        it('should generate an html report', function (done) {
+        it('should generate an html report', (done) => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
             }));
@@ -653,7 +653,7 @@ describe('Turbulence', function () {
                 .endUserSteps()
                 .run()
                 .report()
-                .then(function () {
+                .then(() => {
                     var doc = domParser.parseFromString(stubFs.data);
                     assert.equal('1', xpath.select('//*[@class="TotalRequests"]', doc)[0].firstChild.data);
 
@@ -662,44 +662,43 @@ describe('Turbulence', function () {
         });
     });
 
-    xdescribe('Distributed Testing', function () {
-        xit('should send the test plan to the executor', function () {
+    describe('Multi-User simulation', () => {
+        it('should allow multiple users to be simulated', (done) => {
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                key: 'value'
+            }));
+
+            var start = Date.now();
+
+            turbulence
+                .startUserSteps()
+                .get('http://localhost:8080/url1')
+                .pause(1000)
+                .concurrentUsers(10)
+                .endUserSteps()
+                .run()
+                .then((report) => {
+                    var end = Date.now();
+
+                    var elapsed = end - start;
+
+                    assert.equal(true, elapsed < 2000);
+                    assert.equal(10, report.requests.length);
+                    done();
+                });
+        });
+    });
+
+    xdescribe('Distributed Testing', () => {
+        xit('should send the test plan to the executor', () => {
 
         });
 
-        xit('should distribute the number of users equally between executors', function () {
+        xit('should distribute the number of users equally between executors', () => {
 
         });
     });
 
-    describe('CLI', function () {
-        xit('should run the specified .js file', function () {
-
-        });
-
-        xit('should all .js files when given no args', function () {
-
-        });
-
-        xit('should allow patterns to be included', function () {
-
-        });
-
-        xit('should allow patterns to be excluded', function () {
-
-        });
-
-        xit('should write an html report after executing', function (done) {
-            exec('node ./src/index.js', function (err, out, code) {
-                console.error(err);
-                console.log(out);
-                console.log(code);
-                done();
-            });
-
-        });
-
-    });
 
 })
 ;

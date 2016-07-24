@@ -13,7 +13,7 @@ export class StubFs {
         this.data = data;
         this.callback = callback;
 
-        fs.writeFile(path, data, function () {
+        fs.writeFile(path, data, () => {
             console.error('You should disable this fs writing in StubFs.ts');
         });
     }

@@ -14,18 +14,18 @@ export class LocalExecutor implements Executor {
 
         var allResults:SummaryResults[] = [];
 
-        return testPlans.reduce(function (promise:Q.Promise<SummaryResults>, nextTestPlan:TestPlan):Q.Promise<SummaryResults> {
-                return promise.then(function ():Q.Promise<SummaryResults> {
+        return testPlans.reduce((promise:Q.Promise<SummaryResults>, nextTestPlan:TestPlan):Q.Promise<SummaryResults> => {
+                return promise.then(():Q.Promise<SummaryResults> => {
                     var result = nextTestPlan.run();
 
-                    return result.then(function (results) {
+                    return result.then((results) => {
                         allResults.push(results);
                         return results;
                     });
                 });
             }, deferred.promise)
-            .then(function ():SummaryResults {
-                return allResults.reduce(function (left, right) {
+            .then(():SummaryResults => {
+                return allResults.reduce((left, right) => {
                     right.errors = right.errors + left.errors;
                     return right;
                 });

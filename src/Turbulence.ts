@@ -35,16 +35,16 @@ export class Turbulence {
         var self = this;
         var promise = this.executor.run(this.testPlans);
         return {
-            then: function (func) {
+            then: (func) => {
                 return promise.then(func);
             },
-            report: function () {
-                var promise2 = promise.then(function (results) {
+            report: () => {
+                var promise2 = promise.then((results) => {
                     return self.reportGenerator.toReport(results);
                 });
 
                 return {
-                    then: function (func) {
+                    then: (func) => {
                         return promise2.then(func);
                     }
                 };

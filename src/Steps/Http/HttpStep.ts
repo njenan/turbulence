@@ -25,7 +25,7 @@ export abstract class AbstractHttpStep {
         var self = this;
         var start = new Date().getTime();
 
-        return this.makeCall().then(function (resp) {
+        return this.makeCall().then((resp) => {
             var end = new Date().getTime();
             var duration = end - start;
 

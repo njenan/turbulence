@@ -8,6 +8,7 @@ export class HttpRequestRecord {
     status:number;
     error:boolean;
     duration:number;
+    timestamp:number;
 
     constructor(step:AbstractHttpStep, response:HttpResponse, duration:number) {
         this.type = step.getType();
@@ -16,5 +17,6 @@ export class HttpRequestRecord {
         this.status = response.statusCode;
         this.error = false;
         this.duration = duration;
+        this.timestamp = Date.now();
     }
 }

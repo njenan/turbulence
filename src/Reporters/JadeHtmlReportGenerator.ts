@@ -19,7 +19,7 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
 
 
     toReport(results:SummaryResults) {
-        var requests = results.requests.reduce(function (map, nextRequest) {
+        var requests = results.requests.reduce((map, nextRequest) => {
             var key = nextRequest.url;
             if (!map[key]) {
                 map[key] = {};
@@ -55,9 +55,10 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
 
         this.fs.writeFile('Report.html', this.generator({
                 requests: array,
-                averageResponseTime: results.averageResponseTime()
+                averageResponseTime: results.averageResponseTime(),
+                dataPoints: results.responseTimesByTimestamp()
             }),
-            function (err, result) {
+            (err, result) => {
                 console.log(err, result);
             }
         );

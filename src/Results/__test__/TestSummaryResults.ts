@@ -7,9 +7,9 @@ import {HttpRequestRecord} from "../../Steps/Http/HttpRequestRecord";
 import {HttpGetStep} from "../../Steps/Http/HttpGetStep";
 import {HttpResponse} from "../../Http/HttpResponse";
 
-describe('Summary Results', function () {
-    describe('averageResponseTime', function () {
-        it('should return the average all requests', function () {
+describe('Summary Results', () => {
+    describe('averageResponseTime', () => {
+        it('should return the average all requests', () => {
             var results = new SummaryResults();
             results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, undefined, undefined), new HttpResponse(), 1));
             results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, undefined, undefined), new HttpResponse(), 2));
@@ -19,7 +19,7 @@ describe('Summary Results', function () {
 
         });
 
-        it('should return the average response for a specific url', function () {
+        it('should return the average response for a specific url', () => {
             var results = new SummaryResults();
             results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 10));
             results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 30));
@@ -30,8 +30,8 @@ describe('Summary Results', function () {
 
     });
 
-    describe('requestMap', function () {
-        it('should return a map of each url with response times', function () {
+    describe('requestMap', () => {
+        it('should return a map of each url with response times', () => {
             var results = new SummaryResults();
             results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 10));
             results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 30));

@@ -30,12 +30,12 @@ export class ElseStep implements TestStep, StepCreator {
         var deferred = Q.defer();
         deferred.resolve();
 
-        return this.creator.steps.reduce(function (promise, nextStep) {
-            return promise.then(function (data) {
+        return this.creator.steps.reduce((promise, nextStep) => {
+            return promise.then((data) => {
                 return nextStep.execute(data);
             });
         }, deferred.promise)
-            .then(function () {
+            .then(() => {
                 return self.results;
             });
     }

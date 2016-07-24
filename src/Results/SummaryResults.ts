@@ -12,40 +12,49 @@ export class SummaryResults {
         var filter;
 
         if (name) {
-            filter = function (entry) {
+            filter = (entry) => {
                 return entry.url === name;
             }
         } else {
-            filter = function () {
+            filter = () => {
                 return true;
             }
         }
 
         var map = this.requests
             .filter(filter)
-            .map(function (entry) {
+            .map((entry) => {
                 return entry.duration;
             });
 
         var divisor = map.length;
 
         return map
-                .reduce(function (left, right) {
+                .reduce((left, right) => {
                     return left + right;
                 })
             / divisor;
 
     }
 
+    responseTimesByTimestamp():any[] {
+        return this.requests.map((entry) => {
+            return {
+                x: entry.timestamp,
+                y: entry.duration
+            }
+        });
+    }
+
     requestMap() {
         var self = this;
         var map = {};
 
-        this.requests.map(function (entry) {
+        this.requests.map((entry) => {
             if (!map[entry.url]) {
                 map[entry.url] = {
                     requests: [],
-                    averageResponseTime: function () {
+                    averageResponseTime: () => {
                         return self.averageResponseTime(entry.url);
                     }
                 };

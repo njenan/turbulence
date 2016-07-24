@@ -42,12 +42,12 @@ export class IfStep implements TestStep, StepCreator {
         deferred.resolve();
 
         if (this.predicate(data)) {
-            return this.creator.steps.reduce(function (promise, nextStep) {
-                return promise.then(function (data) {
+            return this.creator.steps.reduce((promise, nextStep) => {
+                return promise.then((data) => {
                     return nextStep.execute(data);
                 });
             }, deferred.promise)
-                .then(function () {
+                .then(() => {
                     return self.results;
                 });
         } else if (this.elseStep) {

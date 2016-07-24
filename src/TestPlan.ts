@@ -20,39 +20,45 @@ export class TestPlan extends EmbeddableStepCreator {
     name:String;
     steps:Array<TestStep>;
     http:HttpClient;
-    results:SummaryResults;
+    users:number = 1;
 
     constructor(parent, http, name?) {
-        var results = new SummaryResults();
-
-        super(http, results);
+        super(http, new SummaryResults());
 
         this.parent = parent;
         this.name = name;
         this.steps = [];
         this.http = http;
-        this.results = new SummaryResults();
-
     }
 
     endUserSteps() {
         return this.parent;
     }
 
+    concurrentUsers(users:number) {
+        this.users = users;
+        return this;
+    }
+
     run():Q.Promise<SummaryResults> {
         var self = this;
-        var deferred = Q.defer();
-        deferred.resolve();
+        var promises = [];
 
-        return this.steps.reduce(function (promise, nextStep) {
-                return promise.then(function (data) {
+        for (var i = 0; i < this.users; i++) {
+
+            var deferred = Q.defer();
+            deferred.resolve();
+
+            promises.push(this.steps.reduce((promise, nextStep) => {
+                return promise.then((data) => {
                     return nextStep.execute(data);
                 });
-            }, deferred.promise)
-            .then(function () {
-                return self.results;
-            });
+            }, deferred.promise));
+        }
 
+        return Q.all(promises).then(() => {
+            return self.results;
+        });
     }
 
 }

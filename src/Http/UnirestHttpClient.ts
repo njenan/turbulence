@@ -43,7 +43,7 @@ export class UnirestHttpClient implements HttpClient {
             request = request.send(body);
         }
 
-        request.end(function (response) {
+        request.end((response) => {
             deferred.resolve(new HttpResponse(response.body, response.statusCode));
         });
 
