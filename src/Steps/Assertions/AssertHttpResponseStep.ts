@@ -17,14 +17,10 @@ export class AssertHttpResponseStep implements TestStep {
     }
 
     execute(resp:HttpResponse):Q.Promise<HttpResponse> {
-        var deferred = Q.defer<HttpResponse>();
-
         if (!this.validator(resp)) {
             this.results.errors++;
         }
 
-        deferred.resolve(resp);
-
-        return deferred.promise;
+        return Q.resolve(resp);
     }
 }

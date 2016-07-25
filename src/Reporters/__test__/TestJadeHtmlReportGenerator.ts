@@ -13,6 +13,8 @@ import {HttpGetStep} from "../../Steps/Http/HttpGetStep";
 import {HttpRequestRecord} from "../../Steps/Http/HttpRequestRecord";
 import {HttpResponse} from "../../Http/HttpResponse";
 
+require("mocha-as-promised")();
+
 describe('JadeHtmlReportGenerator', () => {
     var generator:JadeHtmlReportGenerator;
     var stubFs;

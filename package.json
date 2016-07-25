@@ -28,7 +28,8 @@
   },
   "homepage": "https://github.com/njenan/turbulence#readme",
   "devDependencies": {
-    "mocha": "^2.4.5",
+    "mocha": "^2.5.3",
+    "mocha-as-promised": "^2.0.0",
     "mountebank": "^1.5.1-beta.1115",
     "power-assert": "^1.3.1",
     "typescript": "^1.8.10",
@@ -39,6 +40,7 @@
   },
   "dependencies": {
     "argh": "^0.1.4",
+    "chartjs": "^0.3.24",
     "jade": "^1.11.0",
     "moment": "^2.14.1",
     "q": "^1.4.1",

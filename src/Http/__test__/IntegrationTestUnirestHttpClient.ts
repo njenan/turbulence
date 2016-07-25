@@ -6,6 +6,8 @@ import assert = require('power-assert');
 import {HttpClient} from "../HttpClient";
 import {UnirestHttpClient} from "../UnirestHttpClient";
 
+require("mocha-as-promised")();
+
 
 describe('Unirest Http Client', () => {
     var client:HttpClient;
@@ -69,49 +71,43 @@ describe('Unirest Http Client', () => {
             });
     });
 
-    it('should send a GET request', (done) => {
-        client.get('http://localhost:4545', {headerOne: 'valueOne'}).then((resp) => {
+    it('should send a GET request', () => {
+        return client.get('http://localhost:4545', {headerOne: 'valueOne'}).then((resp) => {
             assert.equal(resp.statusCode, 200);
             assert.equal(resp.body, 'Get response');
-            done();
         });
     });
 
-    it('should send a POST request', (done) => {
-        client.post('http://localhost:4545', 'post body', {headerTwo: 'valueTwo'}).then((resp) => {
+    it('should send a POST request', () => {
+        return client.post('http://localhost:4545', 'post body', {headerTwo: 'valueTwo'}).then((resp) => {
             assert.equal(resp.statusCode, 201);
             assert.equal(resp.body, 'Post response');
-            done();
         });
     });
 
-    it('should send a PUT request', (done) => {
-        client.put('http://localhost:4545', 'put body', {headerThree: 'valueThree'}).then((resp) => {
+    it('should send a PUT request', () => {
+        return client.put('http://localhost:4545', 'put body', {headerThree: 'valueThree'}).then((resp) => {
             assert.equal(resp.statusCode, 202);
             assert.equal(resp.body, 'Put response');
-            done();
         });
     });
 
-    it('should send a HEAD request', (done) => {
-        client.head('http://localhost:4545', {headerFour: 'valueFour'}).then((resp) => {
+    it('should send a HEAD request', () => {
+        return client.head('http://localhost:4545', {headerFour: 'valueFour'}).then((resp) => {
             assert.equal(resp.statusCode, 203);
-            done();
         });
     });
 
-    it('should send a DELETE request', (done) => {
-        client.delete('http://localhost:4545', {headerFive: 'valueFive'}).then((resp) => {
+    it('should send a DELETE request', () => {
+        return client.delete('http://localhost:4545', {headerFive: 'valueFive'}).then((resp) => {
             assert.equal(resp.statusCode, 204);
-            done();
         });
     });
 
     ['get', 'post', 'put', 'delete', 'head'].forEach((entry) => {
-        it('should send ' + entry + ' requests without headers', (done) => {
-            client[entry]('http://localhost:4545').then((resp) => {
+        it('should send ' + entry + ' requests without headers', () => {
+            return client[entry]('http://localhost:4545').then((resp) => {
                 assert.equal(resp.statusCode, 205);
-                done();
             });
         });
     });

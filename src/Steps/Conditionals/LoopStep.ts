@@ -27,12 +27,6 @@ export class LoopStep<T> implements TestStep, StepCreator {
     }
 
     execute():Q.Promise<any> {
-        var deferred = Q.defer();
-
-        setTimeout(() => {
-            deferred.resolve();
-        }, 0);
-
         var self = this;
 
         var chainPromiseNTimes = (i, promise):Q.Promise<any> => {
@@ -47,7 +41,7 @@ export class LoopStep<T> implements TestStep, StepCreator {
             }
         };
 
-        return chainPromiseNTimes(this.times, deferred.promise);
+        return chainPromiseNTimes(this.times, Q.resolve(null));
     }
 
     endLoop():T {

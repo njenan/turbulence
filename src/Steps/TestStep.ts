@@ -2,10 +2,8 @@
 
 import Q = require('q');
 
-import {SummaryResults} from "../Results/SummaryResults";
-
 
 export interface TestStep {
 
-    execute<I,O>(data?:I): Q.Promise<O>;
+    execute<I,O>(data?:I):Q.Promise<O>;
 }

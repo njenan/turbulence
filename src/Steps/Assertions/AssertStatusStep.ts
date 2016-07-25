@@ -17,14 +17,10 @@ export class AssertStatusStep implements TestStep {
     }
 
     execute(resp:HttpResponse):Q.Promise<HttpResponse> {
-        var deferred = Q.defer<HttpResponse>();
-
         if (resp.statusCode !== this.code) {
             this.results.errors++;
         }
 
-        deferred.resolve(resp);
-
-        return deferred.promise;
+        return Q.resolve(resp);
     }
 }

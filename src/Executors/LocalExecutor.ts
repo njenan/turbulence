@@ -9,21 +9,18 @@ import {Executor} from "./Executor";
 export class LocalExecutor implements Executor {
 
     run(testPlans:Array<TestPlan>) {
-        var deferred = Q.defer<SummaryResults>();
-        deferred.resolve();
-
         var allResults:SummaryResults[] = [];
 
         return testPlans.reduce((promise:Q.Promise<SummaryResults>, nextTestPlan:TestPlan):Q.Promise<SummaryResults> => {
-                return promise.then(():Q.Promise<SummaryResults> => {
-                    var result = nextTestPlan.run();
+            return promise.then(():Q.Promise<SummaryResults> => {
+                var result = nextTestPlan.run();
 
-                    return result.then((results) => {
-                        allResults.push(results);
-                        return results;
-                    });
+                return result.then((results) => {
+                    allResults.push(results);
+                    return results;
                 });
-            }, deferred.promise)
+            });
+        }, Q.resolve(null))
             .then(():SummaryResults => {
                 return allResults.reduce((left, right) => {
                     right.errors = right.errors + left.errors;

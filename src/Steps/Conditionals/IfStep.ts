@@ -38,15 +38,13 @@ export class IfStep implements TestStep, StepCreator {
 
     execute(data):Q.Promise<any> {
         var self = this;
-        var deferred = Q.defer();
-        deferred.resolve();
 
         if (this.predicate(data)) {
             return this.creator.steps.reduce((promise, nextStep) => {
                 return promise.then((data) => {
                     return nextStep.execute(data);
                 });
-            }, deferred.promise)
+            }, Q.resolve(null))
                 .then(() => {
                     return self.results;
                 });
