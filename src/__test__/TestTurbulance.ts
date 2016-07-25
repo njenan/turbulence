@@ -642,13 +642,40 @@ describe('Turbulence', () => {
                 .run()
                 .then((report) => {
                     var end = Date.now();
-
                     var elapsed = end - start;
 
                     assert.equal(true, elapsed < 2000);
                     assert.equal(10, report.requests.length);
                 });
-            
+        });
+
+        it('should allow a ramp-up period', function () {
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                key: 'value'
+            }));
+
+            var start = Date.now();
+
+            return turbulence
+                .startUserSteps()
+                .get('http://localhost:8080/url1')
+                .concurrentUsers(10)
+                .rampUpPeriod(1000)
+                .endUserSteps()
+                .run()
+                .then((report) => {
+                    assert(report.requests[0].timestamp - start < 100, 'Took too long to execute first request');
+
+                    for (var i = 0; i < 9; i++) {
+                        var current = report.requests[i];
+                        var next = report.requests[i + 1];
+
+                        var diff = next.timestamp - current.timestamp;
+
+                        assert(diff > 50, 'diff should be greater than 50ms, was' + diff);
+                        assert(diff < 200, 'diff should be less than 200ms, was ' + diff);
+                    }
+                });
         });
 
     });

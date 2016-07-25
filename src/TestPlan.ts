@@ -21,6 +21,7 @@ export class TestPlan extends EmbeddableStepCreator {
     steps:Array<TestStep>;
     http:HttpClient;
     users:number = 1;
+    warmUp:number = 1;
 
     constructor(parent, http, name?) {
         super(http, new SummaryResults());
@@ -40,16 +41,23 @@ export class TestPlan extends EmbeddableStepCreator {
         return this;
     }
 
+    rampUpPeriod(seconds:number) {
+        this.warmUp = seconds;
+        return this;
+    }
+
     run():Q.Promise<SummaryResults> {
         var self = this;
         var promises = [];
+
+        var delay = this.warmUp / this.users;
 
         for (var i = 0; i < this.users; i++) {
             promises.push(this.steps.reduce((promise, nextStep) => {
                 return promise.then((data) => {
                     return nextStep.execute(data);
                 });
-            }, Q.resolve(null)));
+            }, Q.resolve(null).delay(delay * i)));
         }
 
         return Q.all(promises).then(() => {
