@@ -261,12 +261,35 @@ describe('Turbulence', () => {
 
         });
 
-        xit('should allow multiple users to run concurrently', () => {
+        xit('should provide a global scope object for storing variables between steps', () => {
 
         });
 
-        xit('should provide a global scope object for storing variables between steps', () => {
+        it('should run the test to a specified time limit', function () {
+            this.timeout(30000);
 
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                alpha: 'first'
+            }));
+
+            var start = Date.now();
+
+            return turbulence
+                .startUserSteps()
+                .get('http://localhost:8080/url1')
+                .assertResponse((resp) => {
+                    return resp.body.alpha === 'first';
+                })
+                .duration(1000)
+                .endUserSteps()
+
+                .run()
+                .then(() => {
+                    var end = Date.now();
+
+                    assert(end - start > 900, 'Expected duration greater than 900, was ' + (end - start));
+                    assert(end - start < 1100, 'Expected duration greater than 900, was ' + (end - start));
+                });
         });
 
     });

@@ -20,8 +20,11 @@ export class TestPlan extends EmbeddableStepCreator {
     name:String;
     steps:Array<TestStep>;
     http:HttpClient;
-    users:number = 1;
+    targetUsers:number = 1;
     warmUp:number = 1;
+    time:number = -1;
+    actualUsers:number = 0;
+    startTime:number;
 
     constructor(parent, http, name?) {
         super(http, new SummaryResults());
@@ -37,7 +40,7 @@ export class TestPlan extends EmbeddableStepCreator {
     }
 
     concurrentUsers(users:number) {
-        this.users = users;
+        this.targetUsers = users;
         return this;
     }
 
@@ -46,19 +49,48 @@ export class TestPlan extends EmbeddableStepCreator {
         return this;
     }
 
+    duration(millis) {
+        this.time = millis;
+        return this;
+    }
+
+    currentTargetUsers() {
+        return this.targetUsers;
+    }
+
+    running() {
+        return Date.now() < this.startTime + this.time;
+    }
+
     run():Q.Promise<SummaryResults> {
         var self = this;
         var promises = [];
 
-        var delay = this.warmUp / this.users;
+        this.startTime = Date.now();
 
-        for (var i = 0; i < this.users; i++) {
-            promises.push(this.steps.reduce((promise, nextStep) => {
+        var script = (promise) => {
+            return this.steps.reduce((promise, nextStep) => {
                 return promise.then((data) => {
                     return nextStep.execute(data);
                 });
-            }, Q.resolve(null).delay(delay * i)));
-        }
+            }, promise).then(() => {
+                if (this.running()) {
+                    return script(promise);
+                }
+            });
+        };
+
+        var rampUpIncrement = this.warmUp / this.targetUsers;
+
+        var startTestPlans = () => {
+            var i = 0;
+            while (this.actualUsers < this.targetUsers) {
+                promises.push(script(Q.resolve(null).delay(rampUpIncrement * i++)));
+                this.actualUsers++;
+            }
+        };
+
+        startTestPlans();
 
         return Q.all(promises).then(() => {
             return self.results;
