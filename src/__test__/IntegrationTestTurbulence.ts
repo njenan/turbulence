@@ -1,7 +1,5 @@
 import child_process = require('child_process');
 
-require("mocha-as-promised")();
-
 var exec = child_process.exec;
 
 describe('Turbulence', () => {

@@ -6,8 +6,6 @@ import assert = require('power-assert');
 import {HttpClient} from "../HttpClient";
 import {UnirestHttpClient} from "../UnirestHttpClient";
 
-require("mocha-as-promised")();
-
 
 describe('Unirest Http Client', () => {
     var client:HttpClient;

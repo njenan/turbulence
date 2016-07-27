@@ -18,8 +18,6 @@ import {LocalExecutor} from "../Executors/LocalExecutor";
 import {JadeHtmlReportGenerator} from "../Reporters/JadeHtmlReportGenerator";
 import {StubFs} from "../Reporters/__test__/StubFs";
 
-require("mocha-as-promised")();
-
 Q.longStackSupport = true;
 
 var domParser = new xmldom.DOMParser({

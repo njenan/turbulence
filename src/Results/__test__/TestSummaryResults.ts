@@ -7,8 +7,6 @@ import {HttpRequestRecord} from "../../Steps/Http/HttpRequestRecord";
 import {HttpGetStep} from "../../Steps/Http/HttpGetStep";
 import {HttpResponse} from "../../Http/HttpResponse";
 
-require("mocha-as-promised")();
-
 describe('Summary Results', () => {
     describe('averageResponseTime', () => {
         it('should return the average all requests', () => {
