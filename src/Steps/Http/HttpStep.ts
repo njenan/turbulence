@@ -29,7 +29,7 @@ export abstract class AbstractHttpStep {
             var end = new Date().getTime();
             var duration = end - start;
 
-            var requestRecord = new HttpRequestRecord(self, resp, duration);
+            var requestRecord = new HttpRequestRecord(self, resp, duration, Date.now());
             self.results.requests.push(requestRecord);
             return resp;
         });

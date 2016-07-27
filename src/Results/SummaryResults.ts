@@ -46,6 +46,28 @@ export class SummaryResults {
         });
     }
 
+    responsesPerInterval():any[] {
+        return this.requests.reduce((accum:any, next) => {
+            var current = accum.pop();
+
+            if (current.timestamp + 100 < next.timestamp) {
+                accum.push(current);
+                current = {
+                    timestamp: current.timestamp + 100,
+                    count: 1
+                };
+            } else {
+                current.count++;
+            }
+
+            accum.push(current);
+            return accum;
+        }, [{
+            timestamp: this.requests[0].timestamp,
+            count: 0
+        }]);
+    }
+
     requestMap() {
         var self = this;
         var map = {};
