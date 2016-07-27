@@ -13,7 +13,7 @@ describe('Turbulence', () => {
     }
 
     describe('CLI', () => {
-        it('should run the specified .turbulence file', (done) => {
+        xit('should run the specified .turbulence file', (done) => {
             runTurbulence('example.turbulence', () => {
                 done();
             });
