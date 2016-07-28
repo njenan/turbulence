@@ -10,11 +10,11 @@ var args = argh.argv;
 var file = fs.readFileSync(args.argv.pop());
 
 console.log(eval(
-    "var T = new require('./src/Turbulence').Turbulence;" +
-    "var E = require('./src/Executors/LocalExecutor');" +
-    "var R = require('./src/Reporters/JadeHtmlReportGenerator');" +
-    "var H = require('./src/Http/UnirestHttpClient');" +
-    "var F = require('./src/Reporters/__test__/StubFs');" +
+    "var T = new require('" + __dirname + "/src/Turbulence').Turbulence;" +
+    "var E = require('" + __dirname + "/src/Executors/LocalExecutor');" +
+    "var R = require('" + __dirname + "/src/Reporters/JadeHtmlReportGenerator');" +
+    "var H = require('" + __dirname + "/src/Http/UnirestHttpClient');" +
+    "var F = require('" + __dirname + "/src/Reporters/__test__/StubFs');" +
     "var turbulence = new T(new H.UnirestHttpClient(), new E.LocalExecutor(), new R.JadeHtmlReportGenerator(new F.StubFs()));" +
     file)
     .report()
