@@ -46,25 +46,25 @@ export class SummaryResults {
         });
     }
 
-    responsesPerInterval():any[] {
+    responsesPerInterval(interval):any[] {
         return this.requests.reduce((accum:any, next) => {
             var current = accum.pop();
 
-            if (current.timestamp + 100 < next.timestamp) {
+            if (current.x + interval < next.timestamp) {
                 accum.push(current);
                 current = {
-                    timestamp: current.timestamp + 100,
-                    count: 1
+                    x: current.x + interval,
+                    y: 1
                 };
             } else {
-                current.count++;
+                current.y++;
             }
 
             accum.push(current);
             return accum;
         }, [{
-            timestamp: this.requests[0].timestamp,
-            count: 0
+            x: this.requests[0].timestamp,
+            y: 0
         }]);
     }
 

@@ -14,7 +14,7 @@ html(lang="en")
         nav(class="navbar navbar-default header")
             div(class="container-fluid")
                 a(class="navbar-brand", href="./")
-                    img(alt="Brand", height="30", src="./turbulence-logo.png")
+                    img(alt="Brand", height="30", src="http://turbulence.io/turbulence-logo.png")
                 h2(class="navbar-left") turbulence run report
 
         div(class="container")
@@ -45,6 +45,10 @@ html(lang="en")
         div(class="container")
             h3 Response Times Over Time
             canvas(id="responseTimesChart")
+        div(class="container")
+            h3 Responses Per Interval
+            canvas(id="responsesPerIntervalChart")
         script(type="text/javascript").
-            dataPoints = !{JSON.stringify(dataPoints)};
+            responseTimesData = !{JSON.stringify(responseTimesData)};
+            responsesPerIntervalData = !{JSON.stringify(responsesPerIntervalData)};
         script(type="text/javascript", src="./chart.js")

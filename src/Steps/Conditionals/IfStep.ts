@@ -8,6 +8,7 @@ import {StepCreator} from "../StepCreator";
 import {SummaryResults} from "../../Results/SummaryResults";
 import {ElseStep} from "./ElseStep";
 import {HttpClient} from "../../Http/HttpClient";
+import {RandomPauseStep} from "../RandomPauseStep";
 
 //Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will result
 export class IfStep implements TestStep, StepCreator {
@@ -90,6 +91,11 @@ export class IfStep implements TestStep, StepCreator {
 
     pause(time:number):StepCreator {
         this.creator.pause(time);
+        return this;
+    }
+
+    randomPause(lower:number, upper:number):StepCreator {
+        this.creator.randomPause(lower, upper);
         return this;
     }
 

@@ -1,13 +1,10 @@
 //My First Test
 turbulence
     .startUserSteps()
-        .loop(1)
             .get('http://turbulence.io/')
             .expectStatus(200)
-            .pause(500)
-        .endLoop()
-        .concurrentUsers(20)
-        .rampUpPeriod(100)
-        .duration(1000)
+            .randomPause(2000, 10000)
+        .concurrentUsers(10)
+        .duration(60000)
     .endUserSteps()
     .run()

@@ -16,6 +16,8 @@ export interface StepCreator {
 
     pause(time:number):StepCreator;
 
+    randomPause(lower:number, upper:number):StepCreator;
+
     assertResponse(predicate):StepCreator;
 
     expectStatus(code):StepCreator;

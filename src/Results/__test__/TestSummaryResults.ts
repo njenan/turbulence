@@ -48,7 +48,7 @@ describe('Summary Results', () => {
 
     });
 
-    it('should group responses into 100 millisecon intervals', () => {
+    it('should group responses into 100 millisecond intervals', () => {
         var results = new SummaryResults();
         results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 1, 0));
         results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 1, 0));
@@ -56,11 +56,13 @@ describe('Summary Results', () => {
         results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1, 101));
         results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, 'http://localhost:8080/c', undefined), new HttpResponse(), 1, 201));
 
-        var summation = results.responsesPerInterval();
+        var summation = results.responsesPerInterval(100);
 
-        assert.equal(1, summation.pop().count);
-        assert.equal(2, summation.pop().count);
-        assert.equal(2, summation.pop().count);
+        console.log(summation);
+
+        assert.equal(1, summation.pop().y);
+        assert.equal(2, summation.pop().y);
+        assert.equal(2, summation.pop().y);
     });
 
 });

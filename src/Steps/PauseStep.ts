@@ -13,12 +13,6 @@ export class PauseStep implements TestStep {
     }
 
     execute() {
-        var deferred = Q.defer<void>();
-
-        setTimeout(() => {
-            deferred.resolve();
-        }, this.time);
-
-        return deferred.promise;
+        return Q.resolve(null).delay(this.time);
     }
 }

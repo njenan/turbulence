@@ -16,6 +16,7 @@ import {LoopStep} from "./Conditionals/LoopStep";
 import {HttpPutStep} from "./Http/HttpPutStep";
 import {HttpHeadStep} from "./Http/HttpHeadStep";
 import {HttpDeleteStep} from "./Http/HttpDeleteStep";
+import {RandomPauseStep} from "./RandomPauseStep";
 
 export class EmbeddableStepCreator implements StepCreator {
 
@@ -68,6 +69,11 @@ export class EmbeddableStepCreator implements StepCreator {
 
     pause(time:number):StepCreator {
         this.addStep(new PauseStep(time));
+        return this;
+    }
+
+    randomPause(lower:number, upper:number):StepCreator {
+        this.addStep(new RandomPauseStep(lower, upper));
         return this;
     }
 
