@@ -14,7 +14,7 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
     constructor(fileWriter) {
         this.fs = fileWriter;
         //Code is synchronous... shouldn't be a problem because this won't execute during the performance test
-        this.generator = Jade.compileFile("src/Reporters/JadeReport.jade");
+        this.generator = Jade.compileFile(__dirname + "/JadeReport.jade");
     }
 
 
