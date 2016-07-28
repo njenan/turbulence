@@ -12,8 +12,7 @@
     "watch": "watch --wait 5 --filter watchFilter.js 'npm test' **/*",
     "pre-integration-test": "./scripts/startMountebank.sh",
     "integration-test": "./scripts/integrationTest.sh",
-    "all": "npm run package && npm test && npm run integration-test",
-    "prepublish": "tsc"
+    "all": "npm run package && npm test && npm run integration-test"
   },
   "bin": {
     "turbulence": "./index.js"
