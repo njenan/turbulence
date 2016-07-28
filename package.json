@@ -1,6 +1,6 @@
 {
   "name": "turbulence",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A plug-in based, distributed performance testing tool for developers",
   "main": "index.js",
   "scripts": {
