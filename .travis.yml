@@ -5,6 +5,7 @@ before_deploy:
 - git config user.email "njenan@gmail.com"
 - git config user.name "Travis CI"
 deploy:
+  skip_cleanup: true
   provider: npm
   email: njenan@gmail.com
   api_key:
