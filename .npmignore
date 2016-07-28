@@ -1,0 +1,5 @@
+.gitignore
+scripts/
+node_modules/
+typings/
+**/*.ts
