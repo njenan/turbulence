@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+require('./src/Turbulence');
+require('./src/Executors/LocalExecutor');
+require('./src/Reporters/JadeHtmlReportGenerator');
+require('./src/Http/UnirestHttpClient');
+require('./src/Reporters/__test__/StubFs');
+
 var fs = require('fs');
 
 var argh = require('argh');
