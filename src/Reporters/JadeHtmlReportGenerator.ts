@@ -2,9 +2,11 @@
 /// <reference path="../../typings/main/ambient/node/index.d.ts" />
 
 import Jade = require('jade');
+import fs = require('fs');
 
 import {ReportGenerator} from "./ReportGenerator";
 import {SummaryResults} from "./../Results/SummaryResults";
+
 
 export class JadeHtmlReportGenerator implements ReportGenerator {
 
@@ -57,7 +59,9 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
                 requests: array,
                 averageResponseTime: results.averageResponseTime(),
                 responseTimesData: results.responseTimesByTimestamp(),
-                responsesPerIntervalData: results.responsesPerInterval(1000)
+                responsesPerIntervalData: results.responsesPerInterval(1000),
+                cssPath: __dirname + '/style.css',
+                chartjsPath: __dirname + '/chart.js'
             }),
             (err, result) => {
                 console.log(err, result);

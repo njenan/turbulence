@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "find ./src -name \"*.js\" -delete",
-    "postinstall": "typings install",
-    "package": "npm run clean && tsc",
+    "package": "npm run clean && typings install && tsc",
     "test": "npm run package && npm run quick-test",
     "quick-test": "mocha \"src/**/__test__/Test*.js\"",
     "watch": "watch --wait 5 --filter watchFilter.js 'npm test' **/*",

@@ -1,7 +1,10 @@
+declare var Chart:any;
+declare var responseTimesData:any;
+declare var responsesPerIntervalData:any;
+
 var responseTimesChart = document.getElementById("responseTimesChart");
 
 Chart.defaults.global.defaultFontColor = 'white';
-
 Chart.defaults.global.elements.line.borderColor = 'white';
 
 new Chart(responseTimesChart, {
