@@ -32,7 +32,7 @@ This will define a test that runs 10 virtual users against the turbulence home p
  
     turbulence my_test_plan.turbulence
 
-When turbulence finishes, an `output.html` file will be created in the current directory.  Open the file in a web browser and you should see the run report:
+When turbulence finishes, a `Report.html` file will be created in the current directory.  Open the file in a web browser and you should see the run report:
 
 ![Example Turbulence Report](./example-report.png)
 
