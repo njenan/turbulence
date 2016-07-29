@@ -15,7 +15,7 @@ var args = argh.argv;
 
 var file = fs.readFileSync(args.argv.pop());
 
-console.log(eval(
+eval(
     "var T = new require('" + __dirname + "/src/Turbulence').Turbulence;" +
     "var E = require('" + __dirname + "/src/Executors/LocalExecutor');" +
     "var R = require('" + __dirname + "/src/Reporters/JadeHtmlReportGenerator');" +
@@ -24,8 +24,7 @@ console.log(eval(
     "var turbulence = new T(new H.UnirestHttpClient(), new E.LocalExecutor(), new R.JadeHtmlReportGenerator(new F.StubFs()));" +
     file)
     .report()
-    .then(function (data) {
-        console.log(data);
+    .then(function () {
     }).catch(function (err) {
-        console.error(err);
-    }));
+    console.error(err);
+});
