@@ -4,7 +4,7 @@ A plug-in based, distributed performance testing tool *for developers*
 
 [![Build Status](https://travis-ci.org/njenan/turbulence.svg?branch=master)](https://travis-ci.org/njenan/turbulence)
 [![npm version](https://badge.fury.io/js/turbulence.svg)](https://badge.fury.io/js/turbulence)
-
+[![Coverage Status](https://coveralls.io/repos/github/njenan/turbulence/badge.svg?branch=master)](https://coveralls.io/github/njenan/turbulence?branch=master)
 
 ### Installation
 
