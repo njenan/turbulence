@@ -406,8 +406,29 @@ describe('Turbulence', () => {
         });
     });
 
-    xdescribe('Assertions', () => {
+    describe('Assertions', () => {
+        describe('body parsing', () => {
+            xit('should parse json when given "jsonBody"', () => {
 
+            });
+
+
+            xit('should parse xml when given "xmlBody"', () => {
+
+            });
+
+            xit('should provide a jsonpath evaluator when given "jsonPath"', () => {
+
+            });
+
+            xit('should provide an xpath evaluator when given "xpath"', () => {
+
+            });
+
+            xit('should record an error if it cannot parse', () => {
+
+            });
+        });
     });
 
     describe('Control flow', () => {
