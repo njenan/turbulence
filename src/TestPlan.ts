@@ -1,19 +1,13 @@
 /// <reference path="../typings/main/ambient/q/index.d.ts" />
 /// <reference path='./Steps/EmbeddableStepCreator.ts' />
 
-import Q = require('q');
+import Q = require("q");
 
 import {TestStep} from "./Steps/TestStep";
-import {LoopStep} from "./Steps/Conditionals/LoopStep";
 import {EmbeddableStepCreator} from "./Steps/EmbeddableStepCreator";
-import {HttpGetStep} from "./Steps/Http/HttpGetStep";
 import {HttpClient} from "./Http/HttpClient";
 import {Turbulence} from "./Turbulence";
-import {AssertHttpResponseStep} from "./Steps/Assertions/AssertHttpResponseStep";
 import {SummaryResults} from "./Results/SummaryResults";
-import {AssertStatusStep} from "./Steps/Assertions/AssertStatusStep";
-import {PauseStep} from "./Steps/PauseStep";
-import {IfStep} from "./Steps/Conditionals/IfStep";
 
 export class TestPlan extends EmbeddableStepCreator {
     parent:Turbulence;
@@ -63,12 +57,12 @@ export class TestPlan extends EmbeddableStepCreator {
     }
 
     run():Q.Promise<SummaryResults> {
-        var self = this;
-        var promises = [];
+        let self = this;
+        let promises = [];
 
         this.startTime = Date.now();
 
-        var script = (promise) => {
+        let script = (promise) => {
             return this.steps.reduce((promise, nextStep) => {
                 return promise.then((data) => {
                     return nextStep.execute(data);
@@ -80,10 +74,10 @@ export class TestPlan extends EmbeddableStepCreator {
             });
         };
 
-        var rampUpIncrement = this.warmUp / this.targetUsers;
+        let rampUpIncrement = this.warmUp / this.targetUsers;
 
-        var startTestPlans = () => {
-            var i = 0;
+        let startTestPlans = () => {
+            let i = 0;
             while (this.actualUsers < this.targetUsers) {
                 promises.push(script(Q.resolve(null).delay(rampUpIncrement * i++)));
                 this.actualUsers++;
