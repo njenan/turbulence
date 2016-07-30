@@ -10,6 +10,8 @@
     "watch": "watch --wait 5 --filter watchFilter.js 'npm test' **/*",
     "pre-integration-test": "./scripts/startMountebank.sh",
     "integration-test": "./scripts/integrationTest.sh",
+    "travis-coverage": "istanbul cover _mocha \"src/**/__test__/Test*.js\" --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "coverage": "istanbul cover _mocha \"src/**/__test__/Test*.js\"",
     "all": "npm run package && npm test && npm run integration-test"
   },
   "bin": {
@@ -26,6 +28,8 @@
   },
   "homepage": "https://github.com/njenan/turbulence#readme",
   "devDependencies": {
+    "coveralls": "^2.11.12",
+    "istanbul": "^0.4.4",
     "mocha": "^2.5.3",
     "mountebank": "^1.5.1-beta.1115",
     "power-assert": "^1.3.1",

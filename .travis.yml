@@ -15,3 +15,4 @@ deploy:
     repo: njenan/turbulence
 script:
   - npm run all
+  - npm run travis-coverage
