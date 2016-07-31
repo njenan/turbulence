@@ -27,7 +27,7 @@ describe('Unirest Http Client', () => {
                             predicates: [{
                                 equals: {
                                     method: 'POST',
-                                    body: 'post body',
+                                    body: 'post rawBody',
                                     headers: {headerTwo: 'valueTwo'}
                                 }
                             }],
@@ -37,7 +37,7 @@ describe('Unirest Http Client', () => {
                             predicates: [{
                                 equals: {
                                     method: 'PUT',
-                                    body: 'put body',
+                                    body: 'put rawBody',
                                     headers: {headerThree: 'valueThree'}
                                 }
                             }],
@@ -72,21 +72,21 @@ describe('Unirest Http Client', () => {
     it('should send a GET request', () => {
         return client.get('http://localhost:4545', {headerOne: 'valueOne'}).then((resp) => {
             assert.equal(resp.statusCode, 200);
-            assert.equal(resp.body, 'Get response');
+            assert.equal(resp.rawBody, 'Get response');
         });
     });
 
     it('should send a POST request', () => {
-        return client.post('http://localhost:4545', 'post body', {headerTwo: 'valueTwo'}).then((resp) => {
+        return client.post('http://localhost:4545', 'post rawBody', {headerTwo: 'valueTwo'}).then((resp) => {
             assert.equal(resp.statusCode, 201);
-            assert.equal(resp.body, 'Post response');
+            assert.equal(resp.rawBody, 'Post response');
         });
     });
 
     it('should send a PUT request', () => {
-        return client.put('http://localhost:4545', 'put body', {headerThree: 'valueThree'}).then((resp) => {
+        return client.put('http://localhost:4545', 'put rawBody', {headerThree: 'valueThree'}).then((resp) => {
             assert.equal(resp.statusCode, 202);
-            assert.equal(resp.body, 'Put response');
+            assert.equal(resp.rawBody, 'Put response');
         });
     });
 
