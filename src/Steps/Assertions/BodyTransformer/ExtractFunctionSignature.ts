@@ -9,18 +9,4 @@ export function ExtractFunctionSignature(signature:string):any {
         accumulator[next] = i++;
         return accumulator;
     }, {});
-
-    /*
-     if (signature.indexOf("JsonBody") !== -1) {
-     return {jsonBody: 0};
-     } else if (signature.indexOf("XmlBody") !== -1) {
-     return {xmlBody: 0};
-     } else if (signature.indexOf("Response") !== -1) {
-     return {resp: 0};
-     } else if (signature.indexOf("JsonPath") !== -1) {
-     return {jsonPath: 0};
-     } else {
-     return {};
-     }
-     */
 }

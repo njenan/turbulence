@@ -6,11 +6,7 @@ import {TestStep} from "../TestStep";
 import {HttpResponse} from "../../Http/HttpResponse";
 import {SummaryResults} from "../../Results/SummaryResults";
 import {ExtractFunctionSignature} from "./BodyTransformer/ExtractFunctionSignature";
-import {XmlBodyTransformer} from "./BodyTransformer/XmlBodyTransformer";
-import {JsonBodyTransformer} from "./BodyTransformer/JsonBodyTransformer";
-
-//No typings exist for jsonpath-plus TODO write them
-var jsonpath = require('jsonpath-plus');
+import {TransformerFactory} from "./BodyTransformer/TransformerFactory";
 
 export class AssertHttpResponseStep implements TestStep {
     results:SummaryResults;
@@ -26,36 +22,18 @@ export class AssertHttpResponseStep implements TestStep {
         var signature = ExtractFunctionSignature(this.validator.toString());
         var promise = Q.resolve<any>(null);
 
-        if (signature.Response != null) {
-            args[signature.Response] = resp;
-        }
-
-        if (signature.JsonBody != null) {
-            promise = promise.then(() => {
-                return JsonBodyTransformer(resp);
-            }).then((jsonBody) => {
-                args[signature.JsonBody] = jsonBody;
-            });
-        }
-
-        if (signature.XmlBody != null) {
-            promise = promise.then(() => {
-                return XmlBodyTransformer(resp);
-            }).then((xmlBody) => {
-                args[signature.XmlBody] = xmlBody;
-            });
-        }
-
-        if (signature.JsonPath != null) {
-            promise = promise.then(() => {
-                return JsonBodyTransformer(resp);
-            }).then((jsonBody) => {
-                var JsonPath = (path) => {
-                    return jsonpath({path: path, json: jsonBody});
-                };
-
-                args[signature.JsonPath] = JsonPath;
-            });
+        for (var k in signature) {
+            var transformer = TransformerFactory(k);
+            if (transformer) {
+                //Function is here so that the loop doesn't overwrite the transformer, k variables
+                ((transformer, k) => {
+                    promise = promise.then(() => {
+                        return transformer(resp);
+                    }).then((arg) => {
+                        args[signature[k]] = arg;
+                    });
+                })(transformer, k);
+            }
         }
 
         promise = promise.then(()=> {
