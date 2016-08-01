@@ -498,8 +498,20 @@ describe('Turbulence', () => {
 
             });
 
-            xit('should record an error if it cannot parse', () => {
+            it('should record an error if it cannot parse', () => {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse('Not valid json.'));
 
+                return turbulence
+                    .startUserSteps()
+                    .get('http://localhost:8080/url1')
+                    .assertResponse((JsonBody) => {
+                        return true;
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.equal(1, results.errors);
+                    });
             });
 
             it('should inject arguments in order they are provided', () => {

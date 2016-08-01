@@ -48,6 +48,7 @@ export class AssertHttpResponseStep implements TestStep {
 
         if (signature.JsonPath != null) {
             promise = promise.then(() => {
+                console.log('about to parse');
                 return JsonBodyTransformer(resp);
             }).then((jsonBody) => {
                 var JsonPath = (path) => {
@@ -58,7 +59,7 @@ export class AssertHttpResponseStep implements TestStep {
             });
         }
 
-        promise.then(()=> {
+        promise = promise.then(()=> {
             var valid;
 
             try {
@@ -70,6 +71,8 @@ export class AssertHttpResponseStep implements TestStep {
             if (!valid) {
                 this.results.errors++;
             }
+        }).catch((err) => {
+            this.results.errors++;
         });
 
 
