@@ -44,4 +44,4 @@ Please look [here](./CONTRIBUTORS.md) for more information.
 
 ### License
 
-Turbulence is licensed under the terms of the MIT license.
+Turbulence is licensed under the terms of the [MIT license](./LICENSE).
