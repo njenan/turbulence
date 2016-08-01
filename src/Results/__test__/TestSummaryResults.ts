@@ -58,8 +58,6 @@ describe('Summary Results', () => {
 
         var summation = results.responsesPerInterval(100);
 
-        console.log(summation);
-
         assert.equal(1, summation.pop().y);
         assert.equal(2, summation.pop().y);
         assert.equal(2, summation.pop().y);

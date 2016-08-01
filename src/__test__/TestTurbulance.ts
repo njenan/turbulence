@@ -44,9 +44,9 @@ describe('Turbulence', () => {
     describe('Running Tests', () => {
 
         it('should allow a http get request to be defined', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            })));
+            }));
 
             return turbulence
                 .startUserSteps()
@@ -56,15 +56,15 @@ describe('Turbulence', () => {
         });
 
         it('should report no errors when the assertion passes', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            })));
+            }));
 
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse((resp) => {
-                    return resp.body.key === 'value';
+                .assertResponse((Response) => {
+                    return Response.rawBody.key === 'value';
                 })
                 .endUserSteps()
                 .run()
@@ -74,15 +74,15 @@ describe('Turbulence', () => {
         });
 
         it('should report errors when the assertion fails', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            })));
+            }));
 
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse((resp) => {
-                    return resp.body.key === 'wrong';
+                .assertResponse((Response) => {
+                    return Response.rawBody.key === 'wrong';
                 })
                 .endUserSteps()
                 .run()
@@ -120,19 +120,19 @@ describe('Turbulence', () => {
         });
 
         it('should allow multiple assertions to be made', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first',
                 beta: 'second'
-            })));
+            }));
 
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'second';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'second';
                 })
-                .assertResponse((resp) => {
-                    return resp.body.beta === 'second';
+                .assertResponse((Response) => {
+                    return Response.rawBody.beta === 'second';
                 })
                 .endUserSteps()
                 .run()
@@ -142,23 +142,23 @@ describe('Turbulence', () => {
         });
 
         it('should count the number of failures', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first',
                 beta: 'second',
                 gamma: 'third'
-            })));
+            }));
 
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'second';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'second';
                 })
-                .assertResponse((resp) => {
-                    return resp.body.beta === 'second';
+                .assertResponse((Response) => {
+                    return Response.rawBody.beta === 'second';
                 })
-                .assertResponse((resp) => {
-                    return resp.body.gamma === 'second';
+                .assertResponse((Response) => {
+                    return Response.rawBody.gamma === 'second';
                 })
                 .endUserSteps()
                 .run()
@@ -187,35 +187,35 @@ describe('Turbulence', () => {
         });
 
         it('should sum failures in final result', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first'
-            })));
-            http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse(JSON.stringify({
+            }));
+            http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse({
                 alpha: 'first'
-            })));
-            http.whenGet('http://localhost:8080/url3').thenReturn(new HttpResponse(JSON.stringify({
+            }));
+            http.whenGet('http://localhost:8080/url3').thenReturn(new HttpResponse({
                 alpha: 'first'
-            })));
+            }));
 
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'second';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'second';
                 })
                 .endUserSteps()
 
                 .startUserSteps()
                 .get('http://localhost:8080/url2')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'second';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'second';
                 })
                 .endUserSteps()
 
                 .startUserSteps()
                 .get('http://localhost:8080/url3')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'first';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'first';
                 })
                 .endUserSteps()
 
@@ -226,29 +226,29 @@ describe('Turbulence', () => {
         });
 
         it('should allow multiple steps in a testPlans', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first'
-            })));
-            http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse(JSON.stringify({
+            }));
+            http.whenGet('http://localhost:8080/url2').thenReturn(new HttpResponse({
                 alpha: 'second'
-            })));
-            http.whenGet('http://localhost:8080/url3').thenReturn(new HttpResponse(JSON.stringify({
+            }));
+            http.whenGet('http://localhost:8080/url3').thenReturn(new HttpResponse({
                 alpha: 'first'
-            })));
+            }));
 
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'second';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'second';
                 })
                 .get('http://localhost:8080/url2')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'first';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'first';
                 })
                 .get('http://localhost:8080/url3')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'first';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'first';
                 })
                 .endUserSteps()
 
@@ -266,17 +266,17 @@ describe('Turbulence', () => {
         it('should run the test to a specified time limit', function () {
             this.timeout(30000);
 
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 alpha: 'first'
-            })));
+            }));
 
             var start = Date.now();
 
             return turbulence
                 .startUserSteps()
                 .get('http://localhost:8080/url1')
-                .assertResponse((resp) => {
-                    return resp.body.alpha === 'first';
+                .assertResponse((Response) => {
+                    return Response.rawBody.alpha === 'first';
                 })
                 .duration(1000)
                 .endUserSteps()
@@ -408,11 +408,7 @@ describe('Turbulence', () => {
 
     describe('Assertions', () => {
         describe('body parsing', () => {
-            xit('should default to json when parameter doesn\' match', () => {
-
-            });
-
-            it('should parse json when given "jsonBody"', () => {
+            it('should provide a raw response when given "Response"', () => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
                     key: 'value'
                 })));
@@ -420,8 +416,8 @@ describe('Turbulence', () => {
                 return turbulence
                     .startUserSteps()
                     .get('http://localhost:8080/url1')
-                    .assertResponse((jsonBody) => {
-                        return jsonBody.body.key === 'value';
+                    .assertResponse((Response) => {
+                        return Response.rawBody === JSON.stringify({key: 'value'});
                     })
                     .endUserSteps()
                     .run()
@@ -430,13 +426,72 @@ describe('Turbulence', () => {
                     });
             });
 
+            it('should parse json when given "JsonBody"', () => {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                    key: 'value'
+                })));
 
-            xit('should parse xml when given "xmlBody"', () => {
-
+                return turbulence
+                    .startUserSteps()
+                    .get('http://localhost:8080/url1')
+                    .assertResponse((JsonBody) => {
+                        return JsonBody.key === 'value';
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.equal(0, results.errors);
+                    });
             });
 
-            xit('should provide a jsonpath evaluator when given "jsonPath"', () => {
+            it('should parse xml when given "XmlBody"', () => {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse("<a><b>asdf</b></a>"));
 
+                return turbulence
+                    .startUserSteps()
+                    .get('http://localhost:8080/url1')
+                    .assertResponse((XmlBody) => {
+                        return XmlBody.a.b === 'asdf';
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.equal(0, results.errors);
+                    });
+            });
+
+            it('should inject nothing when no matching args are given', () => {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse("response body"));
+
+                return turbulence
+                    .startUserSteps()
+                    .get('http://localhost:8080/url1')
+                    .assertResponse((body) => {
+                        return body == null;
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.equal(0, results.errors);
+                    });
+            });
+
+            it('should provide a jsonpath evaluator when given "JsonPath"', () => {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                    key: 'value'
+                })));
+
+                return turbulence
+                    .startUserSteps()
+                    .get('http://localhost:8080/url1')
+                    .assertResponse((JsonPath) => {
+                        return JsonPath('$.key').pop() === 'value';
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.equal(0, results.errors);
+                    });
             });
 
             xit('should provide an xpath evaluator when given "xpath"', () => {
@@ -445,6 +500,24 @@ describe('Turbulence', () => {
 
             xit('should record an error if it cannot parse', () => {
 
+            });
+
+            it('should inject arguments in order they are provided', () => {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                    key: 'value'
+                })));
+
+                return turbulence
+                    .startUserSteps()
+                    .get('http://localhost:8080/url1')
+                    .assertResponse((JsonBody, JsonPath) => {
+                        return JsonBody.key === 'value' && JsonPath('$.key').pop() === 'value';
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.equal(0, results.errors);
+                    });
             });
         });
     });
@@ -478,8 +551,8 @@ describe('Turbulence', () => {
                 return turbulence
                     .startUserSteps()
                     .get('http://localhost:8080/url1')
-                    .if((resp) => {
-                        return resp.rawBody.alpha === 'first';
+                    .if((Response) => {
+                        return Response.rawBody.alpha === 'first';
                     })
                     .get('http://localhost:8080/url1')
                     .endIf()
@@ -498,8 +571,8 @@ describe('Turbulence', () => {
                 return turbulence
                     .startUserSteps()
                     .get('http://localhost:8080/url1')
-                    .if((resp) => {
-                        return resp.rawBody.alpha === 'second';
+                    .if((Response) => {
+                        return Response.rawBody.alpha === 'second';
                     })
                     .get('http://localhost:8080/url1')
                     .endIf()
@@ -518,8 +591,8 @@ describe('Turbulence', () => {
                 return turbulence
                     .startUserSteps()
                     .get('http://localhost:8080/url1')
-                    .if((resp) => {
-                        return resp.rawBody.alpha === 'second';
+                    .if((Response) => {
+                        return Response.rawBody.alpha === 'second';
                     })
                     .get('http://localhost:8080/url2')
                     .else()
@@ -543,18 +616,18 @@ describe('Turbulence', () => {
 
         describe('loops', () => {
             it('should allow looping 1 time', () => {
-                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
-                })), new HttpResponse(JSON.stringify({
+                }), new HttpResponse({
                     alpha: 'second'
-                })));
+                }));
 
                 return turbulence
                     .startUserSteps()
                     .loop(1)
                     .get('http://localhost:8080/url1')
-                    .assertResponse((resp) => {
-                        return resp.body.alpha === 'first';
+                    .assertResponse((Response) => {
+                        return Response.rawBody.alpha === 'first';
                     })
                     .endLoop()
                     .endUserSteps()
@@ -565,18 +638,18 @@ describe('Turbulence', () => {
             });
 
             it('should allow looping 2 times', () => {
-                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
-                })), new HttpResponse(JSON.stringify({
+                }), new HttpResponse({
                     alpha: 'second'
-                })));
+                }));
 
                 return turbulence
                     .startUserSteps()
                     .loop(2)
                     .get('http://localhost:8080/url1')
-                    .assertResponse((resp) => {
-                        return resp.body.alpha === 'first';
+                    .assertResponse((Response) => {
+                        return Response.rawBody.alpha === 'first';
                     })
                     .endLoop()
                     .endUserSteps()
@@ -587,18 +660,18 @@ describe('Turbulence', () => {
             });
 
             it('should allow looping 3 times', () => {
-                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     alpha: 'first'
-                })), new HttpResponse(JSON.stringify({
+                }), new HttpResponse({
                     alpha: 'second'
-                })));
+                }));
 
                 return turbulence
                     .startUserSteps()
                     .loop(3)
                     .get('http://localhost:8080/url1')
-                    .assertResponse((resp) => {
-                        return resp.body.alpha === 'first';
+                    .assertResponse((Response) => {
+                        return Response.rawBody.alpha === 'first';
                     })
                     .endLoop()
                     .endUserSteps()
@@ -616,9 +689,9 @@ describe('Turbulence', () => {
 
     describe('Reporting', () => {
         it('should report a single http request result', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            }))).delayResponse(10);
+            })).delayResponse(10);
 
             return turbulence
                 .startUserSteps()
@@ -636,9 +709,9 @@ describe('Turbulence', () => {
         });
 
         it('should report average response time of http requests', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            }))).delayResponse(10);
+            })).delayResponse(10);
 
             return turbulence
                 .startUserSteps()
@@ -651,9 +724,9 @@ describe('Turbulence', () => {
         });
 
         it('should allow http requests to be labeled', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            }))).delayResponse(10);
+            })).delayResponse(10);
 
             return turbulence
                 .startUserSteps()
@@ -668,9 +741,9 @@ describe('Turbulence', () => {
         });
 
         it('should generate an html report', () => {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            })));
+            }));
 
             return turbulence
                 .startUserSteps()
@@ -687,9 +760,9 @@ describe('Turbulence', () => {
 
     describe('Multi-User simulation', () => {
         it('should allow multiple users to be simulated', function () {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            })));
+            }));
 
             var start = Date.now();
 
@@ -710,9 +783,9 @@ describe('Turbulence', () => {
         });
 
         it('should allow a ramp-up period', function () {
-            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+            http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'
-            })));
+            }));
 
             var start = Date.now();
 

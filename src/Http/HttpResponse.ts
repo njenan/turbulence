@@ -4,7 +4,7 @@ export class HttpResponse {
     statusCode:number;
 
     constructor(body?, statusCode?) {
-        this.rawBody = body ? body : {};
+        this.rawBody = body ? body : '';
         this.statusCode = statusCode ? statusCode : 200;
     }
 }

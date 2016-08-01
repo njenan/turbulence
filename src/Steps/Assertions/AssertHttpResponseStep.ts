@@ -5,13 +5,16 @@ import Q = require('q');
 import {TestStep} from "../TestStep";
 import {HttpResponse} from "../../Http/HttpResponse";
 import {SummaryResults} from "../../Results/SummaryResults";
-import {BodyTypeDeterminator} from "./BodyType/BodyTypeDeterminator";
-import {BodyTransformerFactory} from "./BodyTransformer/BodyTransformerFactory";
+import {ExtractFunctionSignature} from "./BodyTransformer/ExtractFunctionSignature";
+import {XmlBodyTransformer} from "./BodyTransformer/XmlBodyTransformer";
+import {JsonBodyTransformer} from "./BodyTransformer/JsonBodyTransformer";
+
+//No typings exist for jsonpath-plus TODO write them
+var jsonpath = require('jsonpath-plus');
 
 export class AssertHttpResponseStep implements TestStep {
-
     results:SummaryResults;
-    validator:(resp:any) => boolean;
+    validator:any;
 
     constructor(results, validator) {
         this.results = results;
@@ -19,13 +22,59 @@ export class AssertHttpResponseStep implements TestStep {
     }
 
     execute(resp:HttpResponse):Q.Promise<HttpResponse> {
-        var bodyType = BodyTypeDeterminator(this.validator.toString());
-        var transformer = BodyTransformerFactory(bodyType);
+        var args = [];
+        var signature = ExtractFunctionSignature(this.validator.toString());
+        var promise = Q.resolve<any>(null);
 
-        if (!this.validator(transformer(resp))) {
-            this.results.errors++;
+        if (signature.Response != null) {
+            args[signature.Response] = resp;
         }
 
-        return Q.resolve(resp);
+        if (signature.JsonBody != null) {
+            promise = promise.then(() => {
+                return JsonBodyTransformer(resp);
+            }).then((jsonBody) => {
+                args[signature.JsonBody] = jsonBody;
+            });
+        }
+
+        if (signature.XmlBody != null) {
+            promise = promise.then(() => {
+                return XmlBodyTransformer(resp);
+            }).then((xmlBody) => {
+                args[signature.XmlBody] = xmlBody;
+            });
+        }
+
+        if (signature.JsonPath != null) {
+            promise = promise.then(() => {
+                return JsonBodyTransformer(resp);
+            }).then((jsonBody) => {
+                var JsonPath = (path) => {
+                    return jsonpath({path: path, json: jsonBody});
+                };
+
+                args[signature.JsonPath] = JsonPath;
+            });
+        }
+
+        promise.then(()=> {
+            var valid;
+
+            try {
+                valid = this.validator.apply(this, args)
+            } catch (e) {
+                valid = false;
+            }
+
+            if (!valid) {
+                this.results.errors++;
+            }
+        });
+
+
+        return promise.then(() => {
+            return resp
+        });
     }
 }
