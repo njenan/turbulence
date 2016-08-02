@@ -836,8 +836,4 @@ describe('Turbulence', () => {
 
     });
 
-    it('should fail', () => {
-        assert(false);
-    });
-
 });
