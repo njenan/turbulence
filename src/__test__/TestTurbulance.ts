@@ -42,7 +42,6 @@ describe('Turbulence', () => {
     });
 
     describe('Running Tests', () => {
-
         it('should allow a http get request to be defined', () => {
             http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                 key: 'value'

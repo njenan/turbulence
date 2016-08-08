@@ -48,10 +48,6 @@ export class TestPlan extends EmbeddableStepCreator {
         return this;
     }
 
-    currentTargetUsers() {
-        return this.targetUsers;
-    }
-
     running() {
         return Date.now() < this.startTime + this.time;
     }

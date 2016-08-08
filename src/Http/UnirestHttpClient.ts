@@ -2,8 +2,6 @@
 
 import Q = require('q');
 
-var http = require('http');
-
 //No typings exist for unirest TODO write them
 var unirest = require('unirest');
 

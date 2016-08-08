@@ -4,13 +4,9 @@ import Q = require('q');
 import fs = require('fs');
 
 import {HttpClient} from './Http/HttpClient';
-import {HttpResponse} from "./Http/HttpResponse";
-import {SummaryResults} from "./Results/SummaryResults";
 import {TestPlan} from "./TestPlan";
-import {LocalExecutor} from "./Executors/LocalExecutor";
 import {Executor} from "./Executors/Executor";
 import {ReportGenerator} from "./Reporters/ReportGenerator";
-import {JadeHtmlReportGenerator} from "./Reporters/JadeHtmlReportGenerator";
 
 export class Turbulence {
     http:HttpClient;

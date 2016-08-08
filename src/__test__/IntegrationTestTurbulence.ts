@@ -19,6 +19,14 @@ describe('Turbulence', () => {
             });
         });
 
+        xit('should take test plan input from stdin', () => {
+
+        });
+
+        xit('can parse the concatenated output of multiple turbulence files sent to stdin', () => {
+
+        });
+
         xit('should run all .turbulence files in the directory when given no args', () => {
 
         });
