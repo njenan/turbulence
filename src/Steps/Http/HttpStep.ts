@@ -17,15 +17,15 @@ export abstract class AbstractHttpStep {
         this.label = label;
     }
 
-    abstract makeCall():Q.Promise<HttpResponse>;
+    abstract makeCall(http):Q.Promise<HttpResponse>;
 
     abstract getType():string;
 
-    execute():Q.Promise<HttpResponse> {
+    execute(http):Q.Promise<HttpResponse> {
         var self = this;
         var start = new Date().getTime();
 
-        return this.makeCall().then((resp) => {
+        return this.makeCall(http).then((resp) => {
             var end = new Date().getTime();
             var duration = end - start;
 

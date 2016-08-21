@@ -9,10 +9,10 @@ import {Executor} from "./Executors/Executor";
 import {ReportGenerator} from "./Reporters/ReportGenerator";
 
 export class Turbulence {
-    http:HttpClient;
-    testPlans:Array<TestPlan>;
-    executor:Executor;
-    reportGenerator:ReportGenerator;
+    http: HttpClient;
+    testPlans: Array<TestPlan>;
+    executor: Executor;
+    reportGenerator: ReportGenerator;
 
     constructor(http, executor, reportGenerator) {
         this.http = http;
@@ -29,7 +29,7 @@ export class Turbulence {
 
     run() {
         var self = this;
-        var promise = this.executor.run(this.testPlans);
+        var promise = this.executor.run(this.testPlans, this.http);
         return {
             then: (func) => {
                 return promise.then(func);

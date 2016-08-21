@@ -7,17 +7,18 @@ import {HttpResponse} from "../../Http/HttpResponse";
 import {SummaryResults} from "../../Results/SummaryResults";
 import {ExtractFunctionSignature} from "./BodyTransformer/ExtractFunctionSignature";
 import {TransformerFactory} from "./BodyTransformer/TransformerFactory";
+import {HttpClient} from "../../Http/HttpClient";
 
 export class AssertHttpResponseStep implements TestStep {
-    results:SummaryResults;
-    validator:any;
+    results: SummaryResults;
+    validator: any;
 
     constructor(results, validator) {
         this.results = results;
         this.validator = validator;
     }
 
-    execute(resp:HttpResponse):Q.Promise<HttpResponse> {
+    execute(http: HttpClient, resp: HttpResponse): Q.Promise<HttpResponse> {
         var args = [];
         var signature = ExtractFunctionSignature(this.validator.toString());
         var promise = Q.resolve<any>(null);

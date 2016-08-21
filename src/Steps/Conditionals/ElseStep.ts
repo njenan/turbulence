@@ -12,26 +12,26 @@ import {RandomPauseStep} from "../RandomPauseStep";
 //Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will result
 export class ElseStep implements TestStep, StepCreator {
 
-    parent:IfStep;
-    creator:EmbeddableStepCreator;
-    results:SummaryResults;
+    parent: IfStep;
+    creator: EmbeddableStepCreator;
+    results: SummaryResults;
 
-    constructor(parent, http, results) {
+    constructor(parent, results) {
         this.parent = parent;
         this.results = results;
-        this.creator = new EmbeddableStepCreator(http, results);
+        this.creator = new EmbeddableStepCreator(results);
     }
 
     endIf() {
         return this.parent.endIf();
     }
 
-    execute(data):Q.Promise<any> {
+    execute(http, data): Q.Promise<any> {
         var self = this;
 
         return this.creator.steps.reduce((promise, nextStep) => {
             return promise.then((data) => {
-                return nextStep.execute(data);
+                return nextStep.execute(http, data);
             });
         }, Q.resolve(null))
             .then(() => {
@@ -39,57 +39,57 @@ export class ElseStep implements TestStep, StepCreator {
             });
     }
 
-    loop(times:number):StepCreator {
+    loop(times: number): StepCreator {
         this.creator.loop(times);
         return this;
     }
 
-    if(predicate):StepCreator {
+    if(predicate): StepCreator {
         this.creator.if(predicate);
         return this;
     }
 
-    get(url:string):StepCreator {
+    get(url: string): StepCreator {
         this.creator.get(url);
         return this;
     }
 
-    post(url:string, body:any):StepCreator {
+    post(url: string, body: any): StepCreator {
         this.creator.post(url, body);
         return this;
     }
 
-    put(url:string, body:any):StepCreator {
+    put(url: string, body: any): StepCreator {
         this.creator.put(url, body);
         return this;
     }
 
-    head(url:string):StepCreator {
+    head(url: string): StepCreator {
         this.creator.head(url);
         return this;
     }
 
-    delete(url:string):StepCreator {
+    delete(url: string): StepCreator {
         this.creator.delete(url);
         return this;
     }
 
-    pause(time:number):StepCreator {
+    pause(time: number): StepCreator {
         this.creator.pause(time);
         return this;
     }
 
-    randomPause(lower:number, upper:number):StepCreator {
+    randomPause(lower: number, upper: number): StepCreator {
         this.creator.randomPause(lower, upper);
         return this;
     }
 
-    assertResponse(predicate):StepCreator {
+    assertResponse(predicate): StepCreator {
         this.creator.assertResponse(predicate);
         return this;
     }
 
-    expectStatus(code):StepCreator {
+    expectStatus(code): StepCreator {
         this.creator.expectStatus(code);
         return this;
     }
