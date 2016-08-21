@@ -41,27 +41,27 @@ export class EmbeddableStepCreator implements StepCreator {
     }
 
     get(url: string, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpGetStep(this, this.results, url, headers, label));
+        this.addStep(new HttpGetStep(this.results, url, headers, label));
         return this;
     }
 
     post(url: string, body: any, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpPostStep(this, this.results, url, body, headers, label));
+        this.addStep(new HttpPostStep(this.results, url, body, headers, label));
         return this;
     }
 
     put(url: string, body: any, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpPutStep(this, this.results, url, body, headers, label));
+        this.addStep(new HttpPutStep(this.results, url, body, headers, label));
         return this;
     }
 
     head(url: string, headers?: string, label?: string): StepCreator {
-        this.addStep(new HttpHeadStep(this, this.results, url, headers, label));
+        this.addStep(new HttpHeadStep(this.results, url, headers, label));
         return this;
     }
 
     delete(url: string, headers?: string, label?: string): StepCreator {
-        this.addStep(new HttpDeleteStep(this, this.results, url, headers, label));
+        this.addStep(new HttpDeleteStep(this.results, url, headers, label));
         return this;
     }
 

@@ -1,4 +1,8 @@
-export interface Parent<T> {
+export class Parent<T> {
     value: T;
-    enumerable: boolean;
+    enumerable: boolean = false;
+
+    constructor(value: T) {
+        this.value = value;
+    }
 }

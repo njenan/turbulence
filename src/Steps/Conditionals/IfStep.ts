@@ -9,18 +9,19 @@ import {SummaryResults} from "../../Results/SummaryResults";
 import {ElseStep} from "./ElseStep";
 import {HttpClient} from "../../Http/HttpClient";
 import {RandomPauseStep} from "../RandomPauseStep";
+import {Parent} from "../../Parent";
 
 //Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will result
 export class IfStep implements TestStep, StepCreator {
 
-    parent: StepCreator;
+    parent: Parent<StepCreator>;
     predicate: (data) => boolean;
     creator: EmbeddableStepCreator;
     results: SummaryResults;
     elseStep: ElseStep;
 
     constructor(parent, results, predicate) {
-        this.parent = parent;
+        this.parent = new Parent(parent);
         this.results = results;
         this.predicate = predicate;
         this.creator = new EmbeddableStepCreator(results);
@@ -32,7 +33,7 @@ export class IfStep implements TestStep, StepCreator {
     }
 
     endIf() {
-        return this.parent;
+        return this.parent.value;
     }
 
     execute(http: HttpClient, data): Q.Promise<any> {

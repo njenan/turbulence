@@ -11,9 +11,9 @@ describe('Summary Results', () => {
     describe('averageResponseTime', () => {
         it('should return the average all requests', () => {
             var results = new SummaryResults();
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, undefined), new HttpResponse(), 1, 0));
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, undefined), new HttpResponse(), 2, 0));
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined, undefined), new HttpResponse(), 3, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined), new HttpResponse(), 1, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined), new HttpResponse(), 2, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, undefined), new HttpResponse(), 3, 0));
 
             assert.equal(2, results.averageResponseTime());
 
@@ -21,9 +21,9 @@ describe('Summary Results', () => {
 
         it('should return the average response for a specific url', () => {
             var results = new SummaryResults();
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 10, 0));
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 30, 0));
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1000, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 10, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 30, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1000, 0));
 
             assert.equal(20, results.averageResponseTime('http://localhost:8080/a'));
         });
@@ -33,11 +33,11 @@ describe('Summary Results', () => {
     describe('requestMap', () => {
         it('should return a map of each url with response times', () => {
             var results = new SummaryResults();
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 10, 0));
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 30, 0));
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1000, 0));
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 3000, 0));
-            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/c', undefined), new HttpResponse(), 10000, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 10, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 30, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1000, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 3000, 0));
+            results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/c', undefined), new HttpResponse(), 10000, 0));
 
             var summation = results.requestMap();
 
@@ -50,11 +50,11 @@ describe('Summary Results', () => {
 
     it('should group responses into 100 millisecond intervals', () => {
         var results = new SummaryResults();
-        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 1, 0));
-        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 1, 0));
-        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1, 101));
-        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1, 101));
-        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, undefined, 'http://localhost:8080/c', undefined), new HttpResponse(), 1, 201));
+        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 1, 0));
+        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 1, 0));
+        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1, 101));
+        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/b', undefined), new HttpResponse(), 1, 101));
+        results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/c', undefined), new HttpResponse(), 1, 201));
 
         var summation = results.responsesPerInterval(100);
 

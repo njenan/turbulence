@@ -9,17 +9,18 @@ import {SummaryResults} from "../../Results/SummaryResults";
 import {HttpClient} from "../../Http/HttpClient";
 import {StepCreator} from "../StepCreator";
 import {RandomPauseStep} from "../RandomPauseStep";
+import {Parent} from "../../Parent";
 
 //Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will result
 export class LoopStep<T> implements TestStep, StepCreator {
 
-    parent: T;
+    parent: Parent<T>;
     results: SummaryResults;
     times: number;
     creator: EmbeddableStepCreator;
 
     constructor(parent, results, times) {
-        this.parent = parent;
+        this.parent = {value: parent, enumerable: false};
         this.results = results;
         this.times = times;
         this.creator = new EmbeddableStepCreator(results);
@@ -44,7 +45,7 @@ export class LoopStep<T> implements TestStep, StepCreator {
     }
 
     endLoop(): T {
-        return this.parent;
+        return this.parent.value;
     }
 
     loop(times: number): StepCreator {

@@ -2,26 +2,24 @@ import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
 import {SummaryResults} from "../../Results/SummaryResults";
 import {HttpResponse} from "../../Http/HttpResponse";
 import {HttpRequestRecord} from "./HttpRequestRecord";
+import {Parent} from "../../Parent";
 
 export abstract class AbstractHttpStep {
+    results: SummaryResults;
+    url: string;
+    label: string;
 
-    parent:EmbeddableStepCreator;
-    results:SummaryResults;
-    url:string;
-    label:string;
-
-    constructor(parent, results, url, label) {
-        this.parent = parent;
+    constructor(results, url, label) {
         this.results = results;
         this.url = url;
         this.label = label;
     }
 
-    abstract makeCall(http):Q.Promise<HttpResponse>;
+    abstract makeCall(http): Q.Promise<HttpResponse>;
 
-    abstract getType():string;
+    abstract getType(): string;
 
-    execute(http):Q.Promise<HttpResponse> {
+    execute(http): Q.Promise<HttpResponse> {
         var self = this;
         var start = new Date().getTime();
 

@@ -8,9 +8,10 @@ import {EmbeddableStepCreator} from "./Steps/EmbeddableStepCreator";
 import {HttpClient} from "./Http/HttpClient";
 import {Turbulence} from "./Turbulence";
 import {SummaryResults} from "./Results/SummaryResults";
+import {Parent} from "./Parent";
 
 export class TestPlan extends EmbeddableStepCreator {
-    parent: Turbulence;
+    parent: Parent<Turbulence>;
     name: String;
     steps: Array<TestStep>;
     targetUsers: number = 1;
@@ -22,13 +23,13 @@ export class TestPlan extends EmbeddableStepCreator {
     constructor(parent, name?) {
         super(new SummaryResults());
 
-        this.parent = parent;
+        this.parent = {value: parent, enumerable: false};
         this.name = name;
         this.steps = [];
     }
 
     endUserSteps() {
-        return this.parent;
+        return this.parent.value;
     }
 
     concurrentUsers(users: number) {
