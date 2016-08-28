@@ -34,7 +34,18 @@ var options = {
 var DomParser = xmldom.DOMParser;
 var domParser = new DomParser(options);
 
-[{name: 'Local', Exec: LocalExecutor}, {name: 'Distributed', Exec: ToJsonFromJsonExecutor}].map((type) => {
+function isIstanbul() {
+    return (() => {
+        }).toString().indexOf('cov') !== -1;
+}
+
+var types = [{name: 'Local', Exec: LocalExecutor}, {name: 'Distributed', Exec: ToJsonFromJsonExecutor}];
+
+if (isIstanbul()) {
+    types.pop();
+}
+
+types.map((type) => {
     describe(type.name + ' Turbulence', () => {
         var turbulence;
         var http;
