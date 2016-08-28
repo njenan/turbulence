@@ -9,11 +9,22 @@ import {HttpClient} from "./Http/HttpClient";
 import {Turbulence} from "./Turbulence";
 import {SummaryResults} from "./Results/SummaryResults";
 import {Parent} from "./Parent";
+import {HttpGetStep} from "./Steps/Http/HttpGetStep";
+import {HttpRequestRecord} from "./Steps/Http/HttpRequestRecord";
+import {PauseStep} from "./Steps/PauseStep";
+import {LoopStep} from "./Steps/Conditionals/LoopStep";
+import {IfStep} from "./Steps/Conditionals/IfStep";
+import {ElseStep} from "./Steps/Conditionals/ElseStep";
+import {AssertStatusStep} from "./Steps/Assertions/AssertStatusStep";
+import {AssertHttpResponseStep} from "./Steps/Assertions/AssertHttpResponseStep";
+import {HttpPutStep} from "./Steps/Http/HttpPutStep";
+import {HttpPostStep} from "./Steps/Http/HttpPostStep";
+import {HttpDeleteStep} from "./Steps/Http/HttpDeleteStep";
+import {HttpHeadStep} from "./Steps/Http/HttpHeadStep";
 
 export class TestPlan extends EmbeddableStepCreator {
     parent: Parent<Turbulence>;
     name: String;
-    steps: Array<TestStep>;
     targetUsers: number = 1;
     warmUp: number = 1;
     time: number = -1;
@@ -23,9 +34,8 @@ export class TestPlan extends EmbeddableStepCreator {
     constructor(parent, name?) {
         super(new SummaryResults());
 
-        this.parent = {value: parent, enumerable: false};
+        this.parent = new Parent(parent);
         this.name = name;
-        this.steps = [];
     }
 
     endUserSteps() {
@@ -84,6 +94,72 @@ export class TestPlan extends EmbeddableStepCreator {
         return Q.all(promises).then(() => {
             return self.results;
         });
+    }
+
+    static reviver(key: string, value: any): any {
+        return key === '' ? TestPlan.fromJson(value) : value;
+    }
+
+    static fromJson(root) {
+        var testPlan = new TestPlan(root.parent, root.name);
+        testPlan.results = new SummaryResults();
+        var mapStep = (step, parent?): TestStep => {
+            switch (step.type) {
+                case 'GET':
+                    return new HttpGetStep(testPlan.results, step.url, step.headers, step.label);
+
+                case 'HEAD':
+                    return new HttpHeadStep(testPlan.results, step.url, step.headers, step.label);
+
+                case 'PUT':
+                    return new HttpPutStep(testPlan.results, step.url, step.body, step.headers, step.label);
+
+                case 'POST':
+                    return new HttpPostStep(testPlan.results, step.url, step.body, step.headers, step.label);
+
+                case 'DELETE':
+                    return new HttpDeleteStep(testPlan.results, step.url, step.headers, step.label);
+
+
+                case 'AssertStatusStep':
+                    return new AssertStatusStep(testPlan.results, step.code);
+
+                case 'AssertHttpResponseStep':
+                    return new AssertHttpResponseStep(testPlan.results, eval('(' + step.validatorRaw + ')'));
+
+
+                case 'IfStep':
+                    var ifStep = new IfStep(step.parent, testPlan.results, eval('(' + step.predicateRaw + ')'));
+                    ifStep.creator.steps = step.creator.steps.map(mapStep);
+                    ifStep.elseStep = step.elseStep ? <ElseStep>mapStep(step.elseStep, ifStep) : null;
+
+                    return ifStep;
+
+                case 'ElseStep':
+                    var elseStep = new ElseStep(parent ? parent : step.parent, testPlan.results);
+                    elseStep.creator.steps = step.creator.steps.map(mapStep);
+                    return elseStep;
+
+                case 'LoopStep':
+                    var loopStep = new LoopStep(step.parent, testPlan.results, step.times);
+                    loopStep.creator.steps = step.creator.steps ? step.creator.steps.map(mapStep) : [];
+                    return loopStep;
+
+
+                case 'PauseStep':
+                    return new PauseStep(step.time);
+            }
+
+            throw new Error('Can\'t deserialize unknown step ' + step.type);
+        };
+        testPlan.steps = root.steps.map(mapStep);
+        testPlan.targetUsers = root.targetUsers;
+        testPlan.warmUp = root.warmUp;
+        testPlan.time = root.time;
+        testPlan.actualUsers = root.actualUsers;
+        testPlan.startTime = root.startTime;
+
+        return testPlan;
     }
 
 }

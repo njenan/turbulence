@@ -7,7 +7,6 @@ import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
 import {SummaryResults} from "../../Results/SummaryResults";
 import {IfStep} from "./IfStep";
 import {StepCreator} from "../StepCreator";
-import {RandomPauseStep} from "../RandomPauseStep";
 import {Parent} from "../../Parent";
 
 //Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will result
@@ -16,6 +15,7 @@ export class ElseStep implements TestStep, StepCreator {
     parent: Parent<IfStep>;
     creator: EmbeddableStepCreator;
     results: SummaryResults;
+    type: string = 'ElseStep';
 
     constructor(parent, results) {
         this.parent = new Parent(parent);

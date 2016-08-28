@@ -18,9 +18,10 @@ export class LoopStep<T> implements TestStep, StepCreator {
     results: SummaryResults;
     times: number;
     creator: EmbeddableStepCreator;
+    type: string = 'LoopStep';
 
     constructor(parent, results, times) {
-        this.parent = {value: parent, enumerable: false};
+        this.parent = new Parent(parent);
         this.results = results;
         this.times = times;
         this.creator = new EmbeddableStepCreator(results);

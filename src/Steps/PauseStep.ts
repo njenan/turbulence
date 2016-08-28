@@ -6,9 +6,10 @@ import {TestStep} from "./TestStep";
 
 export class PauseStep implements TestStep {
 
-    time:number;
+    time: number;
+    type: string = 'PauseStep';
 
-    constructor(time:number) {
+    constructor(time: number) {
         this.time = time;
     }
 

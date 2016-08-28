@@ -12,10 +12,13 @@ import {HttpClient} from "../../Http/HttpClient";
 export class AssertHttpResponseStep implements TestStep {
     results: SummaryResults;
     validator: any;
+    validatorRaw: string;
+    type: string = 'AssertHttpResponseStep';
 
     constructor(results, validator) {
         this.results = results;
         this.validator = validator;
+        this.validatorRaw = validator.toString();
     }
 
     execute(http: HttpClient, resp: HttpResponse): Q.Promise<HttpResponse> {
@@ -26,7 +29,7 @@ export class AssertHttpResponseStep implements TestStep {
         for (var k in signature) {
             var transformer = TransformerFactory(k);
             if (transformer) {
-                //Function is here so that the loop doesn't overwrite the transformer, k variables
+                //Function is here so that the loop doesn't overwrite the transformer and k variables
                 ((transformer, k) => {
                     promise = promise.then(() => {
                         return transformer(resp);
@@ -41,7 +44,7 @@ export class AssertHttpResponseStep implements TestStep {
             var valid;
 
             try {
-                valid = this.validator.apply(this, args)
+                valid = this.validator.apply(this, args);
             } catch (e) {
                 valid = false;
             }
@@ -49,7 +52,7 @@ export class AssertHttpResponseStep implements TestStep {
             if (!valid) {
                 this.results.errors++;
             }
-        }).catch((err) => {
+        }).catch(() => {
             this.results.errors++;
         });
 

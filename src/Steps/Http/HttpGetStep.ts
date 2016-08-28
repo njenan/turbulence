@@ -5,12 +5,14 @@ export class HttpGetStep extends AbstractHttpStep implements TestStep {
 
     url: string;
     headers: any;
+    type: string;
 
     constructor(results, url, headers?, label?) {
         super(results, url, label);
 
         this.url = url;
         this.headers = headers;
+        this.type = 'GET';
     }
 
     makeCall(http) {
@@ -18,6 +20,6 @@ export class HttpGetStep extends AbstractHttpStep implements TestStep {
     }
 
     getType() {
-        return 'GET';
+        return this.type;
     }
 }

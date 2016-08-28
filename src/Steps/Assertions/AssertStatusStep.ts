@@ -11,6 +11,7 @@ export class AssertStatusStep implements TestStep {
 
     results: SummaryResults;
     code: number;
+    type: string = 'AssertStatusStep';
 
     constructor(results, code) {
         this.results = results;

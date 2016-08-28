@@ -16,14 +16,17 @@ export class IfStep implements TestStep, StepCreator {
 
     parent: Parent<StepCreator>;
     predicate: (data) => boolean;
+    predicateRaw: string;
     creator: EmbeddableStepCreator;
     results: SummaryResults;
     elseStep: ElseStep;
+    type: string = 'IfStep';
 
     constructor(parent, results, predicate) {
         this.parent = new Parent(parent);
         this.results = results;
         this.predicate = predicate;
+        this.predicateRaw = predicate.toString();
         this.creator = new EmbeddableStepCreator(results);
     }
 

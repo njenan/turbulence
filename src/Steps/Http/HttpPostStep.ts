@@ -6,6 +6,7 @@ export class HttpPostStep extends AbstractHttpStep implements TestStep {
     url: string;
     body: any;
     headers: any;
+    type: string;
 
     constructor(results, url, body, headers?, label?) {
         super(results, url, label);
@@ -13,6 +14,7 @@ export class HttpPostStep extends AbstractHttpStep implements TestStep {
         this.url = url;
         this.body = body;
         this.headers = headers;
+        this.type = 'POST';
     }
 
     makeCall(http) {
@@ -20,6 +22,6 @@ export class HttpPostStep extends AbstractHttpStep implements TestStep {
     }
 
     getType() {
-        return 'POST';
+        return this.type;
     }
 }

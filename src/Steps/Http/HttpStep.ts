@@ -1,8 +1,6 @@
-import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
 import {SummaryResults} from "../../Results/SummaryResults";
 import {HttpResponse} from "../../Http/HttpResponse";
 import {HttpRequestRecord} from "./HttpRequestRecord";
-import {Parent} from "../../Parent";
 
 export abstract class AbstractHttpStep {
     results: SummaryResults;

@@ -6,10 +6,11 @@ import {TestStep} from "./TestStep";
 
 export class RandomPauseStep implements TestStep {
 
-    lower:number;
-    upper:number;
+    lower: number;
+    upper: number;
+    type: string = 'RandomPauseStep';
 
-    constructor(lower:number, upper:number) {
+    constructor(lower: number, upper: number) {
         this.lower = lower;
         this.upper = upper;
     }
