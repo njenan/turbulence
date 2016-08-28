@@ -42,7 +42,7 @@ function isIstanbul() {
 var types = [{name: 'Local', Exec: LocalExecutor}, {name: 'Distributed', Exec: ToJsonFromJsonExecutor}];
 
 if (isIstanbul()) {
-    types.pop();
+    types.pop(); //Removing ToJsonFromJsonExecutor - eval doesn't work correctly while coverage is being captured
 }
 
 types.map((type) => {
