@@ -38,6 +38,9 @@ When turbulence finishes, a `Report.html` file will be created in the current di
 ![Example Turbulence Report](./example-report.png)
 
 
+### Contributing
+Before submitting a pull request, please make sure that your changes are covered by proper tests, and review the [Style Guide](./StyleGuide.md).
+
 
 ### License
 
