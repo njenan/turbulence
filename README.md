@@ -39,7 +39,7 @@ When turbulence finishes, a `Report.html` file will be created in the current di
 
 
 ### Contributing
-Before submitting a pull request, please make sure that your changes are covered by proper tests, and review the [Style Guide](./StyleGuide.md).
+Before submitting a pull request, please make sure that your changes are covered by proper tests, and review the [Style Guide](./STYLE_GUIDE.md).
 
 
 ### License
