@@ -1,7 +1,7 @@
-import {SummaryResults} from "./../Results/SummaryResults";
+import {SummaryResults} from './../Results/SummaryResults';
 
 export interface ReportGenerator {
 
-    toReport(results:SummaryResults):void;
+    toReport(results: SummaryResults): void;
 
 }

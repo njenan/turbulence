@@ -1,22 +1,17 @@
-/// <reference path="./Conditionals/ElseStep.ts" />
-/// <reference path="./Conditionals/LoopStep.ts" />
-/// <reference path="./Conditionals/IfStep.ts" />
-
-import {TestStep} from "./TestStep";
-import {HttpGetStep} from "./Http/HttpGetStep";
-import {HttpClient} from "../Http/HttpClient";
-import {SummaryResults} from "../Results/SummaryResults";
-import {PauseStep} from "./PauseStep";
-import {AssertHttpResponseStep} from "./Assertions/AssertHttpResponseStep";
-import {AssertStatusStep} from "./Assertions/AssertStatusStep";
-import {StepCreator} from "./StepCreator";
-import {HttpPostStep} from "./Http/HttpPostStep";
-import {IfStep} from "./Conditionals/IfStep";
-import {LoopStep} from "./Conditionals/LoopStep";
-import {HttpPutStep} from "./Http/HttpPutStep";
-import {HttpHeadStep} from "./Http/HttpHeadStep";
-import {HttpDeleteStep} from "./Http/HttpDeleteStep";
-import {RandomPauseStep} from "./RandomPauseStep";
+import {TestStep} from './TestStep';
+import {HttpGetStep} from './Http/HttpGetStep';
+import {SummaryResults} from '../Results/SummaryResults';
+import {PauseStep} from './PauseStep';
+import {AssertHttpResponseStep} from './Assertions/AssertHttpResponseStep';
+import {AssertStatusStep} from './Assertions/AssertStatusStep';
+import {StepCreator} from './StepCreator';
+import {HttpPostStep} from './Http/HttpPostStep';
+import {IfStep} from './Conditionals/IfStep';
+import {LoopStep} from './Conditionals/LoopStep';
+import {HttpPutStep} from './Http/HttpPutStep';
+import {HttpHeadStep} from './Http/HttpHeadStep';
+import {HttpDeleteStep} from './Http/HttpDeleteStep';
+import {RandomPauseStep} from './RandomPauseStep';
 
 export class EmbeddableStepCreator implements StepCreator {
 
@@ -29,13 +24,13 @@ export class EmbeddableStepCreator implements StepCreator {
     }
 
     loop(times: number): StepCreator {
-        var loop = new LoopStep(this, this.results, times);
+        let loop = new LoopStep(this, this.results, times);
         this.addStep(loop);
         return loop;
     }
 
     if(predicate): StepCreator {
-        var ifStep = new IfStep(this, this.results, predicate);
+        let ifStep = new IfStep(this, this.results, predicate);
         this.addStep(ifStep);
         return ifStep;
     }

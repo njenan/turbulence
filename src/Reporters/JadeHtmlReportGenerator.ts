@@ -1,28 +1,21 @@
-/// <reference path="../../typings/main/ambient/jade/index.d.ts" />
-/// <reference path="../../typings/main/ambient/node/index.d.ts" />
-
 import Jade = require('jade');
-import fs = require('fs');
-
-import {ReportGenerator} from "./ReportGenerator";
-import {SummaryResults} from "./../Results/SummaryResults";
-
+import {ReportGenerator} from './ReportGenerator';
+import {SummaryResults} from './../Results/SummaryResults';
 
 export class JadeHtmlReportGenerator implements ReportGenerator {
 
-    generator:(locals?:any) => string;
+    generator: (locals?: any) => string;
     fs;
 
     constructor(fileWriter) {
         this.fs = fileWriter;
-        //Code is synchronous... shouldn't be a problem because this won't execute during the performance test
-        this.generator = Jade.compileFile(__dirname + "/JadeReport.jade");
+        // Code is synchronous... shouldn't be a problem because this won't execute during the performance test
+        this.generator = Jade.compileFile(__dirname + '/JadeReport.jade');
     }
 
-
-    toReport(results:SummaryResults) {
-        var requests = results.requests.reduce((map, nextRequest) => {
-            var key = nextRequest.url;
+    toReport(results: SummaryResults) {
+        let requests = results.requests.reduce((map, nextRequest) => {
+            let key = nextRequest.url;
             if (!map[key]) {
                 map[key] = {};
                 map[key].invocations = 0;
@@ -43,25 +36,25 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
             return map;
         }, {});
 
-        var array = [];
+        let array = [];
 
-        for (var k in requests) {
-            var request = requests[k];
+        for (let k in requests) {
+            let request = requests[k];
             array.push({
-                url: k,
-                name: request.name,
+                errorRate: request === 0 ? 0 : request.errors / request.invocations,
                 invocations: request.invocations,
-                errorRate: request === 0 ? 0 : request.errors / request.invocations
+                name: request.name,
+                url: k
             });
         }
 
         this.fs.writeFile('Report.html', this.generator({
-                requests: array,
                 averageResponseTime: results.averageResponseTime(),
-                responseTimesData: results.responseTimesByTimestamp(),
-                responsesPerIntervalData: results.responsesPerInterval(1000),
+                chartjsPath: __dirname + '/chart.js',
                 cssPath: __dirname + '/style.css',
-                chartjsPath: __dirname + '/chart.js'
+                requests: array,
+                responseTimesData: results.responseTimesByTimestamp(),
+                responsesPerIntervalData: results.responsesPerInterval(1000)
             })
         );
     }

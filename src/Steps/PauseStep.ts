@@ -1,8 +1,5 @@
-/// <reference path="../../typings/main/ambient/q/index.d.ts" />
-
 import Q = require('q');
-
-import {TestStep} from "./TestStep";
+import {TestStep} from './TestStep';
 
 export class PauseStep implements TestStep {
 

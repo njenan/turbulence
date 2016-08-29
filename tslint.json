@@ -1,6 +1,19 @@
 {
   "extends": "tslint:recommended",
   "rules": {
-    "typedef-whitespace": "nospace"
+    "typedef-whitespace": "nospace",
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "member-access": false,
+    "forin": false,
+    "trailing-comma": [
+      false
+    ]
   }
 }

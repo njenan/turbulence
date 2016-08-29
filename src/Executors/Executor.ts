@@ -1,6 +1,6 @@
-import {TestPlan} from "./../TestPlan";
-import {SummaryResults} from "./../Results/SummaryResults";
-import {HttpClient} from "../Http/HttpClient";
+import {TestPlan} from './../TestPlan';
+import {SummaryResults} from './../Results/SummaryResults';
+import {HttpClient} from '../Http/HttpClient';
 
 export interface Executor {
 

@@ -13,7 +13,7 @@
     "travis-coverage": "istanbul cover _mocha \"src/**/__test__/Test*.js\" --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "coverage": "istanbul cover _mocha \"src/**/__test__/Test*.js\"",
     "lint": "tslint src/**/*.ts -o ./lint_report -c tslint.json",
-    "all": "npm run package && npm test && npm run integration-test"
+    "all": "npm run package && npm test && npm run integration-test && npm run lint"
   },
   "bin": {
     "turbulence": "./index.js"

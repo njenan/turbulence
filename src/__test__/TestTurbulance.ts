@@ -1,55 +1,52 @@
-/// <reference path="../../typings/main/ambient/q/index.d.ts" />
-/// <reference path="../../typings/main/ambient/mocha/index.d.ts" />
-/// <reference path="../../typings/main/ambient/assert/index.d.ts" />
-/// <reference path="../../typings/main/ambient/xmldom/index.d.ts" />
-/// <reference path="../../typings/main/ambient/xpath/index.d.ts" />
-
 import assert = require('power-assert');
 import Q = require('q');
-
 import xpath = require('xpath');
 import xmldom = require('xmldom');
-import child_process = require('child_process');
-
 import {Turbulence} from '../Turbulence';
 import {StubHttpClient} from './../Http/__test__/StubHttpClient';
-import {HttpResponse} from "../Http/HttpResponse";
-import {LocalExecutor} from "../Executors/LocalExecutor";
-import {JadeHtmlReportGenerator} from "../Reporters/JadeHtmlReportGenerator";
-import {StubFs} from "../Reporters/__test__/StubFs";
-import {ToJsonFromJsonExecutor} from "../Executors/__test__/ToJsonFromJsonExecutor";
+import {HttpResponse} from '../Http/HttpResponse';
+import {LocalExecutor} from '../Executors/LocalExecutor';
+import {JadeHtmlReportGenerator} from '../Reporters/JadeHtmlReportGenerator';
+import {StubFs} from '../Reporters/__test__/StubFs';
+import {ToJsonFromJsonExecutor} from '../Executors/__test__/ToJsonFromJsonExecutor';
 
 Q.longStackSupport = true;
 
-var options = {
-    locator: {},
+let options = {
     errorHandler: {
+        error: () => {
+            return null;
+        },
+        fatalError: () => {
+            return null;
+        },
         warning: () => {
-        }, error: () => {
-        }, fatalError: () => {
+            return null;
         }
-    }
+    },
+    locator: {}
 };
 
-var DomParser = xmldom.DOMParser;
-var domParser = new DomParser(options);
+let DomParser = xmldom.DOMParser;
+let domParser = new DomParser(options);
 
 function isIstanbul() {
     return (() => {
+            return null;
         }).toString().indexOf('cov') !== -1;
 }
 
-var types = [{name: 'Local', Exec: LocalExecutor}, {name: 'Distributed', Exec: ToJsonFromJsonExecutor}];
+let types = [{Exec: LocalExecutor, name: 'Local'}, {Exec: ToJsonFromJsonExecutor, name: 'Distributed'}];
 
 if (isIstanbul()) {
-    types.pop(); //Removing ToJsonFromJsonExecutor - eval doesn't work correctly while coverage is being captured
+    types.pop(); // Removing ToJsonFromJsonExecutor - eval doesn't work correctly while coverage is being captured
 }
 
 types.map((type) => {
     describe(type.name + ' Turbulence', () => {
-        var turbulence;
-        var http;
-        var stubFs;
+        let turbulence;
+        let http;
+        let stubFs;
 
         beforeEach(() => {
             stubFs = new StubFs();
@@ -274,8 +271,8 @@ types.map((type) => {
 
             });
 
-            xit('should provide a global scope object for storing variables between steps', () => {
-
+            xit('should provide a global scope object for storing letiables between steps', () => {
+                return null;
             });
 
             it('should run the test to a specified time limit', function () {
@@ -285,7 +282,7 @@ types.map((type) => {
                     alpha: 'first'
                 }));
 
-                var start = Date.now();
+                let start = Date.now();
 
                 return turbulence
                     .startUserSteps()
@@ -298,7 +295,7 @@ types.map((type) => {
 
                     .run()
                     .then(() => {
-                        var end = Date.now();
+                        let end = Date.now();
 
                         assert(end - start > 900, 'Expected duration greater than 900, was ' + (end - start));
                         assert(end - start < 1100, 'Expected duration greater than 900, was ' + (end - start));
@@ -309,7 +306,7 @@ types.map((type) => {
 
         describe('Http options', () => {
             xit('should allow get requests', () => {
-
+                return null;
             });
 
             it('should allow post requests', () => {
@@ -327,7 +324,8 @@ types.map((type) => {
             });
 
             it('should allow put requests', () => {
-                http.whenPut('http://localhost:8080/url1/1234', 'The Body').thenReturn(new HttpResponse(undefined, 200));
+                http.whenPut('http://localhost:8080/url1/1234', 'The Body')
+                    .thenReturn(new HttpResponse(undefined, 200));
 
                 return turbulence
                     .startUserSteps()
@@ -424,59 +422,65 @@ types.map((type) => {
         describe('Assertions', () => {
             describe('body parsing', () => {
                 it('should provide a raw response when given "Response"', () => {
-                    http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
-                        key: 'value'
-                    })));
+                        http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                            key: 'value'
+                        })));
 
-                    return turbulence
-                        .startUserSteps()
-                        .get('http://localhost:8080/url1')
-                        .assertResponse((Response) => {
-                            return Response.rawBody === JSON.stringify({key: 'value'});
-                        })
-                        .endUserSteps()
-                        .run()
-                        .then((results) => {
-                            assert.equal(0, results.errors);
-                        });
-                });
+                        return turbulence
+                            .startUserSteps()
+                            .get('http://localhost:8080/url1')
+                            .assertResponse((Response) => {
+                                return Response.rawBody === JSON.stringify({key: 'value'});
+                            })
+                            .endUserSteps()
+                            .run()
+                            .then((results) => {
+                                assert.equal(0, results.errors);
+                            });
+                    }
+                )
+                ;
 
                 it('should parse json when given "JsonBody"', () => {
-                    http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
-                        key: 'value'
-                    })));
+                        http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                            key: 'value'
+                        })));
 
-                    return turbulence
-                        .startUserSteps()
-                        .get('http://localhost:8080/url1')
-                        .assertResponse((JsonBody) => {
-                            return JsonBody.key === 'value';
-                        })
-                        .endUserSteps()
-                        .run()
-                        .then((results) => {
-                            assert.equal(0, results.errors);
-                        });
-                });
+                        return turbulence
+                            .startUserSteps()
+                            .get('http://localhost:8080/url1')
+                            .assertResponse((JsonBody) => {
+                                return JsonBody.key === 'value';
+                            })
+                            .endUserSteps()
+                            .run()
+                            .then((results) => {
+                                assert.equal(0, results.errors);
+                            });
+                    }
+                )
+                ;
 
                 it('should parse xml when given "XmlBody"', () => {
-                    http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse("<a><b>asdf</b></a>"));
+                        http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse('<a><b>asdf</b></a>'));
 
-                    return turbulence
-                        .startUserSteps()
-                        .get('http://localhost:8080/url1')
-                        .assertResponse((XmlBody) => {
-                            return XmlBody.a.b === 'asdf';
-                        })
-                        .endUserSteps()
-                        .run()
-                        .then((results) => {
-                            assert.equal(0, results.errors);
-                        });
-                });
+                        return turbulence
+                            .startUserSteps()
+                            .get('http://localhost:8080/url1')
+                            .assertResponse((XmlBody) => {
+                                return XmlBody.a.b === 'asdf';
+                            })
+                            .endUserSteps()
+                            .run()
+                            .then((results) => {
+                                assert.equal(0, results.errors);
+                            });
+                    }
+                )
+                ;
 
                 it('should inject nothing when no matching args are given', () => {
-                    http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse("response body"));
+                    http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse('response body'));
 
                     return turbulence
                         .startUserSteps()
@@ -492,25 +496,27 @@ types.map((type) => {
                 });
 
                 it('should provide a jsonpath evaluator when given "JsonPath"', () => {
-                    http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
-                        key: 'value'
-                    })));
+                        http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse(JSON.stringify({
+                            key: 'value'
+                        })));
 
-                    return turbulence
-                        .startUserSteps()
-                        .get('http://localhost:8080/url1')
-                        .assertResponse((JsonPath) => {
-                            return JsonPath('$.key').pop() === 'value';
-                        })
-                        .endUserSteps()
-                        .run()
-                        .then((results) => {
-                            assert.equal(0, results.errors);
-                        });
-                });
+                        return turbulence
+                            .startUserSteps()
+                            .get('http://localhost:8080/url1')
+                            .assertResponse((JsonPath) => {
+                                return JsonPath('$.key').pop() === 'value';
+                            })
+                            .endUserSteps()
+                            .run()
+                            .then((results) => {
+                                assert.equal(0, results.errors);
+                            });
+                    }
+                )
+                ;
 
                 xit('should provide an xpath evaluator when given "xpath"', () => {
-
+                    return null;
                 });
 
                 it('should record an error if it cannot parse', () => {
@@ -551,7 +557,7 @@ types.map((type) => {
 
         describe('Control flow', () => {
             it('should allow pauses', () => {
-                var start = new Date().getTime();
+                let start = new Date().getTime();
 
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse());
 
@@ -563,7 +569,7 @@ types.map((type) => {
                     .endUserSteps()
                     .run()
                     .then(() => {
-                        var duration = new Date().getTime() - start;
+                        let duration = new Date().getTime() - start;
                         assert(duration > 50, 'testPlans finished too quickly');
                         assert(duration < 100, 'testPlans took too long');
                     });
@@ -633,11 +639,11 @@ types.map((type) => {
                 });
 
                 xit('should execute an if else branch', () => {
-
+                    return null;
                 });
 
                 xit('should evaluate multiple if else branches in order', () => {
-
+                    return null;
                 });
             });
 
@@ -709,7 +715,7 @@ types.map((type) => {
                 });
 
                 xit('should allow looping until a condition is satisfied', () => {
-
+                    return null;
                 });
             });
         });
@@ -726,7 +732,7 @@ types.map((type) => {
                     .endUserSteps()
                     .run()
                     .then((results) => {
-                        var request = results.requests.pop();
+                        let request = results.requests.pop();
                         assert.equal('GET', request.type);
                         assert.equal('http://localhost:8080/url1', request.url);
                         assert.equal(200, request.status);
@@ -762,8 +768,12 @@ types.map((type) => {
                     .run()
                     .report()
                     .then(() => {
-                        var doc = domParser.parseFromString(stubFs.data);
-                        assert.equal('Retrieve User Information', xpath.select('//*[@class="Name"]', doc)[0].firstChild.data);
+                        let doc = domParser.parseFromString(stubFs.data);
+                        assert.equal('Retrieve User Information', xpath.select('//*[@class=\'Name\']', doc
+                            )
+                                [0].firstChild.data
+                        )
+                        ;
                     });
             });
 
@@ -779,8 +789,8 @@ types.map((type) => {
                     .run()
                     .report()
                     .then(() => {
-                        var doc = domParser.parseFromString(stubFs.data);
-                        assert.equal('1', xpath.select('//*[@class="TotalRequests"]', doc)[0].firstChild.data);
+                        let doc = domParser.parseFromString(stubFs.data);
+                        assert.equal('1', xpath.select('//*[@class=\'TotalRequests\']', doc)[0].firstChild.data);
                     });
             });
         });
@@ -791,7 +801,7 @@ types.map((type) => {
                     key: 'value'
                 }));
 
-                var start = Date.now();
+                let start = Date.now();
 
                 return turbulence
                     .startUserSteps()
@@ -801,8 +811,8 @@ types.map((type) => {
                     .endUserSteps()
                     .run()
                     .then((report) => {
-                        var end = Date.now();
-                        var elapsed = end - start;
+                        let end = Date.now();
+                        let elapsed = end - start;
 
                         assert.equal(true, elapsed < 2000);
                         assert.equal(10, report.requests.length);
@@ -814,7 +824,7 @@ types.map((type) => {
                     key: 'value'
                 }));
 
-                var start = Date.now();
+                let start = Date.now();
 
                 return turbulence
                     .startUserSteps()
@@ -826,11 +836,11 @@ types.map((type) => {
                     .then((report) => {
                         assert(report.requests[0].timestamp - start < 100, 'Took too long to execute first request');
 
-                        for (var i = 0; i < 9; i++) {
-                            var current = report.requests[i];
-                            var next = report.requests[i + 1];
+                        for (let i = 0; i < 9; i++) {
+                            let current = report.requests[i];
+                            let next = report.requests[i + 1];
 
-                            var diff = next.timestamp - current.timestamp;
+                            let diff = next.timestamp - current.timestamp;
 
                             assert(diff > 50, 'diff should be greater than 50ms, was' + diff);
                             assert(diff < 200, 'diff should be less than 200ms, was ' + diff);
@@ -842,11 +852,11 @@ types.map((type) => {
 
         xdescribe('Distributed Testing', () => {
             xit('should send the test plan to the executor', () => {
-
+                return null;
             });
 
             xit('should distribute the number of users equally between executors', () => {
-
+                return null;
             });
 
         });

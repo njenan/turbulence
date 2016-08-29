@@ -1,52 +1,54 @@
-declare var Chart:any;
-declare var responseTimesData:any;
-declare var responsesPerIntervalData:any;
+declare var Chart: any;
+declare var responseTimesData: any;
+declare var responsesPerIntervalData: any;
 
-var responseTimesChart = document.getElementById("responseTimesChart");
+let responseTimesChart = document.getElementById('responseTimesChart');
 
 Chart.defaults.global.defaultFontColor = 'white';
 Chart.defaults.global.elements.line.borderColor = 'white';
 
+// tslint:disable-next-line:no-unused-new
 new Chart(responseTimesChart, {
-    type: 'line',
+    bezierCurve: false,
     data: {
         datasets: [{
-            label: "Response times over time",
             data: responseTimesData,
+            label: 'Response times over time',
             lineTension: 0
         }]
     },
     options: {
+        bezierCurve: false,
         scales: {
             xAxes: [{
-                type: 'time',
-                position: 'bottom'
+                position: 'bottom',
+                type: 'time'
             }]
-        },
-        bezierCurve: false
+        }
     },
-    bezierCurve: false
+    type: 'line'
 });
 
-var responsesPerIntervalChart = document.getElementById("responsesPerIntervalChart");
+let responsesPerIntervalChart = document.getElementById('responsesPerIntervalChart');
 
+// tslint:disable-next-line:no-unused-new 
 new Chart(responsesPerIntervalChart, {
-    type: 'line',
+    bezierCurve: false,
     data: {
         datasets: [{
-            label: "Response per interval",
             data: responsesPerIntervalData,
+            label: 'Response per interval',
             lineTension: 0
         }]
     },
     options: {
+        bezierCurve: false,
         scales: {
             xAxes: [{
-                type: 'time',
-                position: 'bottom'
+                position: 'bottom',
+                type: 'time'
             }]
-        },
-        bezierCurve: false
+        }
     },
-    bezierCurve: false
+    type: 'line'
 });
