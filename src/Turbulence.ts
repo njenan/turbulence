@@ -1,12 +1,7 @@
-/// <reference path="../typings/main/ambient/q/index.d.ts" />
-
-import Q = require('q');
-import fs = require('fs');
-
 import {HttpClient} from './Http/HttpClient';
-import {TestPlan} from "./TestPlan";
-import {Executor} from "./Executors/Executor";
-import {ReportGenerator} from "./Reporters/ReportGenerator";
+import {TestPlan} from './TestPlan';
+import {Executor} from './Executors/Executor';
+import {ReportGenerator} from './Reporters/ReportGenerator';
 
 export class Turbulence {
     http: HttpClient;
@@ -22,20 +17,17 @@ export class Turbulence {
     };
 
     startUserSteps() {
-        var testPlan = new TestPlan(this, this.http);
+        let testPlan = new TestPlan(this, this.http);
         this.testPlans.unshift(testPlan);
         return testPlan;
     }
 
     run() {
-        var self = this;
-        var promise = this.executor.run(this.testPlans, this.http);
+        let self = this;
+        let promise = this.executor.run(this.testPlans, this.http);
         return {
-            then: (func) => {
-                return promise.then(func);
-            },
             report: () => {
-                var promise2 = promise.then((results) => {
+                let promise2 = promise.then((results) => {
                     return self.reportGenerator.toReport(results);
                 });
 
@@ -44,6 +36,9 @@ export class Turbulence {
                         return promise2.then(func);
                     }
                 };
+            },
+            then: (func) => {
+                return promise.then(func);
             }
         };
     }
