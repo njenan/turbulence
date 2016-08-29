@@ -1,0 +1,6 @@
+turbulence
+    .startUserSteps()
+        .get('http://localhost:9876/')
+        .expectStatus(222)
+    .endUserSteps()
+    .run();
