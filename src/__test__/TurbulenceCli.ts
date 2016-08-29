@@ -4,7 +4,9 @@ let spawn = child_process.spawn;
 
 export function TurbulenceCli(args) {
     let deferred = Q.defer();
-    let turbulence = spawn('node', ['./index.js'].concat(args.args));
+    let options = args.cwd ? {cwd: args.cwd} : {};
+    let file = args.file ? args.file : './index.js';
+    let turbulence = spawn('node', [file].concat(args.args ? args.args : []), options);
 
     if (args.stdin) {
         turbulence.stdin.write(args.stdin);

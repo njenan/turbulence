@@ -50,3 +50,5 @@ mb*
 nohup.out
 
 lint_report
+
+.tmp

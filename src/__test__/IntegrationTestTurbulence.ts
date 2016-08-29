@@ -8,11 +8,14 @@ import {MountebankRequestLog} from './Mountebank/MountebankRequestLog';
 
 // tslint:disable-next-line:no-var-requires
 let unirest = require('unirest');
+let rimraf = require('rimraf');
 
 describe('Turbulence', () => {
     let port = 9876;
 
     beforeEach((done) => {
+        rimraf.sync('.tmp');
+        fs.mkdirSync('.tmp');
         unirest.delete('http://localhost:2525/imposters').end(() => {
             unirest.post('http://localhost:2525/imposters').send(
                 JSON.stringify(new ImposterBuilder()
@@ -41,6 +44,14 @@ describe('Turbulence', () => {
             });
         });
 
+        it('should run multiple specified .turbulence files', () => {
+            return TurbulenceCli({args: ['examples/example2.turbulence', 'examples/example2.turbulence']}).then(() => {
+                return MountebankRequestLog(port);
+            }).then((requests: Array<any>) => {
+                assert.equal(2, requests.length);
+            });
+        });
+
         it('should take test plan input from stdin', () => {
             return TurbulenceCli({args: '{}', stdin: fs.readFileSync('examples/example2.turbulence')}).then(() => {
                 return MountebankRequestLog(port);
@@ -58,20 +69,59 @@ describe('Turbulence', () => {
             });
         });
 
-        xit('should run all .turbulence files in the directory when given no args', () => {
-            return null;
+        it('should run a .turbulence file in the directory when given no args', () => {
+            var file = fs.readFileSync('examples/example2.turbulence');
+            fs.writeFileSync('.tmp/one.turbulence', file);
+
+            return TurbulenceCli({file: '../index.js', cwd: '.tmp'}).then(() => {
+                return MountebankRequestLog(port);
+            }).then((requests: Array<any>) => {
+                assert.equal(1, requests.length);
+            });
         });
 
-        xit('should run all .turbulence files in sub-directories when given no args', () => {
-            return null;
+        it('should run all .turbulence files in a directory when given no args', () => {
+            var file = fs.readFileSync('examples/example2.turbulence');
+            fs.writeFileSync('.tmp/one.turbulence', file);
+            fs.writeFileSync('.tmp/two.turbulence', file);
+            fs.writeFileSync('.tmp/three.turbulence', file);
+
+            return TurbulenceCli({file: '../index.js', cwd: '.tmp'}).then(() => {
+                return MountebankRequestLog(port);
+            }).then((requests: Array<any>) => {
+                assert.equal(3, requests.length);
+            });
         });
 
-        xit('should allow patterns to be included', () => {
-            return null;
+        it('should run all .turbulence files in sub-directories when given no args', () => {
+            fs.mkdirSync('.tmp/sub1');
+            fs.mkdirSync('.tmp/sub2');
+
+            var file = fs.readFileSync('examples/example2.turbulence');
+            fs.writeFileSync('.tmp/sub1/one.turbulence', file);
+            fs.writeFileSync('.tmp/sub2/two.turbulence', file);
+
+            return TurbulenceCli({file: '../index.js', cwd: '.tmp'}).then(() => {
+                return MountebankRequestLog(port);
+            }).then((requests: Array<any>) => {
+                assert.equal(2, requests.length);
+            });
         });
 
-        xit('should allow patterns to be excluded', () => {
-            return null;
+        it('should allow glob patterns', () => {
+            fs.mkdirSync('.tmp/sub1');
+            fs.mkdirSync('.tmp/sub2');
+
+            var file = fs.readFileSync('examples/example2.turbulence');
+            fs.writeFileSync('.tmp/sub1/one.turbulence', file);
+            fs.writeFileSync('.tmp/sub2/one.turbulence', file);
+            fs.writeFileSync('.tmp/sub2/two.turbulence', file);
+
+            return TurbulenceCli({file: '../index.js', cwd: '.tmp', args: '**/one.turbulence'}).then(() => {
+                return MountebankRequestLog(port);
+            }).then((requests: Array<any>) => {
+                assert.equal(2, requests.length);
+            });
         });
 
         it('should write an html report after executing', () => {
