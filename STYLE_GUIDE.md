@@ -9,4 +9,4 @@ In all tests, the outermost `describe` block should contain only name of the mod
    describe('File System Accessor', () => {  /* ... rest of file
 ```   
 
-This format is the same for both Unit and Integration tests, so multiple types of tests for the same module would have identical outer describe blocks. 
+This format is the same for both Unit and Integration tests, so multiple types of tests for the same module would have identical outer describe blocks.  Additional inner describe blocks can be used to explain the functionality being tested in greater detail.
