@@ -10,8 +10,8 @@
     "watch": "watch --wait 5 --filter watchFilter.js 'npm test' **/*",
     "pre-integration-test": "./scripts/startMountebank.sh",
     "integration-test": "./scripts/integrationTest.sh",
-    "travis-coverage": "istanbul cover _mocha \"src/**/__test__/Test*.js\" --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
-    "coverage": "istanbul cover _mocha \"src/**/__test__/Test*.js\"",
+    "travis-coverage": "istanbul cover -x \"src/**/__test__/*.js\" _mocha \"src/**/__test__/Test*.js\" --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "coverage": "istanbul cover -x \"src/**/__test__/*.js\" _mocha \"src/**/__test__/Test*.js\"",
     "lint": "tslint src/*.ts src/**/*.ts -o ./lint_report -c tslint.json -t verbose",
     "all": "npm run package && npm test && npm run integration-test && npm run lint"
   },
