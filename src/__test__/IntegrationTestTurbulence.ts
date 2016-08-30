@@ -8,6 +8,7 @@ import {MountebankRequestLog} from './Mountebank/MountebankRequestLog';
 
 // tslint:disable-next-line:no-var-requires
 let unirest = require('unirest');
+// tslint:disable-next-line:no-var-requires
 let rimraf = require('rimraf');
 
 describe('Turbulence', () => {
@@ -70,10 +71,10 @@ describe('Turbulence', () => {
         });
 
         it('should run a .turbulence file in the directory when given no args', () => {
-            var file = fs.readFileSync('examples/example2.turbulence');
+            let file = fs.readFileSync('examples/example2.turbulence');
             fs.writeFileSync('.tmp/one.turbulence', file);
 
-            return TurbulenceCli({file: '../index.js', cwd: '.tmp'}).then(() => {
+            return TurbulenceCli({cwd: '.tmp', file: '../index.js'}).then(() => {
                 return MountebankRequestLog(port);
             }).then((requests: Array<any>) => {
                 assert.equal(1, requests.length);
@@ -81,12 +82,12 @@ describe('Turbulence', () => {
         });
 
         it('should run all .turbulence files in a directory when given no args', () => {
-            var file = fs.readFileSync('examples/example2.turbulence');
+            let file = fs.readFileSync('examples/example2.turbulence');
             fs.writeFileSync('.tmp/one.turbulence', file);
             fs.writeFileSync('.tmp/two.turbulence', file);
             fs.writeFileSync('.tmp/three.turbulence', file);
 
-            return TurbulenceCli({file: '../index.js', cwd: '.tmp'}).then(() => {
+            return TurbulenceCli({cwd: '.tmp', file: '../index.js'}).then(() => {
                 return MountebankRequestLog(port);
             }).then((requests: Array<any>) => {
                 assert.equal(3, requests.length);
@@ -97,11 +98,11 @@ describe('Turbulence', () => {
             fs.mkdirSync('.tmp/sub1');
             fs.mkdirSync('.tmp/sub2');
 
-            var file = fs.readFileSync('examples/example2.turbulence');
+            let file = fs.readFileSync('examples/example2.turbulence');
             fs.writeFileSync('.tmp/sub1/one.turbulence', file);
             fs.writeFileSync('.tmp/sub2/two.turbulence', file);
 
-            return TurbulenceCli({file: '../index.js', cwd: '.tmp'}).then(() => {
+            return TurbulenceCli({cwd: '.tmp', file: '../index.js'}).then(() => {
                 return MountebankRequestLog(port);
             }).then((requests: Array<any>) => {
                 assert.equal(2, requests.length);
@@ -112,12 +113,12 @@ describe('Turbulence', () => {
             fs.mkdirSync('.tmp/sub1');
             fs.mkdirSync('.tmp/sub2');
 
-            var file = fs.readFileSync('examples/example2.turbulence');
+            let file = fs.readFileSync('examples/example2.turbulence');
             fs.writeFileSync('.tmp/sub1/one.turbulence', file);
             fs.writeFileSync('.tmp/sub2/one.turbulence', file);
             fs.writeFileSync('.tmp/sub2/two.turbulence', file);
 
-            return TurbulenceCli({file: '../index.js', cwd: '.tmp', args: '**/one.turbulence'}).then(() => {
+            return TurbulenceCli({args: '**/one.turbulence', cwd: '.tmp', file: '../index.js'}).then(() => {
                 return MountebankRequestLog(port);
             }).then((requests: Array<any>) => {
                 assert.equal(2, requests.length);
