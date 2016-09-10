@@ -8,6 +8,12 @@ export function TurbulenceCli(args) {
     let file = args.file ? args.file : './index.js';
     let turbulence = spawn('node', [file].concat(args.args ? args.args : []), options);
 
+    if (args.killAfter) {
+        setTimeout(() => {
+            turbulence.kill('SIGKILL');
+        }, args.killAfter);
+    }
+
     if (args.stdin) {
         turbulence.stdin.write(args.stdin);
         turbulence.stdin.end();
