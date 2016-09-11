@@ -106,6 +106,11 @@ export class IfStep implements TestStep, StepCreator {
         return this;
     }
 
+    processor(func): StepCreator {
+        this.creator.processor(func);
+        return this;
+    }
+
     expectStatus(code): StepCreator {
         this.creator.expectStatus(code);
         return this;

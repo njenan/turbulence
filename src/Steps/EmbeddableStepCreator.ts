@@ -12,6 +12,7 @@ import {HttpPutStep} from './Http/HttpPutStep';
 import {HttpHeadStep} from './Http/HttpHeadStep';
 import {HttpDeleteStep} from './Http/HttpDeleteStep';
 import {RandomPauseStep} from './RandomPauseStep';
+import {ProcessorStep} from './ProcessorStep';
 
 export class EmbeddableStepCreator implements StepCreator {
 
@@ -76,6 +77,11 @@ export class EmbeddableStepCreator implements StepCreator {
 
     assertResponse(predicate): StepCreator {
         this.addStep(new AssertHttpResponseStep(this.results, predicate));
+        return this;
+    }
+
+    processor(func): StepCreator {
+        this.addStep(new ProcessorStep(func));
         return this;
     }
 

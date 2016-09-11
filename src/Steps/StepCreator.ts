@@ -20,6 +20,8 @@ export interface StepCreator {
 
     assertResponse(predicate): StepCreator;
 
+    processor(func): StepCreator;
+
     expectStatus(code): StepCreator;
 
 }

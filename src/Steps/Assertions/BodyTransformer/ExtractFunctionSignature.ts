@@ -1,5 +1,11 @@
-export function ExtractFunctionSignature(signature:string):any {
-    var args = /\(\s*([^)]+?)\s*\)/.exec(signature).pop().split(',').map((entry) => {
+export function ExtractFunctionSignature(signature: string): any {
+    var rawArgs = /\(\s*([^)]+?)\s*\)/.exec(signature);
+
+    if (!rawArgs) {
+        return {};
+    }
+
+    var args = rawArgs.pop().split(',').map((entry) => {
         return entry.trim();
     });
 

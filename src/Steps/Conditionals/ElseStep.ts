@@ -85,6 +85,11 @@ export class ElseStep implements TestStep, StepCreator {
         return this;
     }
 
+    processor(func): StepCreator {
+        this.creator.processor(func);
+        return this;
+    }
+
     assertResponse(predicate): StepCreator {
         this.creator.assertResponse(predicate);
         return this;

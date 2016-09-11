@@ -1,18 +1,15 @@
-/// <reference path="../../../typings/main/ambient/q/index.d.ts" />
-
 import Q = require('q');
-
-import {TestStep} from "../TestStep";
-import {HttpResponse} from "../../Http/HttpResponse";
-import {SummaryResults} from "../../Results/SummaryResults";
-import {ExtractFunctionSignature} from "./BodyTransformer/ExtractFunctionSignature";
-import {TransformerFactory} from "./BodyTransformer/TransformerFactory";
-import {HttpClient} from "../../Http/HttpClient";
+import {TestStep} from '../TestStep';
+import {HttpResponse} from '../../Http/HttpResponse';
+import {SummaryResults} from '../../Results/SummaryResults';
+import {HttpClient} from '../../Http/HttpClient';
+import {Injector} from '../Injector';
 
 export class AssertHttpResponseStep implements TestStep {
     results: SummaryResults;
     validator: any;
     validatorRaw: string;
+    injector = new Injector();
     type: string = 'AssertHttpResponseStep';
 
     constructor(results, validator) {
@@ -22,29 +19,15 @@ export class AssertHttpResponseStep implements TestStep {
     }
 
     execute(http: HttpClient, resp: HttpResponse): Q.Promise<HttpResponse> {
-        var args = [];
-        var signature = ExtractFunctionSignature(this.validator.toString());
-        var promise = Q.resolve<any>(null);
+        let args = {args: []};
+        let promise = Q.resolve<any>(args);
+        promise = this.injector.inject(promise, resp, this.validator);
 
-        for (var k in signature) {
-            var transformer = TransformerFactory(k);
-            if (transformer) {
-                //Function is here so that the loop doesn't overwrite the transformer and k variables
-                ((transformer, k) => {
-                    promise = promise.then(() => {
-                        return transformer(resp);
-                    }).then((arg) => {
-                        args[signature[k]] = arg;
-                    });
-                })(transformer, k);
-            }
-        }
-
-        promise = promise.then(()=> {
-            var valid;
+        return promise.then(() => {
+            let valid;
 
             try {
-                valid = this.validator.apply(this, args);
+                valid = this.validator.apply(this, args.args);
             } catch (e) {
                 valid = false;
             }
@@ -54,10 +37,7 @@ export class AssertHttpResponseStep implements TestStep {
             }
         }).catch(() => {
             this.results.errors++;
-        });
-
-
-        return promise.then(() => {
+        }).then(() => {
             return resp
         });
     }

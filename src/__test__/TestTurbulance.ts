@@ -271,8 +271,43 @@ types.map((type) => {
 
             });
 
-            xit('should provide a global scope object for storing letiables between steps', () => {
-                return null;
+            it('should provide a processor step to do arbitrary computations', () => {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                    alpha: 'first'
+                }));
+
+                return turbulence
+                    .startUserSteps()
+                    .get('http://localhost:8080/url1')
+                    // tslint:disable-next-line:no-empty
+                    .processor(() => {
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.ok(results !== null);
+                    });
+            });
+
+            it('should provide a global scope object for storing variables between steps', () => {
+                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
+                    alpha: 'first'
+                }));
+
+                return turbulence
+                    .startUserSteps()
+                    .get('http://localhost:8080/url1')
+                    .processor((Global, Response) => {
+                        Global.lastResponse = Response.rawBody;
+                    })
+                    .assertResponse((Global) => {
+                        return Global.lastResponse.alpha === 'first';
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.equal(0, results.errors);
+                    });
             });
 
             it('should run the test to a specified time limit', function () {

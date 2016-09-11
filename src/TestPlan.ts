@@ -16,6 +16,7 @@ import {HttpPutStep} from './Steps/Http/HttpPutStep';
 import {HttpPostStep} from './Steps/Http/HttpPostStep';
 import {HttpDeleteStep} from './Steps/Http/HttpDeleteStep';
 import {HttpHeadStep} from './Steps/Http/HttpHeadStep';
+import {ProcessorStep} from './Steps/ProcessorStep';
 
 export class TestPlan extends EmbeddableStepCreator {
 
@@ -60,6 +61,10 @@ export class TestPlan extends EmbeddableStepCreator {
                     let loopStep = new LoopStep(step.parent, testPlan.results, step.times);
                     loopStep.creator.steps = step.creator.steps ? step.creator.steps.map(mapStep) : [];
                     return loopStep;
+
+                case 'ProcessorStep':
+                    // tslint:disable-next-line:no-eval
+                    return new ProcessorStep(eval('(' + step.rawFunc + ')'));
 
                 case 'PauseStep':
                     return new PauseStep(step.time);
