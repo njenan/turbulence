@@ -7,6 +7,8 @@ require('./src/Reporters/JadeHtmlReportGenerator');
 require('./src/Http/UnirestHttpClient');
 require('./src/Reporters/__test__/StubFs');
 
+var Hapi = require('Hapi');
+
 var fs = require('fs');
 var globule = require('globule');
 var argh = require('argh');
@@ -88,5 +90,20 @@ if (!args.slave) {
     }
 } else {
     var DistributedTurbulence = new require('./src/DistributedTurbulence').DistributedTurbulence;
-    new DistributedTurbulence().run();
+
+    var server = new Hapi.Server();
+    server.connection({port: 7777});
+    server.start(function (err) {
+        if (err) {
+            throw err;
+        }
+
+        // console.log('Listening for test plans');
+    });
+
+    server.route({
+        handler: new DistributedTurbulence().route,
+        method: 'POST',
+        path: '/'
+    });
 }

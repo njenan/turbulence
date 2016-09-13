@@ -35,14 +35,27 @@ describe('Distributed Turbulence', () => {
         });
 
         it('should send the test plan to the executor', () => {
-            TurbulenceCli({args: '--slave', killAfter: 3000});
-            return TurbulenceCli({
+            var slave = TurbulenceCli({args: '--slave', killAfter: 1000});
+            return Q.all(slave, TurbulenceCli({
                 args: ['../examples/example2.turbulence', '--master localhost:7777'],
                 cwd: '.tmp',
                 file: '../index.js'
             }).then(() => {
                 fs.readFileSync('.tmp/Report.html');
-            });
+            }));
+        });
+
+        it('should accept multiple executors', () => {
+            var slave1 = TurbulenceCli({args: '--slave 7777', killAfter: 1000});
+            var slave2 = TurbulenceCli({args: '--slave 7778', killAfter: 1000});
+
+            return Q.all(slave1, slave2, TurbulenceCli({
+                args: ['../examples/example2.turbulence', '--master localhost:7777'],
+                cwd: '.tmp',
+                file: '../index.js'
+            }).then(() => {
+                fs.readFileSync('.tmp/Report.html');
+            }));
         });
     });
 });
