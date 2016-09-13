@@ -17,6 +17,7 @@ import {HttpPostStep} from './Steps/Http/HttpPostStep';
 import {HttpDeleteStep} from './Steps/Http/HttpDeleteStep';
 import {HttpHeadStep} from './Steps/Http/HttpHeadStep';
 import {ProcessorStep} from './Steps/ProcessorStep';
+import {RandomPauseStep} from "./Steps/RandomPauseStep";
 
 export class TestPlan extends EmbeddableStepCreator {
 
@@ -68,6 +69,8 @@ export class TestPlan extends EmbeddableStepCreator {
 
                 case 'PauseStep':
                     return new PauseStep(step.time);
+                case 'RandomPauseStep':
+                    return new RandomPauseStep(step.lower, step.upper);
             }
 
             throw new Error('Can\'t deserialize unknown step ' + step.type);
