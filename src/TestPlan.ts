@@ -17,7 +17,7 @@ import {HttpPostStep} from './Steps/Http/HttpPostStep';
 import {HttpDeleteStep} from './Steps/Http/HttpDeleteStep';
 import {HttpHeadStep} from './Steps/Http/HttpHeadStep';
 import {ProcessorStep} from './Steps/ProcessorStep';
-import {RandomPauseStep} from "./Steps/RandomPauseStep";
+import {RandomPauseStep} from './Steps/RandomPauseStep';
 
 export class TestPlan extends EmbeddableStepCreator {
 
