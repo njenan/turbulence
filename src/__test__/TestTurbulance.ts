@@ -883,6 +883,10 @@ types.map((type) => {
                     });
             });
 
+            xit('should allow open workload testing', () => {
+                return null;
+            });
+
         });
 
         xdescribe('Distributed Testing', () => {
