@@ -1,8 +1,10 @@
+import Q = require('q');
 import {TestPlan} from './TestPlan';
 
 export class DistributedTurbulence {
     executor;
     http;
+    state = Q.resolve(null);
 
     constructor(executor, http) {
         this.executor = executor;
@@ -14,8 +16,10 @@ export class DistributedTurbulence {
             return JSON.parse(JSON.stringify(entry), TestPlan.reviver);
         });
 
-        this.executor.run(testPlans, this.http).then((report) => {
-            reply(report);
+        this.state = this.state.then(() => {
+            return this.executor.run(testPlans, this.http).then((report) => {
+                reply(report);
+            });
         });
     }
 }

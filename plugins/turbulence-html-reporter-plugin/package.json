@@ -1,0 +1,17 @@
+{
+  "name": "turbulence-html-reporter-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "find ./src -name \"*.js\" -delete",
+    "build": "npm run clean && tsc",
+    "test": "mocha **/__test__/*.js",
+    "all": "npm run build && npm test"
+  },
+  "author": "Nathan Jenan",
+  "license": "MIT",
+  "dependencies": {
+    "pug": "^2.0.0-beta6"
+  }
+}

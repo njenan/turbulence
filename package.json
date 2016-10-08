@@ -13,7 +13,8 @@
     "travis-coverage": "istanbul cover -x \"src/**/__test__/*.js\" _mocha \"src/**/__test__/Test*.js\" --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "coverage": "istanbul cover -x \"src/**/__test__/*.js\" _mocha \"src/**/__test__/Test*.js\"",
     "lint": "tslint src/*.ts src/**/*.ts -o ./lint_report -c tslint.json -t verbose",
-    "all": "npm run package && npm test && npm run integration-test && npm run lint"
+    "all": "npm run package && npm test && npm run integration-test && npm run lint",
+    "build-plugins": "./scripts/buildPlugins.sh"
   },
   "bin": {
     "turbulence": "./index.js",
@@ -23,7 +24,7 @@
     "type": "git",
     "url": "git+https://github.com/njenan/turbulence.git"
   },
-  "author": "",
+  "author": "Nathan Jenan",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/njenan/turbulence/issues"

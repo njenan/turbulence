@@ -1,7 +1,7 @@
 # Logs
 logs
 *.log
-npm-debug.log*
+plugins/turbulence-html-reporter-plugin/src/npm-debug.log
 
 # Runtime data
 pids

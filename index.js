@@ -71,7 +71,14 @@ if (!args.slave) {
             E = new require('./src/Executors/LocalExecutor').LocalExecutor;
         }
 
-        var R = require('./src/Reporters/JadeHtmlReportGenerator').JadeHtmlReportGenerator;
+        var R;
+
+        if (args.reporter) {
+            R = require('./src/Reporters/' + args.reporter)[args.reporter];
+        } else {
+            R = require('./src/Reporters/JadeHtmlReportGenerator').JadeHtmlReportGenerator;
+        }
+
         var H = require('./src/Http/UnirestHttpClient').UnirestHttpClient;
         var F = require('./src/Reporters/__test__/StubFs').StubFs;
         var turbulence = new T(new H(), new E(), new R(new F()));
