@@ -13,7 +13,7 @@
     "travis-coverage": "istanbul cover -x \"src/**/__test__/*.js\" _mocha \"src/**/__test__/Test*.js\" --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "coverage": "istanbul cover -x \"src/**/__test__/*.js\" _mocha \"src/**/__test__/Test*.js\"",
     "lint": "tslint src/*.ts src/**/*.ts -o ./lint_report -c tslint.json -t verbose",
-    "all": "npm run package && npm test && npm run integration-test && npm run lint",
+    "all": "npm run package && npm test && npm run integration-test && npm run lint && npm run build-plugins",
     "build-plugins": "./scripts/buildPlugins.sh"
   },
   "bin": {
@@ -38,6 +38,7 @@
     "power-assert": "^1.3.1",
     "rimraf": "^2.5.4",
     "tslint": "^3.14.0",
+    "turbulence-html-reporter-plugin": "file:plugins/turbulence-html-reporter-plugin",
     "typescript": "^1.8.10",
     "typings": "^0.7.9",
     "watch": "^0.17.1",

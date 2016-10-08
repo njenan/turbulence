@@ -2,5 +2,5 @@ var JadeHtmlReportGenerator = require("./src/JadeHtmlReportGenerator").JadeHtmlR
 
 module.exports = {
     type: 'ReportGenerator',
-    clazz: JadeHtmlReportGenerator
+    main: JadeHtmlReportGenerator
 };

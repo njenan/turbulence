@@ -1,4 +1,4 @@
-responseTimesChart = document.getElementById('responseTimesChart');
+var responseTimesChart = document.getElementById('responseTimesChart');
 Chart.defaults.global.defaultFontColor = 'white';
 Chart.defaults.global.elements.line.borderColor = 'white';
 // tslint:disable-next-line:no-unused-new
@@ -22,7 +22,7 @@ new Chart(responseTimesChart, {
     },
     type: 'line'
 });
-responsesPerIntervalChart = document.getElementById('responsesPerIntervalChart');
+var responsesPerIntervalChart = document.getElementById('responsesPerIntervalChart');
 // tslint:disable-next-line:no-unused-new 
 new Chart(responsesPerIntervalChart, {
     bezierCurve: false,

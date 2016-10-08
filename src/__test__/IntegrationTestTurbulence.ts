@@ -144,7 +144,7 @@ describe('Turbulence', () => {
     describe('plugins', () => {
         it('should allow existing plugins to be overridden', () => {
             return TurbulenceCli({args: 'example.turbulence', cwd: 'subproject', file: '../index.js'}).then(() => {
-
+                return null;
             });
         });
     });
