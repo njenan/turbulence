@@ -14,6 +14,7 @@ deploy:
     tags: true
     repo: njenan/turbulence
 script:
+  - npm run debug-node-modules
   - npm run all
   - npm run travis-coverage
 notifications:
