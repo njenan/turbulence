@@ -5,6 +5,9 @@ before_deploy:
 - git config user.email "njenan@gmail.com"
 - git config user.name "Travis CI"
 - npm run package
+os:
+  - linux
+  - osx
 deploy:
   provider: npm
   email: njenan@gmail.com
