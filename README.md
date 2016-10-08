@@ -37,6 +37,14 @@ When turbulence finishes, a `Report.html` file will be created in the current di
 
 ![Example Turbulence Report](./example-report.png)
 
+For convenience, `trb` is also available as an alias for `turbulence` on the command line, so the commands:
+
+    turbulence my_test_plan.turbulence
+
+is equivalent to:
+
+    trb my_test_plan.turbulence
+
 
 ### Contributing
 Before submitting a pull request, please make sure that your changes are covered by proper tests, and review the [Style Guide](./STYLE_GUIDE.md).  All code should pass the linter.  Run `npm run all` to run the full regression test suite and linter checks.

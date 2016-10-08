@@ -16,7 +16,8 @@
     "all": "npm run package && npm test && npm run integration-test && npm run lint"
   },
   "bin": {
-    "turbulence": "./index.js"
+    "turbulence": "./index.js",
+    "trb": "./index.js"
   },
   "repository": {
     "type": "git",
