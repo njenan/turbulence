@@ -1,13 +1,6 @@
 #!/usr/bin/env node
 
-//TODO remember why I did this
-require('./src/Turbulence');
-require('./src/Executors/LocalExecutor');
-require('./src/Reporters/JadeHtmlReportGenerator');
-require('./src/Http/UnirestHttpClient');
-require('./src/Reporters/__test__/StubFs');
-
-var Hapi = require('Hapi');
+var Hapi = require('hapi');
 
 var fs = require('fs');
 var globule = require('globule');
