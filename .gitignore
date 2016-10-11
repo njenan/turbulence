@@ -37,6 +37,8 @@ node_modules
 src/**/*.js
 src/**/*.js.map
 
+plugins/**/*.js
+
 turbulence.iml
 
 typings

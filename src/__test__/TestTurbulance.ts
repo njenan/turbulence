@@ -1,33 +1,13 @@
 import assert = require('power-assert');
 import Q = require('q');
-import xpath = require('xpath');
-import xmldom = require('xmldom');
 import {Turbulence} from '../Turbulence';
 import {StubHttpClient} from './../Http/__test__/StubHttpClient';
 import {HttpResponse} from '../Http/HttpResponse';
 import {LocalExecutor} from '../Executors/LocalExecutor';
 import {ToJsonFromJsonExecutor} from '../Executors/__test__/ToJsonFromJsonExecutor';
-import {StubReportGenerator} from "../Reporters/__test__/StubReportGenerator";
+import {StubReportGenerator} from '../Reporters/__test__/StubReportGenerator';
 
 Q.longStackSupport = true;
-
-let options = {
-    errorHandler: {
-        error: () => {
-            return null;
-        },
-        fatalError: () => {
-            return null;
-        },
-        warning: () => {
-            return null;
-        }
-    },
-    locator: {}
-};
-
-let DomParser = xmldom.DOMParser;
-let domParser = new DomParser(options);
 
 function isIstanbul() {
     return (() => {
@@ -45,7 +25,6 @@ types.map((type) => {
     describe(type.name + ' Turbulence', () => {
         let turbulence;
         let http;
-        let stubFs;
 
         beforeEach(() => {
             http = new StubHttpClient();

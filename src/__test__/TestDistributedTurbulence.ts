@@ -6,13 +6,12 @@ import {Turbulence} from '../Turbulence';
 import {RemoteExecutor} from '../Executors/RemoteExecutor';
 import {LocalExecutor} from '../Executors/LocalExecutor';
 import {HttpResponse} from '../Http/HttpResponse';
-import {StubReportGenerator} from "../Reporters/__test__/StubReportGenerator";
+import {StubReportGenerator} from '../Reporters/__test__/StubReportGenerator';
 
 describe('Distributed Turbulence', () => {
     let turbulence;
     let turbulence2;
     let http;
-    let stubFs;
 
     let distributed;
     let request;
