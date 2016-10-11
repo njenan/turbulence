@@ -31,6 +31,17 @@ describe('JadeHtmlReportGenerator', () => {
         assert.equal('2', xpath.select('//*[@class="TotalRequests"]', doc)[0].firstChild.data);
     });
 
+    it('should allow http requests to be labeled', () => {
+
+    });
+    
+    it('should write an html report after executing', () => {
+        // fs.unlinkSync('Report.html');
+        // return TurbulenceCli({args: 'examples/example2.turbulence'}).then(() => {
+//            assert.ok(fs.statSync('Report.html').isFile());
+  //      });
+    });
+
     it('should report each step separately', () => {
         var results = new SummaryResults();
         results.requests.push(new HttpRequestRecord(new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0));

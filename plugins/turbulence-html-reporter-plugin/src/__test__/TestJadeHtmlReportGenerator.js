@@ -24,6 +24,14 @@ describe('JadeHtmlReportGenerator', function () {
         var doc = new xmldom.DOMParser().parseFromString(html);
         assert.equal('2', xpath.select('//*[@class="TotalRequests"]', doc)[0].firstChild.data);
     });
+    it('should allow http requests to be labeled', function () {
+    });
+    it('should write an html report after executing', function () {
+        // fs.unlinkSync('Report.html');
+        // return TurbulenceCli({args: 'examples/example2.turbulence'}).then(() => {
+        //            assert.ok(fs.statSync('Report.html').isFile());
+        //      });
+    });
     it('should report each step separately', function () {
         var results = new SummaryResults_1.SummaryResults();
         results.requests.push(new HttpRequestRecord_1.HttpRequestRecord(new HttpGetStep_1.HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse_1.HttpResponse(), undefined, 0));

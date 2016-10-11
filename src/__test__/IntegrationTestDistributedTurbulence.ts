@@ -40,9 +40,11 @@ describe('Distributed Turbulence', () => {
                 args: ['../examples/example2.turbulence', '--master localhost:7777'],
                 cwd: '.tmp',
                 file: '../index.js'
-            }).then(() => {
-                fs.readFileSync('.tmp/Report.html');
-            })]);
+            })
+                .then(JSON.parse)
+                .then((data) => {
+                    assert.equal(1, data.requests.length);
+                })]);
         });
 
         it('should accept multiple executors', () => {
@@ -53,9 +55,11 @@ describe('Distributed Turbulence', () => {
                 args: ['../examples/example2.turbulence', '--master localhost:7777'],
                 cwd: '.tmp',
                 file: '../index.js'
-            }).then(() => {
-                fs.readFileSync('.tmp/Report.html');
-            })]);
+            })
+                .then(JSON.parse)
+                .then((data) => {
+                    assert.equal(1, data.requests.length);
+                })]);
         });
     });
 });

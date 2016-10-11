@@ -6,9 +6,8 @@ import {Turbulence} from '../Turbulence';
 import {StubHttpClient} from './../Http/__test__/StubHttpClient';
 import {HttpResponse} from '../Http/HttpResponse';
 import {LocalExecutor} from '../Executors/LocalExecutor';
-import {JadeHtmlReportGenerator} from '../Reporters/JadeHtmlReportGenerator';
-import {StubFs} from '../Reporters/__test__/StubFs';
 import {ToJsonFromJsonExecutor} from '../Executors/__test__/ToJsonFromJsonExecutor';
+import {StubReportGenerator} from "../Reporters/__test__/StubReportGenerator";
 
 Q.longStackSupport = true;
 
@@ -49,9 +48,8 @@ types.map((type) => {
         let stubFs;
 
         beforeEach(() => {
-            stubFs = new StubFs();
             http = new StubHttpClient();
-            turbulence = new Turbulence(http, new type.Exec(), new JadeHtmlReportGenerator(stubFs));
+            turbulence = new Turbulence(http, new type.Exec(), new StubReportGenerator());
         });
 
         describe('Running Tests', () => {
@@ -788,44 +786,6 @@ types.map((type) => {
                     .run()
                     .then((results) => {
                         assert(results.averageResponseTime());
-                    });
-            });
-
-            it('should allow http requests to be labeled', () => {
-                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
-                    key: 'value'
-                })).delayResponse(10);
-
-                return turbulence
-                    .startUserSteps()
-                    .get('http://localhost:8080/url1', undefined, 'Retrieve User Information')
-                    .endUserSteps()
-                    .run()
-                    .report()
-                    .then(() => {
-                        let doc = domParser.parseFromString(stubFs.data);
-                        assert.equal('Retrieve User Information', xpath.select('//*[@class=\'Name\']', doc
-                            )
-                                [0].firstChild.data
-                        )
-                        ;
-                    });
-            });
-
-            it('should generate an html report', () => {
-                http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
-                    key: 'value'
-                }));
-
-                return turbulence
-                    .startUserSteps()
-                    .get('http://localhost:8080/url1')
-                    .endUserSteps()
-                    .run()
-                    .report()
-                    .then(() => {
-                        let doc = domParser.parseFromString(stubFs.data);
-                        assert.equal('1', xpath.select('//*[@class=\'TotalRequests\']', doc)[0].firstChild.data);
                     });
             });
         });

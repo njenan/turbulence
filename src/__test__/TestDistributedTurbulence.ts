@@ -1,13 +1,12 @@
 import assert = require('power-assert');
 import Q = require('q');
 import {DistributedTurbulence} from '../DistributedTurbulence';
-import {StubFs} from '../Reporters/__test__/StubFs';
 import {StubHttpClient} from '../Http/__test__/StubHttpClient';
 import {Turbulence} from '../Turbulence';
 import {RemoteExecutor} from '../Executors/RemoteExecutor';
-import {JadeHtmlReportGenerator} from '../Reporters/JadeHtmlReportGenerator';
 import {LocalExecutor} from '../Executors/LocalExecutor';
 import {HttpResponse} from '../Http/HttpResponse';
+import {StubReportGenerator} from "../Reporters/__test__/StubReportGenerator";
 
 describe('Distributed Turbulence', () => {
     let turbulence;
@@ -19,10 +18,9 @@ describe('Distributed Turbulence', () => {
     let request;
 
     beforeEach(() => {
-        stubFs = new StubFs();
         http = new StubHttpClient();
-        turbulence = new Turbulence(http, new RemoteExecutor(), new JadeHtmlReportGenerator(stubFs));
-        turbulence2 = new Turbulence(http, new RemoteExecutor(), new JadeHtmlReportGenerator(stubFs));
+        turbulence = new Turbulence(http, new RemoteExecutor(), new StubReportGenerator());
+        turbulence2 = new Turbulence(http, new RemoteExecutor(), new StubReportGenerator());
 
         distributed = new DistributedTurbulence(new LocalExecutor(), http);
         request = {};

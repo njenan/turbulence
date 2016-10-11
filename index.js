@@ -71,17 +71,10 @@ if (!args.slave) {
             E = new require('./src/Executors/LocalExecutor').LocalExecutor;
         }
 
-        var R;
-
-        if (args.reporter) {
-            R = require('./src/Reporters/' + args.reporter)[args.reporter];
-        } else {
-            R = require('./src/Reporters/JadeHtmlReportGenerator').JadeHtmlReportGenerator;
-        }
+        var R = require('./src/Reporters/JsonReportGenerator').JsonReportGenerator;
 
         var H = require('./src/Http/UnirestHttpClient').UnirestHttpClient;
-        var F = require('./src/Reporters/__test__/StubFs').StubFs;
-        var turbulence = new T(new H(), new E(), new R(new F()));
+        var turbulence = new T(new H(), new E(), new R());
         eval(file)
             .report()
             .then(function () {

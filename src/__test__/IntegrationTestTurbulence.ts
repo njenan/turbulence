@@ -125,13 +125,6 @@ describe('Turbulence', () => {
             });
         });
 
-        it('should write an html report after executing', () => {
-            fs.unlinkSync('Report.html');
-            return TurbulenceCli({args: 'examples/example2.turbulence'}).then(() => {
-                assert.ok(fs.statSync('Report.html').isFile());
-            });
-        });
-
         it('should provide a json reporter', () => {
             return TurbulenceCli({args: ['examples/example2.turbulence', '--reporter=JsonReportGenerator']})
                 .then(JSON.parse)
