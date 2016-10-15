@@ -1,5 +1,3 @@
-/// <reference path="../../../typings/main/ambient/assert/index.d.ts" />
-
 var unirest = require('unirest');
 
 import assert = require('power-assert');
@@ -8,7 +6,7 @@ import {UnirestHttpClient} from "../UnirestHttpClient";
 
 
 describe('Unirest Http Client', () => {
-    var client:HttpClient;
+    var client: HttpClient;
 
     before((done) => {
         client = new UnirestHttpClient();

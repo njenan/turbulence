@@ -1,5 +1,3 @@
-/// <reference path="../../../../typings/main/ambient/q/index.d.ts" />
-
 import Q = require('q');
 import {JsonBodyTransformer} from "./JsonBodyTransformer";
 

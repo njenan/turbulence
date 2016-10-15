@@ -1,15 +1,26 @@
 import fs = require('fs');
+import Q = require('q');
 import assert = require('power-assert');
 import {ImposterBuilder} from './Mountebank/ImposterBuilder';
 import {StubBuilder} from './Mountebank/StubBuilder';
 import {ResponseBuilder} from './Mountebank/ResponseBuilder';
-import {TurbulenceCli} from './TurbulenceCli';
+import {TurbulenceCli} from './TurbulenceCliTestHarness';
 import {MountebankRequestLog} from './Mountebank/MountebankRequestLog';
+import {Plugins} from '../Plugins';
+
+Q.longStackSupport = true;
 
 // tslint:disable-next-line:no-var-requires
 let unirest = require('unirest');
 // tslint:disable-next-line:no-var-requires
 let rimraf = require('rimraf');
+
+function safeUnlink(path) {
+    try {
+        fs.unlinkSync(path);
+    } catch (e) { /* swallow exception */
+    }
+}
 
 describe('Turbulence', () => {
     let port = 9876;
@@ -135,10 +146,27 @@ describe('Turbulence', () => {
     });
 
     describe('plugins', () => {
-        it('should allow existing plugins to be overridden', () => {
-            return TurbulenceCli({args: 'example.turbulence', cwd: 'subproject', file: '../index.js'}).then(() => {
-                return null;
-            });
+        xit('should allow existing plugins to be overridden', () => {
+            safeUnlink('./Report.html');
+
+            new Plugins(require('../../package.json')).plugins = {
+                'turbulence-html-reporter-plugin': require('turbulence-html-reporter-plugin')
+            };
+            return TurbulenceCli({args: 'example.turbulence'})
+                .then(() => {
+                    fs.readFileSync('./Report.html');
+                });
+        });
+
+        xit('should error on multiple plugins', () => {
+            return TurbulenceCli({args: 'example.turbulence'})
+                .then(console.log)
+                .then(() => {
+                    assert.ok(false);
+                }).catch((err) => {
+                    assert.equal('Found multiple plugins of type \'ReportGenerator\' installed in local repo.  ' +
+                        'Uninstall duplicate types or specific plugin with --ReportGenerator=PLUGIN_NAME_HERE', err);
+                });
         });
     });
 });

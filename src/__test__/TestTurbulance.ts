@@ -287,6 +287,7 @@ types.map((type) => {
                     });
             });
 
+            // tslint:disable-next-line:only-arrow-functions
             it('should run the test to a specified time limit', function () {
                 this.timeout(30000);
 
@@ -313,7 +314,6 @@ types.map((type) => {
                         assert(end - start < 1100, 'Expected duration greater than 900, was ' + (end - start));
                     });
             });
-
         });
 
         describe('Http options', () => {
@@ -770,7 +770,7 @@ types.map((type) => {
         });
 
         describe('Multi-User simulation', () => {
-            it('should allow multiple users to be simulated', function () {
+            it('should allow multiple users to be simulated', () => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     key: 'value'
                 }));
@@ -793,7 +793,7 @@ types.map((type) => {
                     });
             });
 
-            it('should allow a ramp-up period', function () {
+            it('should allow a ramp-up period', () => {
                 http.whenGet('http://localhost:8080/url1').thenReturn(new HttpResponse({
                     key: 'value'
                 }));

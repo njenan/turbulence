@@ -1,7 +1,7 @@
 import fs = require('fs');
 import assert = require('power-assert');
 import Q = require('q');
-import {TurbulenceCli} from './TurbulenceCli';
+import {TurbulenceCli} from './TurbulenceCliTestHarness';
 
 // tslint:disable-next-line:no-var-requires
 let rimraf = require('rimraf');

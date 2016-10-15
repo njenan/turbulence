@@ -1,6 +1,0 @@
-turbulence
-    .startUserSteps()
-        .get('http://localhost:8080/path')
-        .expectStatus(200)
-    .endUserSteps()
-    .run()

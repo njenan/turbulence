@@ -1,7 +1,4 @@
-/// <reference path="../../../typings/main/ambient/q/index.d.ts" />
-
 import Q = require('q');
-
 import {HttpClient} from "../HttpClient";
 import {HttpResponse} from "../HttpResponse";
 
@@ -51,7 +48,7 @@ export class StubHttpClient implements HttpClient {
         if (!this.resp[url]) {
             this.resp[url] = {};
         }
-        
+
         if (options && options.headers) {
             this.resp[url][bodyKey] = {};
             this.resp[url][bodyKey][JSON.stringify(options.headers)] = stubbedResponse;
@@ -88,7 +85,7 @@ export class StubHttpClient implements HttpClient {
         return stubbedResponse;
     }
 
-    get(url:string, headers?:string) {
+    get(url: string, headers?: string) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
 
@@ -104,7 +101,7 @@ export class StubHttpClient implements HttpClient {
         return deferred.promise;
     }
 
-    post(url:string, body:any, headers?:any) {
+    post(url: string, body: any, headers?: any) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
         var response = self.resp[url][JSON.stringify(body)];
@@ -121,7 +118,7 @@ export class StubHttpClient implements HttpClient {
         return deferred.promise;
     }
 
-    put(url:string, body:any, headers?:any) {
+    put(url: string, body: any, headers?: any) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
         var response = self.resp[url][JSON.stringify(body)];
@@ -138,7 +135,7 @@ export class StubHttpClient implements HttpClient {
         return deferred.promise;
     }
 
-    head(url:string, headers?:string) {
+    head(url: string, headers?: string) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
 
@@ -154,7 +151,7 @@ export class StubHttpClient implements HttpClient {
         return deferred.promise;
     }
 
-    delete(url:string, headers?:string) {
+    delete(url: string, headers?: string) {
         var self = this;
         var deferred = Q.defer<HttpResponse>();
 
@@ -172,10 +169,10 @@ export class StubHttpClient implements HttpClient {
 }
 
 class StubbedResponse {
-    url:String;
-    body:any;
-    responses:Array<HttpResponse>;
-    delay:number;
+    url: String;
+    body: any;
+    responses: Array<HttpResponse>;
+    delay: number;
 
     constructor(url, body?) {
         this.url = url;

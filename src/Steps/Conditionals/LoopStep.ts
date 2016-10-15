@@ -1,6 +1,3 @@
-/// <reference path="../../../typings/main/ambient/q/index.d.ts" />
-/// <reference path="../EmbeddableStepCreator.ts" />
-
 import Q = require('q');
 
 import {TestStep} from "../TestStep";

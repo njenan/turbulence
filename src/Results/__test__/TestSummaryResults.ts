@@ -1,5 +1,3 @@
-/// <reference path="../../../typings/main/ambient/assert/index.d.ts" />
-
 import assert = require('power-assert');
 
 import {SummaryResults} from "../SummaryResults";

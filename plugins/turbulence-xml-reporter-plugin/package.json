@@ -1,0 +1,16 @@
+{
+  "name": "turbulence-xml-reporter-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "find ./src -name \"*.js\" -delete",
+    "build": "npm run clean && tsc",
+    "all": "npm run build"
+  },
+  "author": "Nathan Jenan",
+  "license": "MIT",
+  "dependencies": {
+    "xml2js": "^0.4.17"
+  }
+}

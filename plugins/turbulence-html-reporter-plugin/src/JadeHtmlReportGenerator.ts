@@ -1,3 +1,4 @@
+import fs = require('fs');
 import Jade = require('pug');
 import {ReportGenerator} from '../../../src/Reporters/ReportGenerator';
 import {SummaryResults} from '../../../src/Results/SummaryResults';
@@ -5,10 +6,8 @@ import {SummaryResults} from '../../../src/Results/SummaryResults';
 export class JadeHtmlReportGenerator implements ReportGenerator {
 
     generator: (locals?: any) => string;
-    fs;
 
-    constructor(fileWriter) {
-        this.fs = fileWriter;
+    constructor() {
         // Code is synchronous... shouldn't be a problem because this won't execute during the performance test
         this.generator = Jade.compileFile(__dirname + '/JadeReport.jade');
     }
@@ -48,7 +47,7 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
             });
         }
 
-        this.fs.writeFile('Report.html', this.generator({
+        fs.writeFile('Report.html', this.generator({
                 averageResponseTime: results.averageResponseTime(),
                 chartjsPath: __dirname + '/chart.js',
                 cssPath: __dirname + '/style.css',
@@ -58,5 +57,4 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
             })
         );
     }
-
 }
