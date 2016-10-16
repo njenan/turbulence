@@ -2,9 +2,8 @@ import fs = require('fs');
 import Q = require('q');
 import {Turbulence} from './Turbulence';
 import {LocalExecutor} from './Executors/LocalExecutor';
-import {UnirestHttpClient} from './Http/UnirestHttpClient';
 import {RemoteExecutor} from './Executors/RemoteExecutor';
-import {PluginFactory} from "./PluginFactory";
+import {PluginFactory} from './PluginFactory';
 
 // No typings exist for globule TODO write them
 // tslint:disable-next-line:no-var-requires
@@ -24,7 +23,7 @@ export class Cli {
     }
 
     readFile(path) {
-        var deferred = Q.defer();
+        let deferred = Q.defer();
 
         fs.readFile(path, (err, data) => {
             if (err) {
@@ -116,8 +115,10 @@ export class Cli {
     };
 
     invokeTurbulence(args) {
-        var turbulence = args[0];
-        var file = args[1];
+        // tslint:disable-next-line:no-unused-variable
+        let turbulence = args[0];
+        let file = args[1];
+        // tslint:disable-next-line:no-eval
         return eval(file);
     }
 }

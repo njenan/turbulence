@@ -1,5 +1,5 @@
-import {JsonReportGenerator} from "./Reporters/JsonReportGenerator";
-import {UnirestHttpClient} from "./Http/UnirestHttpClient";
+import {JsonReportGenerator} from './Reporters/JsonReportGenerator';
+import {UnirestHttpClient} from './Http/UnirestHttpClient';
 
 export class PluginFactory {
     plugins;
@@ -9,11 +9,17 @@ export class PluginFactory {
     };
 
     constructor(plugins) {
-        this.plugins = plugins;
+        this.plugins = plugins.map((name) => {
+            let plugin = require(name);
+            return {
+                main: plugin.main,
+                type: plugin.type
+            };
+        });
     }
 
     get(type) {
-        var candidates = this.plugins.filter((plugin) => {
+        let candidates = this.plugins.filter((plugin) => {
             return plugin.type === type;
         });
 
