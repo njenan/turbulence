@@ -1,21 +1,54 @@
 import fs = require('fs');
 import Q = require('q');
+import {Turbulence} from './Turbulence';
+import {LocalExecutor} from './Executors/LocalExecutor';
+import {UnirestHttpClient} from './Http/UnirestHttpClient';
+import {RemoteExecutor} from './Executors/RemoteExecutor';
+import {PluginFactory} from "./PluginFactory";
 
 // No typings exist for globule TODO write them
 // tslint:disable-next-line:no-var-requires
 let globule = require('globule');
 
 export class Cli {
+    args;
+    filenames;
+    plugins;
+    pluginFactory;
 
-    setUpTurbulence(filenames, args) {
-        let deferred = Q.defer();
-        if (filenames[0] === '{}') {
-            this.readFromStdin(deferred);
-        } else {
-            this.readFromArguments(args, filenames, deferred);
-        }
+    constructor(args, filenames, plugins) {
+        this.args = args;
+        this.filenames = filenames;
+        this.plugins = plugins;
+        this.pluginFactory = new PluginFactory(plugins.plugins);
+    }
+
+    readFile(path) {
+        var deferred = Q.defer();
+
+        fs.readFile(path, (err, data) => {
+            if (err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve(data);
+            }
+        });
 
         return deferred.promise;
+    }
+
+    execute() {
+        let deferred = Q.defer();
+        if (this.filenames[0] === '{}') {
+            this.readFromStdin(deferred);
+        } else {
+            this.readFromArguments(this.filenames, deferred);
+        }
+
+        return deferred.promise
+            .then(this.buildTurbulence)
+            .then(this.invokeTurbulence)
+            .catch(console.error);
     }
 
     readFromStdin(deferred) {
@@ -32,9 +65,9 @@ export class Cli {
         });
     }
 
-    readFromArguments(args, filenames, deferred) {
-        if (args.master) {
-            if (typeof args.master !== 'string') {
+    readFromArguments(filenames, deferred) {
+        if (this.args.master) {
+            if (typeof this.args.master !== 'string') {
                 deferred.reject('Must supply at least 1 slave url');
             }
         }
@@ -49,24 +82,42 @@ export class Cli {
 
         let errors = '';
         let files = '';
-        let x = 0;
-        for (let i = 0; i < filenames.length; i++) {
-            let name = filenames[i];
-            fs.readFile(name, (err, file) => {
-                if (err) {
-                    errors += 'File \'' + name + '\' does not exist';
-                } else {
-                    files += file;
-                    x++;
-                    if (x === filenames.length && errors === '') {
-                        deferred.resolve(files);
-                    }
 
-                    if (errors !== '') {
-                        deferred.reject(errors);
-                    }
-                }
+        Q.all(filenames.map((filename) => {
+            return this.readFile(filename).then((file) => {
+                files += file;
+            }).catch((err) => {
+                errors += err;
             });
+        })).then(() => {
+            if (errors !== '') {
+                deferred.reject(errors);
+            } else {
+                deferred.resolve(files);
+            }
+        });
+
+    }
+
+    buildTurbulence = (file) => {
+        let Executor;
+        if (this.args.master) {
+            Executor = RemoteExecutor;
+        } else {
+            Executor = LocalExecutor;
         }
+
+        let Reporter = this.pluginFactory.get('ReportGenerator');
+        let HttpClient = this.pluginFactory.get('HttpClient');
+
+        let turbulence = new Turbulence(new HttpClient(), new Executor(), new Reporter());
+
+        return Q.resolve([turbulence, file]);
+    };
+
+    invokeTurbulence(args) {
+        var turbulence = args[0];
+        var file = args[1];
+        return eval(file);
     }
 }

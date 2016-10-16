@@ -23,24 +23,7 @@ export class Turbulence {
     }
 
     run() {
-        let self = this;
-        let promise = this.executor.run(this.testPlans, this.http);
-        return {
-            report: () => {
-                let promise2 = promise.then((results) => {
-                    return self.reportGenerator.toReport(results);
-                });
-
-                return {
-                    then: (func) => {
-                        return promise2.then(func);
-                    }
-                };
-            },
-            then: (func) => {
-                return promise.then(func);
-            }
-        };
+        return this.executor.run(this.testPlans, this.http)
+            .then(this.reportGenerator.toReport);
     }
-
 }
