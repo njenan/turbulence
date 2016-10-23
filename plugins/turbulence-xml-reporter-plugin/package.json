@@ -1,6 +1,6 @@
 {
   "name": "turbulence-xml-reporter-plugin",
-  "version": "1.0.0",
+  "version": "0.1.10",
   "description": "Xml formatter for Turbulence output",
   "main": "index.js",
   "scripts": {
