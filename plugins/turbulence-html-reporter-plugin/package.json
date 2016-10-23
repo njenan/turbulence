@@ -1,7 +1,7 @@
 {
   "name": "turbulence-html-reporter-plugin",
   "version": "1.0.0",
-  "description": "",
+  "description": "Html formatter for Turbulence output",
   "main": "index.js",
   "scripts": {
     "clean": "find ./src -name \"*.js\" -delete",
