@@ -37,20 +37,22 @@ export class Cli {
     }
 
     execute() {
-        let deferred = Q.defer();
+        let promise;
         if (this.filenames[0] === '{}') {
-            this.readFromStdin(deferred);
+            promise = this.readFromStdin();
         } else {
-            this.readFromArguments(this.filenames, deferred);
+            promise = this.readFromArguments(this.filenames);
         }
 
-        return deferred.promise
+        return promise
             .then(this.buildTurbulence)
             .then(this.invokeTurbulence)
             .catch(console.error);
     }
 
-    readFromStdin(deferred) {
+    readFromStdin() {
+        let deferred = Q.defer();
+
         let file = '';
         process.stdin.on('readable', () => {
             let chunk = process.stdin.read();
@@ -62,12 +64,14 @@ export class Cli {
         process.stdin.on('end', () => {
             deferred.resolve(file);
         });
+
+        return deferred.promise;
     }
 
-    readFromArguments(filenames, deferred) {
+    readFromArguments(filenames) {
         if (this.args.master) {
             if (typeof this.args.master !== 'string') {
-                deferred.reject('Must supply at least 1 slave url');
+                return Q.reject('Must supply at least 1 slave url');
             }
         }
 
@@ -82,7 +86,7 @@ export class Cli {
         let errors = '';
         let files = '';
 
-        Q.all(filenames.map((filename) => {
+        return Q.all(filenames.map((filename) => {
             return this.readFile(filename).then((file) => {
                 files += file;
             }).catch((err) => {
@@ -90,9 +94,9 @@ export class Cli {
             });
         })).then(() => {
             if (errors !== '') {
-                deferred.reject(errors);
+                return Q.reject(errors);
             } else {
-                deferred.resolve(files);
+                return Q.resolve(files);
             }
         });
 
