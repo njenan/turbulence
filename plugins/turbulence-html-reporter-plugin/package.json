@@ -10,6 +10,10 @@
     "test": "mocha src/**/__test__/*.js",
     "all": "npm run build && npm test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/njenan/turbulence.git"
+  },
   "author": "Nathan Jenan",
   "license": "MIT",
   "dependencies": {

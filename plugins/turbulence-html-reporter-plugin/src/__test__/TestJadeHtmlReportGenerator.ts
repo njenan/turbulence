@@ -11,6 +11,17 @@ import {HttpRequestRecord} from '../../../../src/Steps/Http/HttpRequestRecord';
 import {HttpResponse} from '../../../../src/Http/HttpResponse';
 
 describe('JadeHtmlReportGenerator', () => {
+    let domParser = new xmldom.DOMParser({
+        locator: {},
+        errorHandler: {
+            warning: function () {
+            },
+            error: function () {
+            },
+            fatalError: function () {
+            }
+        }
+    });
     let generator: JadeHtmlReportGenerator;
     let data;
     let temp;
@@ -39,7 +50,7 @@ describe('JadeHtmlReportGenerator', () => {
         generator.toReport(results);
 
         let html = data;
-        let doc = new xmldom.DOMParser().parseFromString(html);
+        let doc = domParser.parseFromString(html);
 
         assert.equal('2', xpath.select('//*[@class="TotalRequests"]', doc)[0].firstChild.data);
     });
@@ -67,7 +78,7 @@ describe('JadeHtmlReportGenerator', () => {
         generator.toReport(results);
 
         let html = data;
-        let doc = new xmldom.DOMParser().parseFromString(html);
+        let doc = domParser.parseFromString(html);
 
         assert.equal('http://localhost:8080/', xpath.select('//*[@class="Url"]', doc)[0].firstChild.data);
         assert.equal('http://localhost:8081/', xpath.select('//*[@class="Url"]', doc)[1].firstChild.data);
@@ -86,7 +97,7 @@ describe('JadeHtmlReportGenerator', () => {
         generator.toReport(results);
 
         let html = data;
-        let doc = new xmldom.DOMParser().parseFromString(html);
+        let doc = domParser.parseFromString(html);
 
         assert.equal('2', xpath.select('//*[@class="Invocations"]', doc)[0].firstChild.data);
     });
@@ -106,7 +117,7 @@ describe('JadeHtmlReportGenerator', () => {
         generator.toReport(results);
 
         let html = data;
-        let doc = new xmldom.DOMParser().parseFromString(html);
+        let doc = domParser.parseFromString(html);
 
         assert.equal('http://localhost:8081/', xpath.select('//*[@class="Url"]', doc)[0].firstChild.data);
         assert.equal('http://localhost:8080/', xpath.select('//*[@class="Url"]', doc)[1].firstChild.data);
@@ -123,7 +134,7 @@ describe('JadeHtmlReportGenerator', () => {
         generator.toReport(results);
 
         let html = data;
-        let doc = new xmldom.DOMParser().parseFromString(html);
+        let doc = domParser.parseFromString(html);
 
         assert.equal('0%', xpath.select('//*[@class="ErrorRate"]', doc)[0].firstChild.data);
     });
@@ -144,7 +155,7 @@ describe('JadeHtmlReportGenerator', () => {
         generator.toReport(results);
 
         let html = data;
-        let doc = new xmldom.DOMParser().parseFromString(html);
+        let doc = domParser.parseFromString(html);
 
         assert.equal('33.33%', xpath.select('//*[@class="ErrorRate"]', doc)[0].firstChild.data);
     });
@@ -164,7 +175,7 @@ describe('JadeHtmlReportGenerator', () => {
         generator.toReport(results);
 
         let html = data;
-        let doc = new xmldom.DOMParser().parseFromString(html);
+        let doc = domParser.parseFromString(html);
 
         assert.equal('20', xpath.select('//*[@class="TotalAverageResponseTime"]', doc)[0].firstChild.data);
     });

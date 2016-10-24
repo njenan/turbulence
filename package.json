@@ -36,16 +36,15 @@
   "devDependencies": {
     "coveralls": "^2.11.12",
     "istanbul": "^0.4.4",
-    "mocha": "^2.5.3",
+    "mocha": "^3.1.2",
     "mountebank": "^1.6.0",
     "power-assert": "^1.3.1",
     "rimraf": "^2.5.4",
     "tslint": "^3.14.0",
-    "typescript": "^1.8.10",
+    "typescript": "^2.0.3",
     "typings": "^1.4.0",
-    "watch": "^0.17.1",
-    "xmldom": "^0.1.22",
-    "xpath": "0.0.22"
+    "watch": "^1.0.1",
+    "xmldom": "^0.1.22"
   },
   "dependencies": {
     "argh": "^0.1.4",
@@ -57,6 +56,7 @@
     "pug": "^2.0.0-beta6",
     "q": "^1.4.1",
     "unirest": "^0.5.0",
-    "xml2js": "^0.4.17"
+    "xml2js": "^0.4.17",
+    "xpath": "0.0.23"
   }
 }

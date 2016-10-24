@@ -9,6 +9,10 @@
     "postinstall": "typings install",
     "all": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/njenan/turbulence.git"
+  },
   "author": "Nathan Jenan",
   "license": "MIT",
   "dependencies": {
