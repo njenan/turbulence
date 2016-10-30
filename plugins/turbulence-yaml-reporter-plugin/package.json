@@ -1,0 +1,21 @@
+{
+  "name": "turbulence-yaml-reporter-plugin",
+  "version": "0.1.10",
+  "description": "Yaml formatter for Turbulence output",
+  "main": "index.js",
+  "scripts": {
+    "clean": "find ./src -name \"*.js\" -delete",
+    "build": "npm install && npm run clean && tsc",
+    "postinstall": "typings install",
+    "all": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/njenan/turbulence.git"
+  },
+  "author": "Nathan Jenan",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^3.6.1"
+  }
+}
