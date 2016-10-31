@@ -6,10 +6,10 @@ import {GlobalTransformer} from './GlobalTransformer';
 
 export function TransformerFactory(type) {
     return {
-        Response: ResponseBodyNoOpTransformer,
-        XmlBody: XmlBodyTransformer,
-        JsonPath: JsonPathTransformer,
+        Global: GlobalTransformer,
         JsonBody: JsonBodyTransformer,
-        Global: GlobalTransformer
+        JsonPath: JsonPathTransformer,
+        Response: ResponseBodyNoOpTransformer,
+        XmlBody: XmlBodyTransformer
     }[type];
 }

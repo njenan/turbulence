@@ -1,4 +1,6 @@
 import Q = require('q');
+
+// tslint:disable-next-line:no-var-requires
 let unirest = require('unirest');
 
 export function MountebankRequestLog(port) {

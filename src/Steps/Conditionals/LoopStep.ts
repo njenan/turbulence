@@ -1,14 +1,13 @@
 import Q = require('q');
 
-import {TestStep} from "../TestStep";
-import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
-import {SummaryResults} from "../../Results/SummaryResults";
-import {HttpClient} from "../../Http/HttpClient";
-import {StepCreator} from "../StepCreator";
-import {RandomPauseStep} from "../RandomPauseStep";
-import {Parent} from "../../Parent";
+import {TestStep} from '../TestStep';
+import {EmbeddableStepCreator} from '../EmbeddableStepCreator';
+import {SummaryResults} from '../../Results/SummaryResults';
+import {StepCreator} from '../StepCreator';
+import {Parent} from '../../Parent';
 
-//Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will result
+// Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will
+// result
 export class LoopStep<T> implements TestStep, StepCreator {
 
     parent: Parent<T>;
@@ -25,17 +24,17 @@ export class LoopStep<T> implements TestStep, StepCreator {
     }
 
     execute(http): Q.Promise<any> {
-        var self = this;
+        let self = this;
 
-        var chainPromiseNTimes = (i, promise): Q.Promise<any> => {
+        let chainPromiseNTimes = (i, initialPromise): Q.Promise<any> => {
             if (i === 0) {
-                return promise;
+                return initialPromise;
             } else {
                 return chainPromiseNTimes(i - 1, self.creator.steps.reduce((promise, nextStep): Q.Promise<any> => {
                     return promise.then((data): Q.Promise<any> => {
                         return nextStep.execute(http, data);
                     });
-                }, promise));
+                }, initialPromise));
             }
         };
 

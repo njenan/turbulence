@@ -1,15 +1,15 @@
 import Q = require('q');
 
-import {TestStep} from "../TestStep";
-import {EmbeddableStepCreator} from "../EmbeddableStepCreator";
-import {StepCreator} from "../StepCreator";
-import {SummaryResults} from "../../Results/SummaryResults";
-import {ElseStep} from "./ElseStep";
-import {HttpClient} from "../../Http/HttpClient";
-import {RandomPauseStep} from "../RandomPauseStep";
-import {Parent} from "../../Parent";
+import {TestStep} from '../TestStep';
+import {EmbeddableStepCreator} from '../EmbeddableStepCreator';
+import {StepCreator} from '../StepCreator';
+import {SummaryResults} from '../../Results/SummaryResults';
+import {ElseStep} from './ElseStep';
+import {HttpClient} from '../../Http/HttpClient';
+import {Parent} from '../../Parent';
 
-//Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will result
+// Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will
+// result
 export class IfStep implements TestStep, StepCreator {
 
     parent: Parent<StepCreator>;
@@ -38,12 +38,12 @@ export class IfStep implements TestStep, StepCreator {
     }
 
     execute(http: HttpClient, data): Q.Promise<any> {
-        var self = this;
+        let self = this;
 
         if (this.predicate(data)) {
             return this.creator.steps.reduce((promise, nextStep) => {
-                return promise.then((data) => {
-                    return nextStep.execute(http, data);
+                return promise.then((chunk) => {
+                    return nextStep.execute(http, chunk);
                 });
             }, Q.resolve(null))
                 .then(() => {

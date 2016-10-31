@@ -1,6 +1,6 @@
 import Q = require('q');
-import {HttpClient} from "../HttpClient";
-import {HttpResponse} from "../HttpResponse";
+import {HttpClient} from '../HttpClient';
+import {HttpResponse} from '../HttpResponse';
 
 export class StubHttpClient implements HttpClient {
     resp;
@@ -10,7 +10,7 @@ export class StubHttpClient implements HttpClient {
     }
 
     whenGet(url, options) {
-        var stubbedResponse = new StubbedResponse(url);
+        let stubbedResponse = new StubbedResponse(url);
 
         if (options && options.headers) {
             this.resp[url] = {};
@@ -19,13 +19,12 @@ export class StubHttpClient implements HttpClient {
             this.resp[url] = stubbedResponse;
         }
 
-
         return stubbedResponse;
     }
 
     whenPost(url, body, options?) {
-        var stubbedResponse = new StubbedResponse(url, body);
-        var bodyKey = JSON.stringify(body);
+        let stubbedResponse = new StubbedResponse(url, body);
+        let bodyKey = JSON.stringify(body);
 
         if (!this.resp[url]) {
             this.resp[url] = {};
@@ -42,8 +41,8 @@ export class StubHttpClient implements HttpClient {
     }
 
     whenPut(url, body, options?) {
-        var stubbedResponse = new StubbedResponse(url, body);
-        var bodyKey = JSON.stringify(body);
+        let stubbedResponse = new StubbedResponse(url, body);
+        let bodyKey = JSON.stringify(body);
 
         if (!this.resp[url]) {
             this.resp[url] = {};
@@ -60,7 +59,7 @@ export class StubHttpClient implements HttpClient {
     }
 
     whenHead(url, options?) {
-        var stubbedResponse = new StubbedResponse(url);
+        let stubbedResponse = new StubbedResponse(url);
 
         if (options && options.headers) {
             this.resp[url] = {};
@@ -73,7 +72,7 @@ export class StubHttpClient implements HttpClient {
     }
 
     whenDelete(url, options?) {
-        var stubbedResponse = new StubbedResponse(url);
+        let stubbedResponse = new StubbedResponse(url);
 
         if (options && options.headers) {
             this.resp[url] = {};
@@ -86,13 +85,13 @@ export class StubHttpClient implements HttpClient {
     }
 
     get(url: string, headers?: string) {
-        var self = this;
-        var deferred = Q.defer<HttpResponse>();
+        let self = this;
+        let deferred = Q.defer<HttpResponse>();
 
         setTimeout(() => {
             if (headers) {
-                var any = self.resp[url][JSON.stringify(headers)];
-                deferred.resolve(any ? any.nextResponse() : {});
+                let obj = self.resp[url][JSON.stringify(headers)];
+                deferred.resolve(obj ? obj.nextResponse() : {});
             } else {
                 deferred.resolve(self.resp[url].nextResponse());
             }
@@ -102,14 +101,14 @@ export class StubHttpClient implements HttpClient {
     }
 
     post(url: string, body: any, headers?: any) {
-        var self = this;
-        var deferred = Q.defer<HttpResponse>();
-        var response = self.resp[url][JSON.stringify(body)];
+        let self = this;
+        let deferred = Q.defer<HttpResponse>();
+        let response = self.resp[url][JSON.stringify(body)];
 
         setTimeout(() => {
             if (headers) {
-                var any = response[JSON.stringify(headers)];
-                deferred.resolve(any ? any.nextResponse() : {});
+                let obj = response[JSON.stringify(headers)];
+                deferred.resolve(obj ? obj.nextResponse() : {});
             } else {
                 deferred.resolve(response.nextResponse());
             }
@@ -119,14 +118,14 @@ export class StubHttpClient implements HttpClient {
     }
 
     put(url: string, body: any, headers?: any) {
-        var self = this;
-        var deferred = Q.defer<HttpResponse>();
-        var response = self.resp[url][JSON.stringify(body)];
+        let self = this;
+        let deferred = Q.defer<HttpResponse>();
+        let response = self.resp[url][JSON.stringify(body)];
 
         setTimeout(() => {
             if (headers) {
-                var any = response[JSON.stringify(headers)];
-                deferred.resolve(any ? any.nextResponse() : {});
+                let obj = response[JSON.stringify(headers)];
+                deferred.resolve(obj ? obj.nextResponse() : {});
             } else {
                 deferred.resolve(response.nextResponse());
             }
@@ -136,13 +135,13 @@ export class StubHttpClient implements HttpClient {
     }
 
     head(url: string, headers?: string) {
-        var self = this;
-        var deferred = Q.defer<HttpResponse>();
+        let self = this;
+        let deferred = Q.defer<HttpResponse>();
 
         setTimeout(() => {
             if (headers) {
-                var any = self.resp[url][JSON.stringify(headers)];
-                deferred.resolve(any ? any.nextResponse() : {});
+                let obj = self.resp[url][JSON.stringify(headers)];
+                deferred.resolve(obj ? obj.nextResponse() : {});
             } else {
                 deferred.resolve(self.resp[url].nextResponse());
             }
@@ -152,13 +151,13 @@ export class StubHttpClient implements HttpClient {
     }
 
     delete(url: string, headers?: string) {
-        var self = this;
-        var deferred = Q.defer<HttpResponse>();
+        let self = this;
+        let deferred = Q.defer<HttpResponse>();
 
         setTimeout(() => {
             if (headers) {
-                var any = self.resp[url][JSON.stringify(headers)];
-                deferred.resolve(any ? any.nextResponse() : {});
+                let obj = self.resp[url][JSON.stringify(headers)];
+                deferred.resolve(obj ? obj.nextResponse() : {});
             } else {
                 deferred.resolve(self.resp[url].nextResponse());
             }

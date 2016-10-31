@@ -1,28 +1,28 @@
 export class ImposterBuilder {
-    _port = 4545;
-    _protocol = 'http';
-    _stubs = [];
+    portProp = 4545;
+    protocolProp = 'http';
+    stubsProp = [];
 
     port(port) {
-        this._port = port;
+        this.portProp = port;
         return this;
     }
 
     protocol(protocol) {
-        this._protocol = protocol;
+        this.protocolProp = protocol;
         return this;
     }
 
     addStub(stub) {
-        this._stubs.push(stub);
+        this.stubsProp.push(stub);
         return this;
     }
 
     build() {
         return {
-            protocol: this._protocol,
-            port: this._port,
-            stubs: this._stubs
+            port: this.portProp,
+            protocol: this.protocolProp,
+            stubs: this.stubsProp
         };
     }
 }

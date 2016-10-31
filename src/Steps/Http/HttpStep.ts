@@ -1,6 +1,6 @@
-import {SummaryResults} from "../../Results/SummaryResults";
-import {HttpResponse} from "../../Http/HttpResponse";
-import {HttpRequestRecord} from "./HttpRequestRecord";
+import {SummaryResults} from '../../Results/SummaryResults';
+import {HttpResponse} from '../../Http/HttpResponse';
+import {HttpRequestRecord} from './HttpRequestRecord';
 
 export abstract class AbstractHttpStep {
     results: SummaryResults;
@@ -18,14 +18,14 @@ export abstract class AbstractHttpStep {
     abstract getType(): string;
 
     execute(http): Q.Promise<HttpResponse> {
-        var self = this;
-        var start = new Date().getTime();
+        let self = this;
+        let start = new Date().getTime();
 
         return this.makeCall(http).then((resp) => {
-            var end = new Date().getTime();
-            var duration = end - start;
+            let end = new Date().getTime();
+            let duration = end - start;
 
-            var requestRecord = new HttpRequestRecord(self, resp, duration, Date.now());
+            let requestRecord = new HttpRequestRecord(self, resp, duration, Date.now());
             self.results.requests.push(requestRecord);
             return resp;
         });

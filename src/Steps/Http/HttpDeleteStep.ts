@@ -1,5 +1,5 @@
-import {TestStep} from "../TestStep";
-import {AbstractHttpStep} from "./HttpStep";
+import {TestStep} from '../TestStep';
+import {AbstractHttpStep} from './HttpStep';
 
 export class HttpDeleteStep extends AbstractHttpStep implements TestStep {
 

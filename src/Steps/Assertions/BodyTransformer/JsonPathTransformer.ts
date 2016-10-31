@@ -1,12 +1,12 @@
-import Q = require('q');
-import {JsonBodyTransformer} from "./JsonBodyTransformer";
+import {JsonBodyTransformer} from './JsonBodyTransformer';
 
-var jsonpath = require('jsonpath-plus');
+// tslint:disable-next-line:no-var-requires
+let jsonpath = require('jsonpath-plus');
 
 export function JsonPathTransformer(resp) {
     return JsonBodyTransformer(resp).then((jsonBody) => {
         return (path) => {
-            return jsonpath({path: path, json: jsonBody});
+            return jsonpath({json: jsonBody, path: path});
         };
     });
 }

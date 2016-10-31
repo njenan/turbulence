@@ -1,22 +1,22 @@
 export class ResponseBuilder {
-    _body = {};
-    _statusCode = 200;
+    bodyProp = {};
+    statusCodeProp = 200;
 
     body(body) {
-        this._body = body;
+        this.bodyProp = body;
         return this;
     }
 
     status(statusCode) {
-        this._statusCode = statusCode;
+        this.statusCodeProp = statusCode;
         return this;
     }
 
     build() {
         return {
             is: {
-                body: this._body,
-                statusCode: this._statusCode
+                body: this.bodyProp,
+                statusCode: this.statusCodeProp
             }
         };
     }

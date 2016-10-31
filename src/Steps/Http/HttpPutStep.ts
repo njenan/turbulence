@@ -1,5 +1,5 @@
-import {TestStep} from "../TestStep";
-import {AbstractHttpStep} from "./HttpStep";
+import {TestStep} from '../TestStep';
+import {AbstractHttpStep} from './HttpStep';
 
 export class HttpPutStep extends AbstractHttpStep implements TestStep {
 
@@ -22,6 +22,6 @@ export class HttpPutStep extends AbstractHttpStep implements TestStep {
     }
 
     getType() {
-        return this.type
+        return this.type;
     }
 }

@@ -1,4 +1,4 @@
-import {ReportGenerator} from "../ReportGenerator";
+import {ReportGenerator} from '../ReportGenerator';
 
 export class StubReportGenerator implements ReportGenerator {
     results;

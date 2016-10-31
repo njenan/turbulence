@@ -1,12 +1,12 @@
-var unirest = require('unirest');
+// tslint:disable-next-line:no-var-requires
+let unirest = require('unirest');
 
 import assert = require('power-assert');
-import {HttpClient} from "../HttpClient";
-import {UnirestHttpClient} from "../UnirestHttpClient";
-
+import {HttpClient} from '../HttpClient';
+import {UnirestHttpClient} from '../UnirestHttpClient';
 
 describe('Unirest Http Client', () => {
-    var client: HttpClient;
+    let client: HttpClient;
 
     before((done) => {
         client = new UnirestHttpClient();
@@ -18,35 +18,35 @@ describe('Unirest Http Client', () => {
                     protocol: 'http',
                     stubs: [
                         {
-                            predicates: [{equals: {method: 'GET', headers: {headerOne: 'valueOne'}}}],
-                            responses: [{is: {statusCode: 200, body: 'Get response'}}]
+                            predicates: [{equals: {headers: {headerOne: 'valueOne'}, method: 'GET'}}],
+                            responses: [{is: {body: 'Get response', statusCode: 200}}]
                         },
                         {
                             predicates: [{
                                 equals: {
-                                    method: 'POST',
                                     body: 'post rawBody',
-                                    headers: {headerTwo: 'valueTwo'}
+                                    headers: {headerTwo: 'valueTwo'},
+                                    method: 'POST'
                                 }
                             }],
-                            responses: [{is: {statusCode: 201, body: 'Post response'}}]
+                            responses: [{is: {body: 'Post response', statusCode: 201}}]
                         },
                         {
                             predicates: [{
                                 equals: {
-                                    method: 'PUT',
                                     body: 'put rawBody',
-                                    headers: {headerThree: 'valueThree'}
+                                    headers: {headerThree: 'valueThree'},
+                                    method: 'PUT'
                                 }
                             }],
-                            responses: [{is: {statusCode: 202, body: 'Put response'}}]
+                            responses: [{is: {body: 'Put response', statusCode: 202}}]
                         },
                         {
-                            predicates: [{equals: {method: 'HEAD', headers: {headerFour: 'valueFour'}}}],
-                            responses: [{is: {statusCode: 203, body: 'Head response'}}]
+                            predicates: [{equals: {headers: {headerFour: 'valueFour'}, method: 'HEAD'}}],
+                            responses: [{is: {body: 'Head response', statusCode: 203}}]
                         },
                         {
-                            predicates: [{equals: {method: 'DELETE', headers: {headerFive: 'valueFive'}}}],
+                            predicates: [{equals: {headers: {headerFive: 'valueFive'}, method: 'DELETE'}}],
                             responses: [{is: {statusCode: 204}}]
                         },
                         {

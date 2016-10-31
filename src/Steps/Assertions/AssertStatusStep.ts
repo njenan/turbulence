@@ -1,9 +1,9 @@
 import Q = require('q');
 
-import {TestStep} from "../TestStep";
-import {SummaryResults} from "../../Results/SummaryResults";
-import {HttpResponse} from "../../Http/HttpResponse";
-import {HttpClient} from "../../Http/HttpClient";
+import {TestStep} from '../TestStep';
+import {SummaryResults} from '../../Results/SummaryResults';
+import {HttpResponse} from '../../Http/HttpResponse';
+import {HttpClient} from '../../Http/HttpClient';
 
 export class AssertStatusStep implements TestStep {
 

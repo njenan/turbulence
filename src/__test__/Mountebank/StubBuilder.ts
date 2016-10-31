@@ -1,21 +1,21 @@
 export class StubBuilder {
-    _predicates = [];
-    _responses = [];
+    predicatesProp = [];
+    responsesProp = [];
 
     addPredicate(predicate) {
-        this._predicates.push(predicate);
+        this.predicatesProp.push(predicate);
         return this;
     }
 
     addResponses(responses) {
-        this._responses.push(responses);
+        this.responsesProp.push(responses);
         return this;
     }
 
     build() {
         return {
-            predicates: this._predicates,
-            responses: this._responses
+            predicates: this.predicatesProp,
+            responses: this.responsesProp
         };
     }
 }

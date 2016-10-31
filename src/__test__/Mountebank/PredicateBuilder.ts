@@ -1,14 +1,14 @@
 export class PredicateBuilder {
-    _equals;
+    equalsProp;
 
     equals(equals) {
-        this._equals = equals;
+        this.equalsProp = equals;
         return this;
     }
 
     build() {
         return {
-            equals: this._equals
+            equals: this.equalsProp
         };
     }
 

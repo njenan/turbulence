@@ -38,7 +38,7 @@ export class AssertHttpResponseStep implements TestStep {
         }).catch(() => {
             this.results.errors++;
         }).then(() => {
-            return resp
+            return resp;
         });
     }
 }
