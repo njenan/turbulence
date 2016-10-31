@@ -1,18 +1,15 @@
 #!/usr/bin/env node
 
+var Plugins = require('./src/Plugins').Plugins;
 var Hapi = require('hapi');
-
-var fs = require('fs');
-var globule = require('globule');
 var argh = require('argh');
+var package = require('./package.json');
 
 var args = argh.argv;
 var filenames = args.argv ? args.argv : [];
 
-var Plugins = require('./src/Plugins').Plugins;
-
 var Cli = require('./src/Cli').Cli;
-var plugins = new Plugins(require('./package.json'));
+var plugins = new Plugins(package);
 
 if (!args.slave) {
     var cli = new Cli(args, filenames, plugins);
