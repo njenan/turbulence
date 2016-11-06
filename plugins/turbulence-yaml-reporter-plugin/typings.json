@@ -2,6 +2,6 @@
   "name": "turbulence-xml-reporter-plugin",
   "version": false,
   "globalDependencies": {
-    "q": "registry:dt/q#0.0.0+20161004185634"
+    "js-yaml": "registry:dt/js-yaml#3.5.2+20160316171810"
   }
 }
