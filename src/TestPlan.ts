@@ -81,6 +81,7 @@ export class TestPlan extends EmbeddableStepCreator {
         testPlan.time = root.time;
         testPlan.actualUsers = root.actualUsers;
         testPlan.startTime = root.startTime;
+        testPlan.rate = root.rate;
 
         return testPlan;
     }
@@ -89,9 +90,10 @@ export class TestPlan extends EmbeddableStepCreator {
     name: String;
     targetUsers: number = 1;
     warmUp: number = 1;
-    time: number = -1;
+    time: number;
     actualUsers: number = 0;
     startTime: number;
+    rate: number;
 
     constructor(parent, name?) {
         super(new SummaryResults());
@@ -119,11 +121,22 @@ export class TestPlan extends EmbeddableStepCreator {
         return this;
     }
 
+    arrivalRate(rate) {
+        this.rate = rate;
+        return this;
+    }
+
     running() {
         return Date.now() < this.startTime + this.time;
     }
 
     run(http: HttpClient): Q.Promise<SummaryResults> {
+        let reject = this.validate();
+
+        if (reject) {
+            return reject;
+        }
+
         let self = this;
         let promises = [];
 
@@ -135,7 +148,7 @@ export class TestPlan extends EmbeddableStepCreator {
                     return nextStep.execute(http, data);
                 });
             }, initialPromise).then(() => {
-                if (this.running()) {
+                if (this.running() && !this.rate) {
                     return script(initialPromise);
                 }
             });
@@ -144,18 +157,57 @@ export class TestPlan extends EmbeddableStepCreator {
         let rampUpIncrement = this.warmUp / this.targetUsers;
 
         let startTestPlans = () => {
-            let i = 0;
-            while (this.actualUsers < this.targetUsers) {
-                promises.push(script(Q.resolve(null).delay(rampUpIncrement * i++)));
-                this.actualUsers++;
+            if (!this.rate) {
+                let i = 0;
+                while (this.actualUsers < this.targetUsers) {
+                    promises.push(script(Q.resolve(null).delay(rampUpIncrement * i++)));
+                    this.actualUsers++;
+                }
+            } else {
+                this.spawnUser(promises, script);
             }
         };
 
         startTestPlans();
 
-        return Q.all(promises).then(() => {
+        return this.recursiveAll(promises).then(() => {
             return self.results;
         });
+    }
+
+    private recursiveAll(promises) {
+        let initalLength = promises.length;
+        return Q.all(promises).then(() => {
+            if (promises.length > initalLength) {
+                return this.recursiveAll(promises);
+            }
+        });
+    }
+
+    private spawnUser(promises, script) {
+        promises.push(script(Q.resolve(null)).then((data) => {
+            return data;
+        }));
+
+        if (this.running()) {
+            setTimeout(() => {
+                this.spawnUser(promises, script);
+            }, this.rate);
+        }
+    }
+
+    private validate() {
+        if (this.rate && !this.time) {
+            return Q.reject<SummaryResults>('Must specify a duration when arrival rate is specified.');
+        }
+
+        if (this.rate && this.targetUsers !== 1) {
+            return Q.reject<SummaryResults>('A number of users cannot be specified when an arrival rate is specified.');
+        }
+
+        if (this.rate && this.warmUp !== 1) {
+            return Q.reject<SummaryResults>('A ramp up period cannot be specified when an arrival rate is specified.');
+        }
     }
 
 }

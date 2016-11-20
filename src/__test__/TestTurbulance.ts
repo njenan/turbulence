@@ -290,6 +290,7 @@ types.map((type) => {
                     });
             });
 
+            // disabling linter because we need to set this.timeout()
             // tslint:disable-next-line:only-arrow-functions
             it('should run the test to a specified time limit', function () {
                 this.timeout(30000);
@@ -306,15 +307,15 @@ types.map((type) => {
                     .assertResponse((Response) => {
                         return Response.rawBody.alpha === 'first';
                     })
-                    .duration(1000)
+                    .duration(100)
                     .endUserSteps()
 
                     .run()
                     .then(() => {
                         let end = Date.now();
 
-                        assert(end - start > 900, 'Expected duration greater than 900, was ' + (end - start));
-                        assert(end - start < 1100, 'Expected duration greater than 900, was ' + (end - start));
+                        assert(end - start > 90, 'Expected duration greater than 900, was ' + (end - start));
+                        assert(end - start < 110, 'Expected duration greater than 900, was ' + (end - start));
                     });
             });
         });
@@ -783,7 +784,7 @@ types.map((type) => {
                 return turbulence
                     .startUserSteps()
                     .get(URL_1)
-                    .pause(1000)
+                    .pause(100)
                     .concurrentUsers(10)
                     .endUserSteps()
                     .run()
@@ -791,7 +792,7 @@ types.map((type) => {
                         let end = Date.now();
                         let elapsed = end - start;
 
-                        assert.equal(true, elapsed < 2000);
+                        assert.equal(true, elapsed < 200);
                         assert.equal(10, report.requests.length);
                     });
             });
@@ -825,8 +826,90 @@ types.map((type) => {
                     });
             });
 
-            xit('should allow open workload testing', () => {
-                return null;
+            describe('open workload testing', () => {
+                it('should error if arrival rate is specified and no duration is specified', () => {
+                    http.whenGet(URL_1).thenReturn(new HttpResponse({
+                        key: 'value'
+                    }));
+
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .arrivalRate(1)
+                        .endUserSteps()
+                        .run()
+                        .then(() => {
+                            assert.ok(false);
+                        }, (error) => {
+                            assert.equal('Must specify a duration when arrival rate is specified.', error);
+                        });
+                });
+
+                it('should error if arrival rate is specified and a number of users is specified', () => {
+                    http.whenGet(URL_1).thenReturn(new HttpResponse({
+                        key: 'value'
+                    }));
+
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .arrivalRate(1)
+                        .duration(1000)
+                        .concurrentUsers(10)
+                        .endUserSteps()
+                        .run()
+                        .then(() => {
+                            assert.ok(false);
+                        }, (error) => {
+                            assert.equal('A number of users cannot be specified when an arrival rate is specified.',
+                                error);
+                        });
+                });
+
+                it('should error if arrival rate is specified and a ramp up period is also specified', () => {
+                    http.whenGet(URL_1).thenReturn(new HttpResponse({
+                        key: 'value'
+                    }));
+
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .arrivalRate(1)
+                        .duration(1000)
+                        .rampUpPeriod(10)
+                        .endUserSteps()
+                        .run()
+                        .then(() => {
+                            assert.ok(false);
+                        }, (error) => {
+                            assert.equal('A ramp up period cannot be specified when an arrival rate is specified.',
+                                error);
+                        });
+                });
+
+                it('should continue sending requests regardless of response times', () => {
+                    http.whenGet(URL_1).thenReturn(new HttpResponse({
+                        key: 'value'
+                    })).delayResponse(500);
+
+                    let start = Date.now();
+
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .arrivalRate(100)
+                        .duration(1000)
+                        .endUserSteps()
+                        .run()
+                        .then((report) => {
+                            assert.equal(11, report.requests.length);
+
+                            assert.ok(report.requests[0].timestamp - start >= 0);
+                            assert.ok(report.requests[1].timestamp - start >= 100);
+
+                            assert.ok(report.requests[10].timestamp - start >= 1000);
+                        });
+                });
             });
 
         });

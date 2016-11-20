@@ -70,7 +70,7 @@ describe('Distributed Turbulence', () => {
         request.payload = [
             turbulence.startUserSteps()
                 .get('http://localhost:8080/endpointa')
-                .pause(500)
+                .pause(100)
                 .assertResponse((Response) => {
                     return 'alpha' === Response.rawBody.field;
                 })
@@ -83,7 +83,7 @@ describe('Distributed Turbulence', () => {
         request2.payload = [
             turbulence2.startUserSteps()
                 .get('http://localhost:8080/endpointa')
-                .pause(500)
+                .pause(100)
                 .assertResponse((Response) => {
                     return 'alpha' === Response.rawBody.field;
                 })
@@ -95,7 +95,7 @@ describe('Distributed Turbulence', () => {
             return reply2.then((data2) => {
                 let firstTime = data1.requests[0].timestamp;
                 let secondTime = data2.requests[0].timestamp;
-                assert.ok(secondTime - firstTime > 500);
+                assert.ok(secondTime - firstTime > 100);
             });
         });
     });
