@@ -1,12 +1,16 @@
 import fs = require('fs');
 import Q = require('q');
+import Yaml = require('js-yaml');
 import assert = require('power-assert');
 import {ImposterBuilder} from './Mountebank/ImposterBuilder';
 import {StubBuilder} from './Mountebank/StubBuilder';
 import {ResponseBuilder} from './Mountebank/ResponseBuilder';
-import {TurbulenceCli} from './TurbulenceCliTestHarness';
+import {TurbulenceCli} from './TurbulenceCli';
 import {MountebankRequestLog} from './Mountebank/MountebankRequestLog';
 import {Plugins} from '../Plugins';
+import {PromisifiedProcess} from './PromisifiedProcess';
+
+let Execute = PromisifiedProcess;
 
 Q.longStackSupport = true;
 
@@ -26,8 +30,13 @@ describe('Turbulence', () => {
     let port = 9876;
 
     beforeEach((done) => {
+        rimraf.sync('subproject');
+        safeUnlink('subproject');
+        fs.mkdirSync('./subproject');
+
         rimraf.sync('.tmp');
         fs.mkdirSync('.tmp');
+
         unirest.delete('http://localhost:2525/imposters').end(() => {
             unirest.post('http://localhost:2525/imposters').send(
                 JSON.stringify(new ImposterBuilder()
@@ -39,6 +48,14 @@ describe('Turbulence', () => {
                     done();
                 });
         });
+    });
+
+    afterEach(() => {
+        rimraf.sync('subproject');
+        safeUnlink('subproject');
+
+        rimraf.sync('.tmp');
+        safeUnlink('.tmp');
     });
 
     describe('CLI', () => {
@@ -146,6 +163,47 @@ describe('Turbulence', () => {
     });
 
     describe('plugins', () => {
+        // tslint:disable-next-line:only-arrow-functions
+        it('should allow plugins to be installed', function () {
+            this.timeout(60000);
+
+            // catching because -f causes npm to output to stderr and fail the step
+            return Execute(['npm', 'init', '-f'], {cwd: './subproject'})
+                .catch(() => {
+                    return Execute(['npm', 'install', '--save', '../plugins/turbulence-yaml-reporter-plugin'],
+                        {cwd: './subproject'});
+                })
+                // catching because install places warning onto stderr
+                .catch(() => {
+                    fs.writeFileSync('./subproject/mytest.turbulence',
+                        `turbulence
+                        .startUserSteps()
+                                .get('http://turbulence.io/')
+                                .expectStatus(200)
+                                .randomPause(2000, 10000)
+                            .concurrentUsers(10)
+                            .duration(5000)
+                        .endUserSteps()
+                        .run();`
+                    );
+                })
+                .then(() => {
+                    return Execute(['node', '../index.js', 'mytest.turbulence'], {cwd: 'subproject'});
+                })
+                .then((report: string) => {
+                    return {
+                        object: Yaml.load(report),
+                        raw: report
+                    };
+                })
+                .then((report) => {
+                    let expected = Yaml.safeDump(report.object);
+                    let actual = report.raw;
+
+                    assert.equal(actual.trim(), expected.trim());
+                });
+        });
+
         xit('should allow existing plugins to be overridden', () => {
             safeUnlink('./Report.html');
 

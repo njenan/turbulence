@@ -10,7 +10,7 @@ export class PluginFactory {
 
     constructor(plugins) {
         this.plugins = plugins.map((name) => {
-            let plugin = require(name);
+            let plugin = require(process.cwd() + '/node_modules/' + name);
             return {
                 main: plugin.main,
                 type: plugin.type
@@ -25,7 +25,7 @@ export class PluginFactory {
 
         if (candidates.length > 1) {
             throw new Error('Found multiple plugins of type \'' + type + '\' installed in local repo.  ' +
-                'Uninstall duplicate types or specific plugin with --ReportGenerator=PLUGIN_NAME_HERE');
+                'Uninstall duplicate types or specify single plugin with --ReportGenerator=PLUGIN_NAME_HERE');
         } else if (candidates.length === 0) {
             return this.defaultPlugins[type];
         } else {

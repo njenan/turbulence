@@ -3,7 +3,6 @@ import Q = require('q');
 import {Turbulence} from './Turbulence';
 import {LocalExecutor} from './Executors/LocalExecutor';
 import {RemoteExecutor} from './Executors/RemoteExecutor';
-import {PluginFactory} from './PluginFactory';
 
 // No typings exist for globule TODO write them
 // tslint:disable-next-line:no-var-requires
@@ -12,14 +11,12 @@ let globule = require('globule');
 export class Cli {
     args;
     filenames;
-    plugins;
     pluginFactory;
 
-    constructor(args, filenames, plugins) {
+    constructor(args, filenames, pluginFactory) {
         this.args = args;
         this.filenames = filenames;
-        this.plugins = plugins;
-        this.pluginFactory = new PluginFactory(plugins.plugins);
+        this.pluginFactory = pluginFactory;
     }
 
     readFile(path) {

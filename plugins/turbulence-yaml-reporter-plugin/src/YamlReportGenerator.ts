@@ -4,6 +4,6 @@ import {ReportGenerator} from '../../../src/Reporters/ReportGenerator';
 export class YamlReportGenerator implements ReportGenerator {
 
     toReport(results) {
-        console.log(yaml.safeDump(results));
+        console.log(yaml.safeDump(results, {skipInvalid: true}));
     }
 }

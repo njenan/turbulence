@@ -11,6 +11,7 @@
   },
   "globalDependencies": {
     "empower": "registry:dt/empower#1.2.1+20160924120522",
+    "js-yaml": "registry:dt/js-yaml#3.5.2+20160316171810",
     "mocha": "registry:dt/mocha#2.2.5+20160720003353",
     "node": "registry:dt/node#6.0.0+20161019125345",
     "power-assert": "registry:dt/power-assert#1.4.1+20160924120522",

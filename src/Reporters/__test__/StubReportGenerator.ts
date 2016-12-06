@@ -1,10 +1,10 @@
 import {ReportGenerator} from '../ReportGenerator';
 
 export class StubReportGenerator implements ReportGenerator {
-    results;
+    results = [];
 
     toReport = (results) => {
-        this.results = results;
+        this.results.push(results);
         return results;
     }
 }

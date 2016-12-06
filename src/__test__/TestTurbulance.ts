@@ -31,7 +31,7 @@ types.map((type) => {
 
         beforeEach(() => {
             http = new StubHttpClient();
-            turbulence = new Turbulence(http, new type.Exec(), new StubReportGenerator());
+            turbulence = new Turbulence(http, new type.Exec(new StubReportGenerator()), new StubReportGenerator());
         });
 
         describe('Running Tests', () => {

@@ -16,12 +16,16 @@ describe('Distributed Turbulence', () => {
     let distributed;
     let request;
 
+    let reporter;
+
     beforeEach(() => {
         http = new StubHttpClient();
-        turbulence = new Turbulence(http, new RemoteExecutor(), new StubReportGenerator());
-        turbulence2 = new Turbulence(http, new RemoteExecutor(), new StubReportGenerator());
+        reporter = new StubReportGenerator();
 
-        distributed = new DistributedTurbulence(new LocalExecutor(), http);
+        turbulence = new Turbulence(http, new RemoteExecutor(), reporter);
+        turbulence2 = new Turbulence(http, new RemoteExecutor(), reporter);
+
+        distributed = new DistributedTurbulence(new LocalExecutor(reporter), http);
         request = {};
     });
 

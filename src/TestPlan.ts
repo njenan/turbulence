@@ -18,6 +18,7 @@ import {HttpDeleteStep} from './Steps/Http/HttpDeleteStep';
 import {HttpHeadStep} from './Steps/Http/HttpHeadStep';
 import {ProcessorStep} from './Steps/ProcessorStep';
 import {RandomPauseStep} from './Steps/RandomPauseStep';
+import {ReportGenerator} from './Reporters/ReportGenerator';
 
 export class TestPlan extends EmbeddableStepCreator {
 
@@ -130,7 +131,7 @@ export class TestPlan extends EmbeddableStepCreator {
         return Date.now() < this.startTime + this.time;
     }
 
-    run(http: HttpClient): Q.Promise<SummaryResults> {
+    run(http: HttpClient, reporter: ReportGenerator): Q.Promise<SummaryResults> {
         let reject = this.validate();
 
         if (reject) {
