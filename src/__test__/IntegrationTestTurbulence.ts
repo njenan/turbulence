@@ -7,7 +7,6 @@ import {StubBuilder} from './Mountebank/StubBuilder';
 import {ResponseBuilder} from './Mountebank/ResponseBuilder';
 import {TurbulenceCli} from './TurbulenceCli';
 import {MountebankRequestLog} from './Mountebank/MountebankRequestLog';
-import {Plugins} from '../Plugins';
 import {PromisifiedProcess} from './PromisifiedProcess';
 
 let Execute = PromisifiedProcess;
@@ -163,33 +162,41 @@ describe('Turbulence', () => {
     });
 
     describe('plugins', () => {
+        function installPlugin(plugin) {
+            return () => {
+                return Execute(['npm', 'install', '--save', '../plugins/' + plugin],
+                    {cwd: './subproject'});
+            };
+        }
+
+        function writeTest() {
+            fs.writeFileSync('./subproject/mytest.turbulence',
+                `turbulence
+                    .startUserSteps()
+                            .get('http://turbulence.io/')
+                            .expectStatus(200)
+                            .randomPause(2000, 10000)
+                        .concurrentUsers(10)
+                        .duration(5000)
+                    .endUserSteps()
+                    .run();`
+            );
+        }
+
+        function runTest() {
+            return Execute(['node', '../index.js', 'mytest.turbulence'], {cwd: 'subproject'});
+        }
+
         // tslint:disable-next-line:only-arrow-functions
         it('should allow plugins to be installed', function () {
             this.timeout(60000);
 
-            // catching because -f causes npm to output to stderr and fail the step
             return Execute(['npm', 'init', '-f'], {cwd: './subproject'})
-                .catch(() => {
-                    return Execute(['npm', 'install', '--save', '../plugins/turbulence-yaml-reporter-plugin'],
-                        {cwd: './subproject'});
-                })
+            // catching because -f causes npm to output to stderr and fail the stepl
+                .catch(installPlugin('turbulence-yaml-reporter-plugin'))
                 // catching because install places warning onto stderr
-                .catch(() => {
-                    fs.writeFileSync('./subproject/mytest.turbulence',
-                        `turbulence
-                        .startUserSteps()
-                                .get('http://turbulence.io/')
-                                .expectStatus(200)
-                                .randomPause(2000, 10000)
-                            .concurrentUsers(10)
-                            .duration(5000)
-                        .endUserSteps()
-                        .run();`
-                    );
-                })
-                .then(() => {
-                    return Execute(['node', '../index.js', 'mytest.turbulence'], {cwd: 'subproject'});
-                })
+                .catch(writeTest)
+                .then(runTest)
                 .then((report: string) => {
                     return {
                         object: Yaml.load(report),
@@ -204,26 +211,25 @@ describe('Turbulence', () => {
                 });
         });
 
-        xit('should allow existing plugins to be overridden', () => {
-            safeUnlink('./Report.html');
+        // tslint:disable-next-line:only-arrow-functions
+        it('should error on multiple plugins', function () {
+            this.timeout(60000);
 
-            new Plugins(require('../../package.json')).plugins = {
-                'turbulence-html-reporter-plugin': require('turbulence-html-reporter-plugin')
-            };
-            return TurbulenceCli({args: 'example.turbulence'})
-                .then(() => {
-                    fs.readFileSync('./Report.html');
-                });
-        });
-
-        xit('should error on multiple plugins', () => {
-            return TurbulenceCli({args: 'example.turbulence'})
-                .then(console.log)
+            return Execute(['npm', 'init', '-f'], {cwd: './subproject'})
+            // catching because -f causes npm to output to stderr and fail the step
+                .catch(installPlugin('turbulence-yaml-reporter-plugin'))
+                // catching because -f causes npm to output to stderr and fail the step
+                .catch(installPlugin('turbulence-xml-reporter-plugin'))
+                // catching because install places warning onto stderr
+                .catch(writeTest)
+                .then(runTest)
                 .then(() => {
                     assert.ok(false);
-                }).catch((err) => {
-                    assert.equal('Found multiple plugins of type \'ReportGenerator\' installed in local repo.  ' +
-                        'Uninstall duplicate types or specific plugin with --ReportGenerator=PLUGIN_NAME_HERE', err);
+                })
+                .catch((err) => {
+                    assert.ok(err.indexOf('Found multiple plugins of type \'ReportGenerator\' installed in local ' +
+                            'repo.  Uninstall duplicate types or specify single plugin with ' +
+                            '--ReportGenerator=PLUGIN_NAME_HERE') !== -1);
                 });
         });
     });
