@@ -177,9 +177,9 @@ export class TestPlan extends EmbeddableStepCreator {
     }
 
     private recursiveAll(promises) {
-        let initalLength = promises.length;
+        let initialLength = promises.length;
         return Q.all(promises).then(() => {
-            if (promises.length > initalLength) {
+            if (promises.length > initialLength) {
                 return this.recursiveAll(promises);
             }
         });
