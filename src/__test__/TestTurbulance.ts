@@ -914,6 +914,66 @@ types.map((type) => {
 
         });
 
+        describe('Listeners', () => {
+            it('should not report metrics when no listeners are added', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse({
+                    key: 'value'
+                })).delayResponse(500);
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .endUserSteps()
+                    .run()
+                    .then((report) => {
+                        assert.equal(0, report.metrics.length);
+                    });
+            });
+
+            it('should allow arbitrary samples to be added to the request logs', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse({
+                    key: 'value'
+                })).delayResponse(500);
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .listener({
+                        interval: 100,
+                        sample: () => {
+                            return 'This is a sample';
+                        }
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((report) => {
+                        assert.equal(1, report.metrics.length);
+                    });
+            });
+
+            it('should allow listeners to sample at a set rate', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse({
+                    key: 'value'
+                })).delayResponse(500);
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .listener({
+                        interval: 100,
+                        sample: () => {
+                            return 'This is a sample';
+                        }
+                    })
+                    .duration(1000)
+                    .endUserSteps()
+                    .run()
+                    .then((report) => {
+                        assert.equal(10, report.metrics.length);
+                    });
+            });
+        });
+
         xdescribe('Distributed Testing', () => {
             xit('should send the test plan to the executor', () => {
                 return null;

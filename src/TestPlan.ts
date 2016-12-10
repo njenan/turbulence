@@ -19,6 +19,7 @@ import {HttpHeadStep} from './Steps/Http/HttpHeadStep';
 import {ProcessorStep} from './Steps/ProcessorStep';
 import {RandomPauseStep} from './Steps/RandomPauseStep';
 import {ReportGenerator} from './Reporters/ReportGenerator';
+import {Listener} from './Listener';
 
 export class TestPlan extends EmbeddableStepCreator {
 
@@ -83,12 +84,20 @@ export class TestPlan extends EmbeddableStepCreator {
         testPlan.actualUsers = root.actualUsers;
         testPlan.startTime = root.startTime;
         testPlan.rate = root.rate;
+        testPlan.listeners = root.listeners.map((listener) => {
+            return {
+                interval: listener.interval,
+                // tslint:disable-next-line:no-eval
+                sample: eval('(' + listener.sampleRaw + ')')
+            };
+        });
 
         return testPlan;
     }
 
     parent: Parent<Turbulence>;
     name: String;
+    listeners: Array<Listener> = [];
     targetUsers: number = 1;
     warmUp: number = 1;
     time: number;
@@ -131,6 +140,12 @@ export class TestPlan extends EmbeddableStepCreator {
         return Date.now() < this.startTime + this.time;
     }
 
+    listener(listener: Listener) {
+        listener.sampleRaw = listener.sample.toString();
+        this.listeners.push(listener);
+        return this;
+    }
+
     run(http: HttpClient, reporter: ReportGenerator): Q.Promise<SummaryResults> {
         let reject = this.validate();
 
@@ -169,7 +184,22 @@ export class TestPlan extends EmbeddableStepCreator {
             }
         };
 
+        let startListeners = () => {
+            this.listeners.forEach((listener) => {
+                let nextSample = () => {
+                    this.results.metrics.push(listener.sample());
+
+                    if (this.running()) {
+                        setTimeout(nextSample, listener.interval);
+                    }
+                };
+
+                nextSample();
+            });
+        };
+
         startTestPlans();
+        startListeners();
 
         return this.recursiveAll(promises).then(() => {
             return self.results;

@@ -2,6 +2,7 @@ import {HttpRequestRecord} from '../Steps/Http/HttpRequestRecord';
 
 export class SummaryResults {
     errors: number;
+    metrics = [];
     requests: Array<HttpRequestRecord>;
 
     constructor() {
