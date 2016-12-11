@@ -974,6 +974,32 @@ types.map((type) => {
             });
         });
 
+        describe('Build breakers', () => {
+            it('should break the build if criteria are not met', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse({
+                    key: 'value'
+                })).delayResponse(100);
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .breaker((criteria) => {
+                        criteria
+                            .averageResponseTime()
+                            .lessThan(50);
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then(() => {
+                        assert.ok(false); // Fail the promise regardless so we hit our assertion in the catch block
+                    })
+                    .catch((error) => {
+                        assert.equal('Average response time was greater than 50 ms, failing the build', error.message);
+                        assert.equal(1, error.results.requests.length);
+                    });
+            });
+        });
+
         xdescribe('Distributed Testing', () => {
             xit('should send the test plan to the executor', () => {
                 return null;

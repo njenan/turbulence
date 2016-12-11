@@ -4,7 +4,7 @@
   "description": "Html formatter for Turbulence output",
   "main": "index.js",
   "scripts": {
-    "clean": "find ./src -name \"*.js\" -delete",
+    "clean": "find ./src -name '*.js' -delete",
     "build": "npm install && npm run clean && tsc",
     "postinstall": "typings install",
     "test": "mocha src/**/__test__/*.js",
@@ -24,6 +24,7 @@
     "mocha": "^3.1.2",
     "power-assert": "^1.4.1",
     "typings": "^1.4.0",
+    "xml2js": "^0.4.17",
     "xmldom": "^0.1.22"
   }
 }

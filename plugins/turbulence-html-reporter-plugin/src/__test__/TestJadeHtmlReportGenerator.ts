@@ -39,7 +39,7 @@ describe('JadeHtmlReportGenerator', () => {
     });
 
     it('should report total number of requests', () => {
-        let results = new SummaryResults();
+        let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
             new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
         );
@@ -64,7 +64,7 @@ describe('JadeHtmlReportGenerator', () => {
     });
 
     it('should report each step separately', () => {
-        let results = new SummaryResults();
+        let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
             new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
         );
@@ -86,7 +86,7 @@ describe('JadeHtmlReportGenerator', () => {
     });
 
     it('should count how many times each url was accessed', () => {
-        let results = new SummaryResults();
+        let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
             new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
         );
@@ -103,7 +103,7 @@ describe('JadeHtmlReportGenerator', () => {
     });
 
     it('should preserve order of url invocations', () => {
-        let results = new SummaryResults();
+        let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
             new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
@@ -126,7 +126,7 @@ describe('JadeHtmlReportGenerator', () => {
     });
 
     it('should show a 0% error rate if no errors occured', () => {
-        let results = new SummaryResults();
+        let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
             new HttpGetStep('http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
@@ -140,7 +140,7 @@ describe('JadeHtmlReportGenerator', () => {
     });
 
     xit('should calculate the error rate', () => {
-        let results = new SummaryResults();
+        let results = new SummaryResults(null);
 
         results.requests.push(new HttpRequestRecord(
             new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
@@ -161,7 +161,7 @@ describe('JadeHtmlReportGenerator', () => {
     });
 
     it('should calculate the total average response time', () => {
-        let results = new SummaryResults();
+        let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
             new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), 10, 0)
         );

@@ -4,8 +4,10 @@ export class SummaryResults {
     errors: number;
     metrics = [];
     requests: Array<HttpRequestRecord>;
+    breakerFunction: (Criteria) => void;
 
-    constructor() {
+    constructor(breaker) {
+        this.breakerFunction = breaker;
         this.errors = 0;
         this.requests = [];
     }

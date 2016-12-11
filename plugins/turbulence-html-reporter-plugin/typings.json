@@ -11,6 +11,7 @@
     "power-assert": "registry:dt/power-assert#1.4.1+20160924120522",
     "power-assert-formatter": "registry:dt/power-assert-formatter#1.4.1+20160924120522",
     "q": "registry:dt/q#0.0.0+20161004185634",
+    "xml2js": "registry:dt/xml2js#0.0.0+20160317120654",
     "xmldom": "registry:dt/xmldom#0.1.22+20160319053438",
     "xpath": "registry:dt/xpath#0.0.7+20160316155526"
   }

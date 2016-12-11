@@ -4,7 +4,7 @@
   "description": "Yaml formatter for Turbulence output",
   "main": "index.js",
   "scripts": {
-    "clean": "find ./src -name \"*.js\" -delete",
+    "clean": "find ./src -name '*.js' -delete",
     "build": "npm install && npm run clean && tsc",
     "postinstall": "typings install",
     "all": "npm run build"
@@ -17,5 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "js-yaml": "^3.6.1"
+  },
+  "devDependencies": {
+    "xml2js": "^0.4.17"
   }
 }

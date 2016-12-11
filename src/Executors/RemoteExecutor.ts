@@ -16,7 +16,8 @@ export class RemoteExecutor implements Executor {
             .headers({'Accept': 'application/json', 'Content-Type': 'application/json'})
             .send(JSON.stringify(testPlans))
             .end((resp) => {
-                let results = new SummaryResults();
+                // TODO implement support for multiple test plans better
+                let results = new SummaryResults(testPlans.pop().breakerFunction);
                 results.requests = resp.body.requests;
                 results.errors = resp.body.errors;
                 deferred.resolve(results);

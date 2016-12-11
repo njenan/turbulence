@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-nohup mb start --mock &
+nohup mb --mock &
 
 while [ ! -f ./mb.pid ]
 do

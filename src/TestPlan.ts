@@ -29,7 +29,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     static fromJson(root) {
         let testPlan = new TestPlan(root.parent, root.name);
-        testPlan.results = new SummaryResults();
+        testPlan.results = new SummaryResults(testPlan.breakerFunction);
         let mapStep = (step, parent?): TestStep => {
             switch (step.type) {
                 case 'GET':
@@ -104,9 +104,10 @@ export class TestPlan extends EmbeddableStepCreator {
     actualUsers: number = 0;
     startTime: number;
     rate: number;
+    breakerFunction: (Criteria) => void;
 
     constructor(parent, name?) {
-        super(new SummaryResults());
+        super(new SummaryResults(null));
 
         this.parent = new Parent(parent);
         this.name = name;
@@ -143,6 +144,12 @@ export class TestPlan extends EmbeddableStepCreator {
     listener(listener: Listener) {
         listener.sampleRaw = listener.sample.toString();
         this.listeners.push(listener);
+        return this;
+    }
+
+    breaker(closure) {
+        this.breakerFunction = closure;
+        this.results.breakerFunction = closure;
         return this;
     }
 

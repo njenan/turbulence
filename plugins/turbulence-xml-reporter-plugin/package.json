@@ -4,7 +4,7 @@
   "description": "Xml formatter for Turbulence output",
   "main": "index.js",
   "scripts": {
-    "clean": "find ./src -name \"*.js\" -delete",
+    "clean": "find ./src -name '*.js' -delete",
     "build": "npm install && npm run clean && tsc",
     "postinstall": "typings install",
     "all": "npm run build"

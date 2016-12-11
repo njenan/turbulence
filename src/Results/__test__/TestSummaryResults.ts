@@ -8,7 +8,7 @@ import {HttpResponse} from '../../Http/HttpResponse';
 describe('Summary Results', () => {
     describe('averageResponseTime', () => {
         it('should return the average all requests', () => {
-            let results = new SummaryResults();
+            let results = new SummaryResults(null);
             results.requests.push(new HttpRequestRecord(
                 new HttpGetStep(undefined, undefined, undefined), new HttpResponse(), 1, 0));
             results.requests.push(new HttpRequestRecord(
@@ -21,7 +21,7 @@ describe('Summary Results', () => {
         });
 
         it('should return the average response for a specific url', () => {
-            let results = new SummaryResults();
+            let results = new SummaryResults(null);
             results.requests.push(new HttpRequestRecord(
                 new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 10, 0));
             results.requests.push(new HttpRequestRecord(
@@ -36,7 +36,7 @@ describe('Summary Results', () => {
 
     describe('requestMap', () => {
         it('should return a map of each url with response times', () => {
-            let results = new SummaryResults();
+            let results = new SummaryResults(null);
             results.requests.push(new HttpRequestRecord(
                 new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 10, 0));
             results.requests.push(new HttpRequestRecord(
@@ -58,7 +58,7 @@ describe('Summary Results', () => {
     });
 
     it('should group responses into 100 millisecond intervals', () => {
-        let results = new SummaryResults();
+        let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
             new HttpGetStep(undefined, 'http://localhost:8080/a', undefined), new HttpResponse(), 1, 0));
         results.requests.push(new HttpRequestRecord(
