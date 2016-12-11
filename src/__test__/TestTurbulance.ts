@@ -965,7 +965,7 @@ types.map((type) => {
                             return 'This is a sample';
                         }
                     })
-                    .duration(950)
+                    .duration(900)
                     .endUserSteps()
                     .run()
                     .then((report) => {
