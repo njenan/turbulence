@@ -998,6 +998,74 @@ types.map((type) => {
                         assert.equal(1, error.results.requests.length);
                     });
             });
+
+            it('should specify what the target criteria was', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse({
+                    key: 'value'
+                })).delayResponse(100);
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .breaker((criteria) => {
+                        criteria
+                            .averageResponseTime()
+                            .lessThan(75);
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then(() => {
+                        assert.ok(false); // Fail the promise regardless so we hit our assertion in the catch block
+                    })
+                    .catch((error) => {
+                        assert.equal('Average response time was greater than 75 ms, failing the build', error.message);
+                        assert.equal(1, error.results.requests.length);
+                    });
+            });
+
+            it('should not fail the build if the criteria are met', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse({
+                    key: 'value'
+                })).delayResponse(100);
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .breaker((criteria) => {
+                        criteria
+                            .averageResponseTime()
+                            .lessThan(150);
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then((results) => {
+                        assert.equal(1, results.requests.length);
+                    });
+            });
+
+            it('should allow artbitrary functions to be used', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse({
+                    key: 'value'
+                })).delayResponse(100);
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .breaker((criteria) => {
+                        criteria.predicate((results) => {
+                            return results.requests.length === 1;
+                        });
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then(() => {
+                        assert.ok(false); // Fail the promise regardless so we hit our assertion in the catch block
+                    })
+                    .catch((error) => {
+                        assert.equal('Predicate evaluated to false', error.message);
+                        assert.equal(1, error.results.requests.length);
+                    });
+            });
         });
 
         xdescribe('Distributed Testing', () => {
