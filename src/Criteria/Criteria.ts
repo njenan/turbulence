@@ -28,7 +28,7 @@ export class Criteria {
         }
 
         if (this.predicateFunction) {
-            if (this.predicateFunction(results)) {
+            if (!this.predicateFunction(results)) {
                 throw new BuildBreakerError('Predicate evaluated to false', results);
             }
         }

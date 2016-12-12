@@ -1053,7 +1053,7 @@ types.map((type) => {
                     .get(URL_1)
                     .breaker((criteria) => {
                         criteria.predicate((results) => {
-                            return results.requests.length === 1;
+                            return results.requests.length === 2;
                         });
                     })
                     .endUserSteps()
@@ -1067,17 +1067,5 @@ types.map((type) => {
                     });
             });
         });
-
-        xdescribe('Distributed Testing', () => {
-            xit('should send the test plan to the executor', () => {
-                return null;
-            });
-
-            xit('should distribute the number of users equally between executors', () => {
-                return null;
-            });
-
-        });
-
     });
 });
