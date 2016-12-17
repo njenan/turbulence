@@ -1,0 +1,104 @@
+html, body {
+    height: 100%;
+
+    background-color: #6180A6;
+    color: #F4F9FF;
+}
+
+html, body {
+    height: 100%;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+
+.sidebar .col-md-2 {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .sidebar .col-md-2 {
+        display: block;
+        background-color: #40638D;
+        height: 100%;
+    }
+}
+
+.container-fluid.sidebar {
+    height: 100%;
+}
+
+.container-fluid .row {
+    height: 100%;
+}
+
+.info-block {
+    background-color: #40638D;
+    padding-bottom: 20px;
+}
+
+.navbar-default {
+    background: #274B77;
+    border-color: transparent;
+    -webkit-box-shadow: none;
+
+    border-radius: 0px;
+}
+
+.navbar-default .navbar-collapse {
+    background: #274B77;
+    border-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+
+    border-radius: 0px;
+}
+
+a:link {
+    color: #FFEEB1;
+}
+
+a:visited {
+    color: #D8BC57;
+}
+
+pre {
+    background-color: #C4D3E6;
+}
+
+code {
+    color: #D88657;
+}
+
+.navbar-default .navbar-brand {
+    color: #F4F9FF;
+}
+
+#white {
+    color: #F4F9FF;
+}
+
+.logo {
+    max-height: 80px;
+    vertical-align: bottom;
+    display: inline-block;
+}
+
+.navbar.navbar-default.navbar-fixed-bottom.navbar-transparent {
+    background-color: #274B77;
+    border-color: transparent;
+    min-height: 30px;
+
+    border-radius: 0px;
+}
+
+.jumbotron {
+    background-color: transparent;
+}
+
+.container.transparent {
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}

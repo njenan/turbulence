@@ -17,7 +17,9 @@
     "all": "npm install && npm run build-plugins && npm run package && npm test && npm run integration-test && npm run lint && npm run verify-plugin-versions",
     "build-plugins": "./scripts/buildPlugins.sh",
     "set-plugin-versions": "./scripts/setPluginVersions.sh",
-    "verify-plugin-versions": "./scripts/verifyPluginVersions.js"
+    "verify-plugin-versions": "./scripts/verifyPluginVersions.js",
+    "serve-docs": "cd docs; jekyll serve",
+    "git-push-docs": "git subtree push --prefix docs origin gh-pages"
   },
   "bin": {
     "turbulence": "./index.js",

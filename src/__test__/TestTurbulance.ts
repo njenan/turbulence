@@ -1043,7 +1043,7 @@ types.map((type) => {
                     });
             });
 
-            it('should allow artbitrary functions to be used', () => {
+            it('should allow arbitrary functions to be used', () => {
                 http.whenGet(URL_1).thenReturn(new HttpResponse({
                     key: 'value'
                 })).delayResponse(100);
