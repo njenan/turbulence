@@ -19,6 +19,7 @@
     "set-plugin-versions": "./scripts/setPluginVersions.sh",
     "verify-plugin-versions": "./scripts/verifyPluginVersions.js",
     "serve-docs": "cd docs; jekyll serve",
+    "api-docs": "typedoc --out output ./src/Turbulence.ts --noLib --ignoreCompilerErrors --excludePrivate --readme none",
     "git-push-docs": "git subtree push --prefix docs origin gh-pages"
   },
   "bin": {
@@ -44,6 +45,7 @@
     "power-assert": "^1.3.1",
     "rimraf": "^2.5.4",
     "tslint": "^3.14.0",
+    "typedoc": "^0.5.1",
     "typescript": "^2.0.3",
     "typings": "^1.4.0",
     "watch": "^1.0.1",
