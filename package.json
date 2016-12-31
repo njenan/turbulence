@@ -18,8 +18,8 @@
     "set-plugin-versions": "./scripts/setPluginVersions.sh",
     "verify-plugin-versions": "./scripts/verifyPluginVersions.js",
     "serve-docs": "cd docs; jekyll serve",
-    "api-docs": "typedoc --out output ./src/Turbulence.ts --noLib --ignoreCompilerErrors --excludePrivate --readme none",
-    "git-push-docs": "git subtree push --prefix docs origin gh-pages"
+    "compile-docs": "typedoc --out docs/_api/ ./src/Turbulence.ts --excludePrivate --readme none --exclude **/__test__/** --ignoreCompilerErrors",
+    "publish-docs": "git subtree push --prefix docs origin gh-pages"
   },
   "bin": {
     "turbulence": "./index.js",
@@ -61,6 +61,7 @@
     "pug": "^2.0.0-beta6",
     "q": "^1.4.1",
     "tslint": "^3.15.1",
+    "typedoc": "^0.5.3",
     "unirest": "^0.5.0",
     "xml2js": "^0.4.17",
     "xpath": "0.0.23"
