@@ -4,6 +4,10 @@ import {Executor} from './Executors/Executor';
 import {ReportGenerator} from './Reporters/ReportGenerator';
 import {Criteria} from './Criteria/Criteria';
 
+/**
+ * Turbulence is a variable automatically provided inside of Turbulence test plans.  It is the entry point for all
+ * tests, and allows test plans to be defined.
+ */
 export class Turbulence {
     private http: HttpClient;
     private testPlans: Array<TestPlan>;

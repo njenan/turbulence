@@ -21,6 +21,9 @@ import {RandomPauseStep} from './Steps/RandomPauseStep';
 import {ReportGenerator} from './Reporters/ReportGenerator';
 import {Listener} from './Listener';
 
+/**
+ * An individual test plan.  It allows steps of the test to be defined in order.  
+ */
 export class TestPlan extends EmbeddableStepCreator {
 
     static reviver(key: string, value: any): any {
@@ -114,46 +117,91 @@ export class TestPlan extends EmbeddableStepCreator {
         this.name = name;
     }
 
+    /**
+     * End this test plan and return the main [[Turbulence]] object.
+     * 
+     * @returns {Turbulence}
+     */
     endUserSteps() {
         return this.parent.value;
     }
 
+    /**
+     * Set the number of concurrent users to simulate during this test.  Use in conjunction with [[rampUpPeriod]] to
+     * slowly add load as the test runs.  Cannot be combined with [[arrivalRate]]
+     * @param users
+     * @returns {TestPlan}
+     */
     concurrentUsers(users: number) {
         this.targetUsers = users;
         return this;
     }
 
+    /**
+     * A warm-up period during which new users are slowly added to the performance test.  Use in conjunction with
+     * [[concurrentUsers]].
+     * @param seconds
+     * @returns {TestPlan}
+     */
     rampUpPeriod(seconds: number) {
         this.warmUp = seconds;
         return this;
     }
 
+    /**
+     * The duration of the test in milliseconds.
+     * @param millis
+     * @returns {TestPlan}
+     */
     duration(millis) {
         this.time = millis;
         return this;
     }
 
+    /**
+     * How often to create a new user in milliseconds.  Cannot be combined with [[concurrentUsers]].
+     * @param rate
+     * @returns {TestPlan}
+     */
     arrivalRate(rate) {
         this.rate = rate;
         return this;
     }
 
-    running() {
+    private running() {
         return Date.now() < this.startTime + this.time;
     }
 
+    /**
+     * Add a listener to the test.  See the {Listener} interface for information on what fields are necessary.
+     * @param listener
+     * @returns {TestPlan}
+     */
     listener(listener: Listener) {
         listener.sampleRaw = listener.sample.toString();
         this.listeners.push(listener);
         return this;
     }
 
+    /**
+     * A function that determines whether or not to 'break' the Turbulence test (by returning a non-zero return code).
+     * The function is passed the results object of the run and should return either true or false to indicate if the
+     * run was successful or not, respectively.
+     * @param closure
+     * @returns {TestPlan}
+     */
     breaker(closure) {
         this.breakerFunction = closure;
         this.results.breakerFunction = closure;
         return this;
     }
 
+    /**
+     * Interal command used by Turbulence. DO NOT USE.
+     * @param http
+     * @param reporter
+     * @returns {any}
+     */
     run(http: HttpClient, reporter: ReportGenerator): Q.Promise<SummaryResults> {
         let reject = this.validate();
 

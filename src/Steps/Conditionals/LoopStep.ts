@@ -23,6 +23,11 @@ export class LoopStep<T> implements TestStep, StepCreator {
         this.creator = new EmbeddableStepCreator(results);
     }
 
+    /**
+     * Interal command used by Turbulence.  DO NOT USE.
+     * @param http
+     * @returns {Q.Promise<any>}
+     */
     execute(http): Q.Promise<any> {
         let self = this;
 
@@ -41,25 +46,53 @@ export class LoopStep<T> implements TestStep, StepCreator {
         return chainPromiseNTimes(this.times, Q.resolve(null));
     }
 
+    /**
+     * End the loop and return the parent object.
+     * @returns {T}
+     */
     endLoop(): T {
         return this.parent.value;
     }
-
+    
+    /**
+     * Start a loop for the specified number of times.  Steps can be chained off of this object until
+     * [[LoopStep.endLoop]] is called.
+     *
+     * @param times
+     * @returns {LoopStep}
+     */
     loop(times: number): StepCreator {
         this.creator.loop(times);
         return this;
     }
 
+    /**
+     * Start an if statement.  A predicate that resolves to either true or false should be provided.  If the predicate
+     * resolves to true, the chained steps will be executed.  Otherwise only steps after the [[IfStep.endIf]] will be immediately executed.
+     * @param predicate
+     * @returns {LoopStep}
+     */
     if(predicate): StepCreator {
         this.creator.if(predicate);
         return this;
     }
 
+    /**
+     * Send an Http Get request to the specified url.
+     * @param url
+     * @returns {LoopStep}
+     */
     get(url: string): StepCreator {
         this.creator.get(url);
         return this;
     }
 
+    /**
+     * Send an Http Post request to the specified url with the provided body.
+     * @param url
+     * @param body
+     * @returns {LoopStep}
+     */
     post(url: string, body: any): StepCreator {
         this.creator.post(url, body);
         return this;
