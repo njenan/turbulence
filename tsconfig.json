@@ -1,13 +1,9 @@
 {
   "compilerOptions": {
-    "module": "commonjs"
+    "moduleResolution": "node"
   },
   "exclude": [
-    "plugins",
     "node_modules",
-    "typings/browser.d.ts",
-    "typings/browser",
-    "typings/main/ambient/xml2js",
-    "typings/main/definitions/pug"
+    "plugins"
   ]
 }

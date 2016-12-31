@@ -1,6 +1,7 @@
 import {SummaryResults} from '../../Results/SummaryResults';
 import {HttpResponse} from '../../Http/HttpResponse';
 import {HttpRequestRecord} from './HttpRequestRecord';
+import Q = require('q');
 
 export abstract class AbstractHttpStep {
     results: SummaryResults;

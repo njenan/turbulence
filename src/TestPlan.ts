@@ -95,16 +95,17 @@ export class TestPlan extends EmbeddableStepCreator {
         return testPlan;
     }
 
-    parent: Parent<Turbulence>;
-    name: String;
-    listeners: Array<Listener> = [];
-    targetUsers: number = 1;
-    warmUp: number = 1;
-    time: number;
-    actualUsers: number = 0;
-    startTime: number;
-    rate: number;
-    breakerFunction: (Criteria) => void;
+    public breakerFunction: (Criteria) => void;
+
+    private parent: Parent<Turbulence>;
+    private name: String;
+    private listeners: Array<Listener> = [];
+    private targetUsers: number = 1;
+    private warmUp: number = 1;
+    private time: number;
+    private actualUsers: number = 0;
+    private startTime: number;
+    private rate: number;
 
     constructor(parent, name?) {
         super(new SummaryResults(null));
