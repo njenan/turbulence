@@ -14,7 +14,7 @@
     "coverage": "istanbul cover -x \"src/**/__test__/*.js\" _mocha \"src/**/__test__/Test*.js\"",
     "lint": "tslint src/*.ts src/**/*.ts src/**/**/*.ts src/**/**/**/*.ts src/**/**/**/**/*.ts -o ./lint_report -c tslint.json -t verbose",
     "all": "npm install && npm run build-plugins && npm run package && npm test && npm run integration-test && npm run lint && npm run verify-plugin-versions",
-    "build-plugins": "echo ./scripts/buildPlugins.sh",
+    "build-plugins": "./scripts/buildPlugins.sh",
     "set-plugin-versions": "./scripts/setPluginVersions.sh",
     "verify-plugin-versions": "./scripts/verifyPluginVersions.js",
     "serve-docs": "cd docs; jekyll serve",
