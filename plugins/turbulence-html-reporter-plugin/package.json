@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "find ./src -name '*.js' -delete",
     "build": "npm install && npm run clean && tsc",
-    "postinstall": "typings install",
     "test": "mocha src/**/__test__/*.js",
     "all": "npm run build && npm test"
   },
