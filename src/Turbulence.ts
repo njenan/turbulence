@@ -5,10 +5,10 @@ import {ReportGenerator} from './Reporters/ReportGenerator';
 import {Criteria} from './Criteria/Criteria';
 
 export class Turbulence {
-    http: HttpClient;
-    testPlans: Array<TestPlan>;
-    executor: Executor;
-    reportGenerator: ReportGenerator;
+    private http: HttpClient;
+    private testPlans: Array<TestPlan>;
+    private executor: Executor;
+    private reportGenerator: ReportGenerator;
 
     constructor(http, executor, reportGenerator) {
         this.http = http;

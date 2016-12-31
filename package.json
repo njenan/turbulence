@@ -18,7 +18,7 @@
     "set-plugin-versions": "./scripts/setPluginVersions.sh",
     "verify-plugin-versions": "./scripts/verifyPluginVersions.js",
     "serve-docs": "cd docs; jekyll serve",
-    "compile-docs": " typedoc --out docs/_api ./src/Turbulence.ts --ignoreCompilerErrors --readme none --excludePrivate",
+    "compile-docs": "typedoc --out docs/_api ./src/Turbulence.ts --ignoreCompilerErrors --readme none --excludePrivate --mode file",
     "publish-docs": "git subtree push --prefix docs origin gh-pages"
   },
   "bin": {
