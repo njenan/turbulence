@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "find ./src -name '*.js' -delete",
     "build": "npm install && npm run clean && tsc",
-    "postinstall": "typings install",
     "all": "npm run build"
   },
   "repository": {
@@ -17,5 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "@types/xml2js": "0.0.32"
   }
 }
