@@ -18,26 +18,49 @@ layout: default
         <div class="col-md-8 col-sm-9">
             {% for child in site.data.api.children sort %}
             {% if child.kind == 128 %}
-            <div>
-                <header>
-                    <h2>
-                        <a href="#{{ child.name }}" name="{{ child.name }}">{{ child.name }}</a>
-                    </h2>
-                </header>
-                <article>
-                    <div>{{ child.comment.shortText }}</div>
-                    {% for method in child.children %}
-                    {% if method.kind == 2048 %}
-                    <a href="#{{ child.name }}.{{ method.name }}" name="{{ child.name }}.{{ method.name }}"> {{ method.name }}</a>
+            <div class="info-block">
+                <div>
+                    <header>
+                        <h2>
+                            <a href="#{{ child.name }}" name="{{ child.name }}">{{ child.name }}</a>
+                        </h2>
+                    </header>
+                    <article>
+                        <div>{{ child.comment.shortText }}</div>
+                        {% for method in child.children %}
+                        {% if method.kind == 2048 %}
+                        <h4>
+                            <a href="#{{ child.name }}.{{ method.name }}" name="{{ child.name }}.{{ method.name }}">
+                                {{ method.name }}</a>
+                        </h4>
 
-                    {% for signature in method.signatures %}
-                    <div> {{ signature.comment.shortText }}</div>
-                    {% endfor %}
+                        {% for signature in method.signatures %}
 
-                    {% endif %}
-                    {% endfor %}
-                </article>
+                        (
 
+                        {% for parameter in signature.parameters %}
+
+                        {% if forloop.first == false %}
+                        <span>,</span>
+                        {% endif %}
+
+                        <span>{{ parameter.name }}: <a
+                                href="#{{ parameter.type.name }}"><i>{{ parameter.type.name}}</i></a></span>
+                        {% endfor %}
+
+                        )
+
+                        =>
+
+                        <span><a href="#{{ signature.type.name }}"><i>{{ signature.type.name }}</i></a></span>
+
+                        <div>{{ signature.comment.shortText }}</div>
+                        {% endfor %}
+
+                        {% endif %}
+                        {% endfor %}
+                    </article>
+                </div>
             </div>
             {% endif %}
             {% endfor %}
