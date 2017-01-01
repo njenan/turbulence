@@ -8,7 +8,7 @@ layout: default
                 {% for child in site.data.api.children sort %}
                 {% if child.kind == 128 %}
                 <li>
-                    <a href="./">{{ child.name }}</a>
+                    <a href="#{{ child.name }}">{{ child.name }}</a>
                 </li>
                 {% endif %}
                 {% endfor %}
@@ -16,13 +16,32 @@ layout: default
         </div>
 
         <div class="col-md-8 col-sm-9">
-            <header>
-                <h1>{{ page.title }}</h1>
-            </header>
+            {% for child in site.data.api.children sort %}
+            {% if child.kind == 128 %}
+            <div>
+                <header>
+                    <h2>
+                        <a href="#{{ child.name }}" name="{{ child.name }}">{{ child.name }}</a>
+                    </h2>
+                </header>
+                <article>
+                    <div>{{ child.comment.shortText }}</div>
+                    {% for method in child.children %}
+                    {% if method.kind == 2048 %}
+                    <a href="#{{ child.name }}.{{ method.name }}" name="{{ child.name }}.{{ method.name }}"> {{ method.name }}</a>
 
-            <article>
-                {{ content }}
-            </article>
+                    {% for signature in method.signatures %}
+                    <div> {{ signature.comment.shortText }}</div>
+                    {% endfor %}
+
+                    {% endif %}
+                    {% endfor %}
+                </article>
+
+            </div>
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
+</div>
 </div>

@@ -129,6 +129,7 @@ export class TestPlan extends EmbeddableStepCreator {
     /**
      * Set the number of concurrent users to simulate during this test.  Use in conjunction with [[rampUpPeriod]] to
      * slowly add load as the test runs.  Cannot be combined with [[arrivalRate]]
+     * 
      * @param users
      * @returns {TestPlan}
      */
@@ -140,6 +141,7 @@ export class TestPlan extends EmbeddableStepCreator {
     /**
      * A warm-up period during which new users are slowly added to the performance test.  Use in conjunction with
      * [[concurrentUsers]].
+     * 
      * @param seconds
      * @returns {TestPlan}
      */
@@ -150,6 +152,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     /**
      * The duration of the test in milliseconds.
+     * 
      * @param millis
      * @returns {TestPlan}
      */
@@ -160,6 +163,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     /**
      * How often to create a new user in milliseconds.  Cannot be combined with [[concurrentUsers]].
+     * 
      * @param rate
      * @returns {TestPlan}
      */
@@ -170,6 +174,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     /**
      * Add a listener to the test.  See the {Listener} interface for information on what fields are necessary.
+     * 
      * @param listener
      * @returns {TestPlan}
      */
@@ -183,6 +188,7 @@ export class TestPlan extends EmbeddableStepCreator {
      * A function that determines whether or not to 'break' the Turbulence test (by returning a non-zero return code).
      * The function is passed the results object of the run and should return either true or false to indicate if the
      * run was successful or not, respectively.
+     * 
      * @param closure
      * @returns {TestPlan}
      */
@@ -194,6 +200,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     /**
      * Interal command used by Turbulence. DO NOT USE.
+     * 
      * @param http
      * @param reporter
      * @returns {any}

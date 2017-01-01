@@ -21,6 +21,11 @@ export class Turbulence {
         this.reportGenerator = reportGenerator;
     };
 
+    /**
+     * Start a new test.
+     * 
+     * @returns {TestPlan}
+     */
     startUserSteps() {
         let testPlan = new TestPlan(this, this.http);
         this.testPlans.unshift(testPlan);

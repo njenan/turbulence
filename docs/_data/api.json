@@ -9743,7 +9743,7 @@
 					"sources": [
 						{
 							"fileName": "TestPlan.ts",
-							"line": 166,
+							"line": 170,
 							"character": 15
 						}
 					]
@@ -9855,7 +9855,7 @@
 					"sources": [
 						{
 							"fileName": "TestPlan.ts",
-							"line": 189,
+							"line": 195,
 							"character": 11
 						}
 					]
@@ -9903,7 +9903,7 @@
 					"sources": [
 						{
 							"fileName": "TestPlan.ts",
-							"line": 135,
+							"line": 136,
 							"character": 19
 						}
 					]
@@ -10036,7 +10036,7 @@
 					"sources": [
 						{
 							"fileName": "TestPlan.ts",
-							"line": 156,
+							"line": 159,
 							"character": 12
 						}
 					]
@@ -10418,7 +10418,7 @@
 					"sources": [
 						{
 							"fileName": "TestPlan.ts",
-							"line": 176,
+							"line": 181,
 							"character": 12
 						}
 					]
@@ -10855,7 +10855,7 @@
 					"sources": [
 						{
 							"fileName": "TestPlan.ts",
-							"line": 146,
+							"line": 148,
 							"character": 16
 						}
 					]
@@ -10992,7 +10992,7 @@
 					"sources": [
 						{
 							"fileName": "TestPlan.ts",
-							"line": 201,
+							"line": 208,
 							"character": 7
 						}
 					]
@@ -11268,7 +11268,7 @@
 					"sources": [
 						{
 							"fileName": "Turbulence.ts",
-							"line": 30,
+							"line": 35,
 							"character": 7
 						}
 					]
@@ -11288,6 +11288,10 @@
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
+							"comment": {
+								"shortText": "Start a new test.",
+								"returns": "\n"
+							},
 							"type": {
 								"type": "reference",
 								"name": "TestPlan",
@@ -11298,7 +11302,7 @@
 					"sources": [
 						{
 							"fileName": "Turbulence.ts",
-							"line": 24,
+							"line": 29,
 							"character": 18
 						}
 					]
