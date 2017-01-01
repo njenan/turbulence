@@ -22,7 +22,7 @@ import {ReportGenerator} from './Reporters/ReportGenerator';
 import {Listener} from './Listener';
 
 /**
- * An individual test plan.  It allows steps of the test to be defined in order.  
+ * An individual test plan.  It allows steps of the test to be defined in order.
  */
 export class TestPlan extends EmbeddableStepCreator {
 
@@ -119,7 +119,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     /**
      * End this test plan and return the main [[Turbulence]] object.
-     * 
+     *
      * @returns {Turbulence}
      */
     endUserSteps() {
@@ -166,10 +166,6 @@ export class TestPlan extends EmbeddableStepCreator {
     arrivalRate(rate) {
         this.rate = rate;
         return this;
-    }
-
-    private running() {
-        return Date.now() < this.startTime + this.time;
     }
 
     /**
@@ -295,6 +291,10 @@ export class TestPlan extends EmbeddableStepCreator {
         if (this.rate && this.warmUp !== 1) {
             return Q.reject<SummaryResults>('A ramp up period cannot be specified when an arrival rate is specified.');
         }
+    }
+
+    private running() {
+        return Date.now() < this.startTime + this.time;
     }
 
 }

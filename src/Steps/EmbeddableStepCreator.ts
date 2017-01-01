@@ -25,8 +25,8 @@ export class EmbeddableStepCreator implements StepCreator {
     }
 
     /**
-     * Start a loop for the specified number of times.  Steps can be chained off of this object until [[LoopStep.endLoop]] is
-     * called.
+     * Start a loop for the specified number of times.  Steps can be chained off of this object until 
+     * [[LoopStep.endLoop]] is called.
      * 
      * @param times
      * @returns {LoopStep}

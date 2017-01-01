@@ -53,7 +53,7 @@ export class LoopStep<T> implements TestStep, StepCreator {
     endLoop(): T {
         return this.parent.value;
     }
-    
+
     /**
      * Start a loop for the specified number of times.  Steps can be chained off of this object until
      * [[LoopStep.endLoop]] is called.
@@ -68,7 +68,9 @@ export class LoopStep<T> implements TestStep, StepCreator {
 
     /**
      * Start an if statement.  A predicate that resolves to either true or false should be provided.  If the predicate
-     * resolves to true, the chained steps will be executed.  Otherwise only steps after the [[IfStep.endIf]] will be immediately executed.
+     * resolves to true, the chained steps will be executed.  Otherwise only steps after the [[IfStep.endIf]] will be
+     * immediately executed.
+     * 
      * @param predicate
      * @returns {LoopStep}
      */

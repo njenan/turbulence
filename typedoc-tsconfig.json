@@ -1,0 +1,9 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "commonjs"
+  },
+  "files": [
+    "src/Turbulence.ts"
+  ]
+}
