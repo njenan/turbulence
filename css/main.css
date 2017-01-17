@@ -124,3 +124,7 @@ code {
     padding: 20px;
     list-style-type: square;
 }
+
+.method-signature {
+    padding-bottom: 10px;
+}
