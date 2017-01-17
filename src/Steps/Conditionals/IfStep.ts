@@ -28,11 +28,21 @@ export class IfStep implements TestStep, StepCreator {
         this.creator = new EmbeddableStepCreator(results);
     }
 
+    /**
+     * Steps to execute if the predicate evalutes to false.
+     * 
+     * @returns {ElseStep}
+     */
     else() {
         this.elseStep = new ElseStep(this, this.results);
         return this.elseStep;
     }
 
+    /**
+     * End the if statement and return to the parent step chain.
+     * 
+     * @returns {StepCreator}
+     */
     endIf() {
         return this.parent.value;
     }

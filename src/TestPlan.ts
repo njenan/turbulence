@@ -26,14 +26,25 @@ import {Listener} from './Listener';
  */
 export class TestPlan extends EmbeddableStepCreator {
 
+    /**
+     * @hidden
+     * @param key
+     * @param value
+     * @returns {TestPlan}
+     */
     static reviver(key: string, value: any): any {
         return key === '' ? TestPlan.fromJson(value) : value;
     }
 
+    /**
+     * @hidden
+     * @param root
+     * @returns {TestPlan}
+     */
     static fromJson(root) {
         let testPlan = new TestPlan(root.parent, root.name);
         testPlan.results = new SummaryResults(testPlan.breakerFunction);
-        let mapStep = (step, parent?): TestStep => {
+        let mapStep = (step,  parent?): TestStep => {
             switch (step.type) {
                 case 'GET':
                     return new HttpGetStep(testPlan.results, step.url, step.headers, step.label);
@@ -122,7 +133,7 @@ export class TestPlan extends EmbeddableStepCreator {
      *
      * @returns {Turbulence}
      */
-    endUserSteps() {
+    endUserSteps(): Turbulence {
         return this.parent.value;
     }
 
@@ -133,7 +144,7 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param users
      * @returns {TestPlan}
      */
-    concurrentUsers(users: number) {
+    concurrentUsers(users: number): TestPlan {
         this.targetUsers = users;
         return this;
     }
@@ -145,7 +156,7 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param seconds
      * @returns {TestPlan}
      */
-    rampUpPeriod(seconds: number) {
+    rampUpPeriod(seconds: number): TestPlan {
         this.warmUp = seconds;
         return this;
     }
@@ -156,7 +167,7 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param millis
      * @returns {TestPlan}
      */
-    duration(millis) {
+    duration(millis): TestPlan {
         this.time = millis;
         return this;
     }
@@ -167,7 +178,7 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param rate
      * @returns {TestPlan}
      */
-    arrivalRate(rate) {
+    arrivalRate(rate): TestPlan {
         this.rate = rate;
         return this;
     }
@@ -178,7 +189,7 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param listener
      * @returns {TestPlan}
      */
-    listener(listener: Listener) {
+    listener(listener: Listener): TestPlan {
         listener.sampleRaw = listener.sample.toString();
         this.listeners.push(listener);
         return this;
@@ -192,7 +203,7 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param closure The function that configures the build criteria.
      * @returns {TestPlan}
      */
-    breaker(closure: (Criteria) => boolean) {
+    breaker(closure: (Criteria) => boolean): TestPlan {
         this.breakerFunction = closure;
         this.results.breakerFunction = closure;
         return this;

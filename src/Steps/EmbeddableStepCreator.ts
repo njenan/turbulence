@@ -24,20 +24,13 @@ export class EmbeddableStepCreator implements StepCreator {
         this.steps = [];
     }
 
-    /**
-     * Start a loop for the specified number of times.  Steps can be chained off of this object until 
-     * [[LoopStep.endLoop]] is called.
-     * 
-     * @param times
-     * @returns {LoopStep}
-     */
-    loop(times: number): StepCreator {
+    loop(times: number): LoopStep<{}> {
         let loop = new LoopStep(this, this.results, times);
         this.addStep(loop);
         return loop;
     }
 
-    if(predicate): StepCreator {
+    if(predicate): IfStep {
         let ifStep = new IfStep(this, this.results, predicate);
         this.addStep(ifStep);
         return ifStep;
@@ -78,6 +71,10 @@ export class EmbeddableStepCreator implements StepCreator {
         return this;
     }
 
+    /**
+     * @hidden
+     * @param step
+     */
     addStep(step: TestStep): void {
         this.steps.push(step);
     }

@@ -9,6 +9,9 @@ import {Parent} from '../../Parent';
 
 // Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will
 // result
+/**
+ * Returned from within an If block.  Allows alternate steps to be defined if the If predicate evaluates to false.
+ */
 export class ElseStep implements TestStep, StepCreator {
 
     parent: Parent<IfStep>;
@@ -22,10 +25,21 @@ export class ElseStep implements TestStep, StepCreator {
         this.creator = new EmbeddableStepCreator(results);
     }
 
+    /**
+     * End the If statement.
+     * 
+     * @returns {StepCreator}
+     */
     endIf() {
         return this.parent.value.endIf();
     }
 
+    /**
+     * @hidden
+     * @param http
+     * @param data
+     * @returns {any}
+     */
     execute(http, data): Q.Promise<any> {
         let self = this;
 

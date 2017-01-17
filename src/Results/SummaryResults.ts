@@ -1,5 +1,8 @@
 import {HttpRequestRecord} from '../Steps/Http/HttpRequestRecord';
 
+/**
+ * An object maintaining a record of all responses Turbulence received over the course of a test.
+ */
 export class SummaryResults {
     errors: number;
     metrics = [];
@@ -12,6 +15,11 @@ export class SummaryResults {
         this.requests = [];
     }
 
+    /**
+     * Return the average response time for all requests.
+     * @param name TODO what does this do?
+     * @returns {number}
+     */
     averageResponseTime(name?: string): number {
         let filter;
 
@@ -41,6 +49,9 @@ export class SummaryResults {
 
     }
 
+    /**
+     * @returns {{x: number, y: number}[]}
+     */
     responseTimesByTimestamp(): any[] {
         return this.requests.map((entry) => {
             return {
@@ -50,6 +61,11 @@ export class SummaryResults {
         });
     }
 
+    /**
+     * 
+     * @param interval
+     * @returns {any}
+     */
     responsesPerInterval(interval): any[] {
         return this.requests.reduce((accum: any, next) => {
             let current = accum.pop();
@@ -72,6 +88,10 @@ export class SummaryResults {
         }]);
     }
 
+    /**
+     * 
+     * @returns {{}}
+     */
     requestMap() {
         let self = this;
         let map = {};

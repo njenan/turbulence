@@ -6,7 +6,7 @@ layout: default
         <div class="sidebar col-md-2 col-sm-3">
             <ul class="nav nav-sidebar">
                 {% for child in site.data.api.children sort %}
-                {% if child.kind == 128 %}
+                {% if child.kind == 128 or child.kind == 256 %}
                 <li>
                     <a href="#{{ child.name }}">{{ child.name }}</a>
                 </li>
@@ -17,7 +17,7 @@ layout: default
 
         <div class="col-md-8 col-sm-9">
             {% for child in site.data.api.children sort %}
-            {% if child.kind == 128 %}
+            {% if child.kind == 128 or child.kind == 256 %}
             <div class="info-block">
                 <div>
                     <header class="clazz-header">
@@ -37,36 +37,41 @@ layout: default
                                     {{ method.name }}</a>
                             </h4>
 
-                            {% for signature in method.signatures %}
+                            <div class="method-signature">
+                                {% for signature in method.signatures %}
 
-                            (
+                                (
 
-                            {% for parameter in signature.parameters %}
+                                {% for parameter in signature.parameters %}
 
-                            {% if forloop.first == false %}
-                            <span>,</span>
-                            {% endif %}
+                                {% if forloop.first == false %}
+                                <span>,</span>
+                                {% endif %}
 
-                            <span>{{ parameter.name }}: <a
-                                    href="#{{ parameter.type.name }}"><i>{{ parameter.type.name}}</i></a></span>
-                            {% endfor %}
+                                <span>{{ parameter.name }}: <a
+                                        href="#{{ parameter.type.name }}"><i>{{ parameter.type.name}}</i></a></span>
+                                {% endfor %}
 
-                            )
+                                )
 
-                            =>
+                                =>
 
-                            <span><a href="#{{ signature.type.name }}"><i>{{ signature.type.name }}</i></a></span>
+                                <span><a href="#{{ signature.type.name }}"><i>{{ signature.type.name }}</i></a></span>
+                            </div>
 
                             <div>{{ signature.comment.shortText | Link }}</div>
 
                             <div>
                                 <h5>Arguments:</h5>
                                 <ul>
+                                    {% if signature.parameters == null %}
+                                    <li>None</li>
+                                    {% endif %}
 
                                     {% for parameter in signature.parameters %}
                                     <li>{{ parameter.name }}: <a
                                             href="#{{ parameter.type.name }}"><i>{{ parameter.type.name}}</i></a>
-                                        
+
                                         {% if parameter.comment.text %}
                                         <span> - {{ parameter.comment.text }}</span>
                                         {% endif %}
