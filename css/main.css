@@ -16,6 +16,8 @@ html, body {
 .sidebar .col-md-2 {
     display: none;
     height: 100%;
+    
+    box-shadow: 1px 1px 4px black;
 }
 
 @media (min-width: 768px) {
@@ -36,7 +38,9 @@ html, body {
 
 .info-block {
     background-color: #40638D;
-    margin: 40px;
+    margin: 20px;
+
+    box-shadow: 1px 1px 4px black;
 }
 
 .api-block {
@@ -49,6 +53,8 @@ html, body {
     -webkit-box-shadow: none;
 
     border-radius: 0px;
+    
+    box-shadow: 1px 1px 4px black;
 }
 
 .navbar-default .navbar-collapse {
@@ -93,7 +99,7 @@ code {
 .navbar.navbar-default.navbar-fixed-bottom.navbar-transparent {
     background-color: #274B77;
     border-color: transparent;
-    min-height: 30px;
+    min-height: 25px;
 
     border-radius: 0px;
 }
@@ -110,10 +116,15 @@ code {
 
 .clazz-header {
     background-color: #274B77;
-    padding: 10px;
+    
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-top: 1px;
 }
 
 .clazz-contents {
-    padding: 40px;
+    padding: 20px;
     list-style-type: square;
 }
