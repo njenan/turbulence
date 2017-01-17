@@ -4,15 +4,13 @@ import {Criteria} from '../Criteria';
 import {SummaryResults} from '../../Results/SummaryResults';
 import {HttpRequestRecord} from '../../Steps/Http/HttpRequestRecord';
 import {HttpGetStep} from '../../Steps/Http/HttpGetStep';
+import {HttpResponse} from '../../Http/HttpResponse';
 
 describe('Criteria', () => {
     function getResultsWithAverageResponseTimeOf(averageResponseTime) {
         let summaryResults = new SummaryResults(null);
-        let httpRequestRecord = new HttpRequestRecord(new HttpGetStep(null, null, null, null), {
-            body: null,
-            rawBody: null,
-            statusCode: 200
-        }, averageResponseTime, Date.now());
+        let httpRequestRecord = new HttpRequestRecord(new HttpGetStep(null, null, null, null),
+            new HttpResponse(null, 200), averageResponseTime, Date.now());
         summaryResults.requests.push(httpRequestRecord);
         return summaryResults;
     }

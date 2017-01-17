@@ -13,19 +13,19 @@ export class HttpResponse {
 
     /**
      * Get the body of the http response.
-     * 
+     *
      * @returns {any}
      */
-    public getBody():any {
+    public getBody(): any {
         return this.rawBody;
     }
 
     /**
      * Get the status code of the http response as a number.
-     * 
+     *
      * @returns {number}
      */
-    public getStatusCode():number {
+    public getStatusCode(): number {
         return this.statusCode;
     }
 }

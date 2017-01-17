@@ -1,5 +1,5 @@
 /**
- * The common interface that all step creating 'nodes' implement.  These steps will be available when you have just 
+ * The common interface that all step creating 'nodes' implement.  These steps will be available when you have just
  * created a [[TestPlan]], entered an if statement, or started a loop.
  */
 export interface StepCreator {
@@ -54,7 +54,7 @@ export interface StepCreator {
      * @returns {EmbeddableStepCreator}
      */
     put(url: string, body: any, label?: String): StepCreator;
-    
+
     /**
      *
      * @param url

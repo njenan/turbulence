@@ -22,7 +22,7 @@ export class LoopStep<T> implements TestStep, StepCreator {
         this.times = times;
         this.creator = new EmbeddableStepCreator(results);
     }
-    
+
     execute(http): Q.Promise<any> {
         let self = this;
 
