@@ -16,8 +16,6 @@ html, body {
 .sidebar .col-md-2 {
     display: none;
     height: 100%;
-    
-    box-shadow: 1px 1px 4px black;
 }
 
 @media (min-width: 768px) {
@@ -53,8 +51,6 @@ html, body {
     -webkit-box-shadow: none;
 
     border-radius: 0px;
-    
-    box-shadow: 1px 1px 4px black;
 }
 
 .navbar-default .navbar-collapse {
