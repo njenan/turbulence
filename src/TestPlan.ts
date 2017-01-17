@@ -189,10 +189,10 @@ export class TestPlan extends EmbeddableStepCreator {
      * The function is passed the results object of the run and should return either true or false to indicate if the
      * run was successful or not, respectively.
      * 
-     * @param closure
+     * @param closure The function that configures the build criteria.
      * @returns {TestPlan}
      */
-    breaker(closure) {
+    breaker(closure: (Criteria) => boolean) {
         this.breakerFunction = closure;
         this.results.breakerFunction = closure;
         return this;

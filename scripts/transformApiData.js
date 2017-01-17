@@ -8,14 +8,18 @@ fs.readFile('./docs/_data/api.json', function (err, data) {
 
     var apiData = JSON.parse(data);
 
-    apiData.children.forEach(function (child, index) {
+    apiData.children.forEach(function (child, index) {        
         if (child.name === 'Turbulence') {
             apiData.children.splice(index, 1);
             apiData.children.unshift(child);
         }
 
         if (child.children) {
-            child.children.forEach(function (grandchild) {
+            child.children.forEach(function (grandchild, index) {
+                if (grandchild.kind !== 2048) {
+                    child.children.splice(index, 1);
+                }
+                
                 if (grandchild.signatures) {
                     grandchild.signatures.forEach(function (signature, index) {
                         if (signature.comment && signature.comment.shortText.indexOf('@hidden') != -1) {
