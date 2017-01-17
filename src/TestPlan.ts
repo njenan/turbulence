@@ -199,8 +199,7 @@ export class TestPlan extends EmbeddableStepCreator {
     }
 
     /**
-     * Interal command used by Turbulence. DO NOT USE.
-     * 
+     * @hidden
      * @param http
      * @param reporter
      * @returns {any}

@@ -36,7 +36,7 @@ html, body {
 
 .info-block {
     background-color: #40638D;
-    padding-bottom: 20px;
+    margin: 40px;
 }
 
 .api-block {
@@ -106,4 +106,14 @@ code {
     background-color: transparent;
     -webkit-box-shadow: none;
     box-shadow: none;
+}
+
+.clazz-header {
+    background-color: #274B77;
+    padding: 10px;
+}
+
+.clazz-contents {
+    padding: 40px;
+    list-style-type: square;
 }

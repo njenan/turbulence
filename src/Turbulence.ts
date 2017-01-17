@@ -32,6 +32,10 @@ export class Turbulence {
         return testPlan;
     }
 
+    /**
+     * @hidden
+     * @returns {PromiseLike<void>}
+     */
     run() {
         return this.executor.run(this.testPlans, this.http)
             .then((results) => {
