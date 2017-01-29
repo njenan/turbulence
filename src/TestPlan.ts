@@ -20,6 +20,7 @@ import {ProcessorStep} from './Steps/ProcessorStep';
 import {RandomPauseStep} from './Steps/RandomPauseStep';
 import {ReportGenerator} from './Reporters/ReportGenerator';
 import {Listener} from './Listener';
+import {JsonReportGenerator} from './Reporters/JsonReportGenerator';
 
 /**
  * An individual test plan.  It allows steps of the test to be defined in order.
@@ -41,21 +42,25 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param root
      * @returns {TestPlan}
      */
+
     static fromJson(root) {
-        let testPlan = new TestPlan(root.parent, root.name);
+        let reporter = new JsonReportGenerator();
+        let testPlan = new TestPlan(root.parent, reporter, root.name);
         testPlan.results = new SummaryResults(testPlan.breakerFunction);
-        let mapStep = (step,  parent?): TestStep => {
+        let mapStep = (step, parent?): TestStep => {
             switch (step.type) {
                 case 'GET':
-                    return new HttpGetStep(testPlan.results, step.url, step.headers, step.label);
+                    return new HttpGetStep(testPlan.results, testPlan.reporter, step.url, step.headers, step.label);
                 case 'HEAD':
-                    return new HttpHeadStep(testPlan.results, step.url, step.headers, step.label);
+                    return new HttpHeadStep(testPlan.results, testPlan.reporter, step.url, step.headers, step.label);
                 case 'PUT':
-                    return new HttpPutStep(testPlan.results, step.url, step.body, step.headers, step.label);
+                    return new HttpPutStep(testPlan.results, testPlan.reporter, step.url, step.body, step.headers,
+                        step.label);
                 case 'POST':
-                    return new HttpPostStep(testPlan.results, step.url, step.body, step.headers, step.label);
+                    return new HttpPostStep(testPlan.results, testPlan.reporter, step.url, step.body, step.headers,
+                        step.label);
                 case 'DELETE':
-                    return new HttpDeleteStep(testPlan.results, step.url, step.headers, step.label);
+                    return new HttpDeleteStep(testPlan.results, testPlan.reporter, step.url, step.headers, step.label);
 
                 case 'AssertStatusStep':
                     return new AssertStatusStep(testPlan.results, step.code);
@@ -64,18 +69,19 @@ export class TestPlan extends EmbeddableStepCreator {
                     return new AssertHttpResponseStep(testPlan.results, eval('(' + step.validatorRaw + ')'));
 
                 case 'IfStep':
-                    // tslint:disable-next-line:no-eval
-                    let ifStep = new IfStep(step.parent, testPlan.results, eval('(' + step.predicateRaw + ')'));
+                    let ifStep = new IfStep(step.parent, testPlan.results, testPlan.reporter,
+                        // tslint:disable-next-line:no-eval
+                        eval('(' + step.predicateRaw + ')'));
                     ifStep.creator.steps = step.creator.steps.map(mapStep);
                     ifStep.elseStep = step.elseStep ? <ElseStep> mapStep(step.elseStep, ifStep) : null;
 
                     return ifStep;
                 case 'ElseStep':
-                    let elseStep = new ElseStep(parent ? parent : step.parent, testPlan.results);
+                    let elseStep = new ElseStep(parent ? parent : step.parent, testPlan.results, testPlan.reporter);
                     elseStep.creator.steps = step.creator.steps.map(mapStep);
                     return elseStep;
                 case 'LoopStep':
-                    let loopStep = new LoopStep(step.parent, testPlan.results, step.times);
+                    let loopStep = new LoopStep(step.parent, testPlan.results, testPlan.reporter, step.times);
                     loopStep.creator.steps = step.creator.steps ? step.creator.steps.map(mapStep) : [];
                     return loopStep;
 
@@ -111,6 +117,8 @@ export class TestPlan extends EmbeddableStepCreator {
 
     public breakerFunction: (Criteria) => void;
 
+    reporter: ReportGenerator;
+
     private parent: Parent<Turbulence>;
     private name: String;
     private listeners: Array<Listener> = [];
@@ -121,11 +129,12 @@ export class TestPlan extends EmbeddableStepCreator {
     private startTime: number;
     private rate: number;
 
-    constructor(parent, name?) {
-        super(new SummaryResults(null));
+    constructor(parent, reporter, name?) {
+        super(new SummaryResults(null), reporter);
 
         this.parent = new Parent(parent);
         this.name = name;
+        this.reporter = reporter;
     }
 
     /**
@@ -140,7 +149,7 @@ export class TestPlan extends EmbeddableStepCreator {
     /**
      * Set the number of concurrent users to simulate during this test.  Use in conjunction with [[rampUpPeriod]] to
      * slowly add load as the test runs.  Cannot be combined with [[arrivalRate]]
-     * 
+     *
      * @param users
      * @returns {TestPlan}
      */
@@ -152,7 +161,7 @@ export class TestPlan extends EmbeddableStepCreator {
     /**
      * A warm-up period during which new users are slowly added to the performance test.  Use in conjunction with
      * [[concurrentUsers]].
-     * 
+     *
      * @param seconds
      * @returns {TestPlan}
      */
@@ -163,7 +172,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     /**
      * The duration of the test in milliseconds.
-     * 
+     *
      * @param millis
      * @returns {TestPlan}
      */
@@ -174,7 +183,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     /**
      * How often to create a new user in milliseconds.  Cannot be combined with [[concurrentUsers]].
-     * 
+     *
      * @param rate
      * @returns {TestPlan}
      */
@@ -185,7 +194,7 @@ export class TestPlan extends EmbeddableStepCreator {
 
     /**
      * Add a listener to the test.  See the {Listener} interface for information on what fields are necessary.
-     * 
+     *
      * @param listener
      * @returns {TestPlan}
      */
@@ -199,7 +208,7 @@ export class TestPlan extends EmbeddableStepCreator {
      * A function that determines whether or not to 'break' the Turbulence test (by returning a non-zero return code).
      * The function is passed the results object of the run and should return either true or false to indicate if the
      * run was successful or not, respectively.
-     * 
+     *
      * @param closure The function that configures the build criteria.
      * @returns {TestPlan}
      */

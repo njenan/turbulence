@@ -7,8 +7,8 @@ export class HttpHeadStep extends AbstractHttpStep implements TestStep {
     headers: any;
     type: string;
 
-    constructor(results, url, headers?, label?) {
-        super(results, url, label);
+    constructor(results, reporter, url, headers?, label?) {
+        super(results, reporter, url, label);
 
         this.url = url;
         this.headers = headers;

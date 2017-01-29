@@ -1,9 +1,15 @@
 import {ReportGenerator} from './ReportGenerator';
+import {HttpRequestRecord} from '../Steps/Http/HttpRequestRecord';
 
 export class JsonReportGenerator implements ReportGenerator {
+    results = [];
 
-    toReport(results) {
+    addResult(result: HttpRequestRecord): void {
+        this.results.push(result);
+    }
+
+    end(): void {
         // tslint:disable-next-line:no-console
-        console.log(JSON.stringify(results));
+        console.log(JSON.stringify(this.results));
     }
 }

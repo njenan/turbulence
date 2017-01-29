@@ -7,6 +7,7 @@ import {SummaryResults} from '../../Results/SummaryResults';
 import {ElseStep} from './ElseStep';
 import {HttpClient} from '../../Http/HttpClient';
 import {Parent} from '../../Parent';
+import {ReportGenerator} from '../../Reporters/ReportGenerator';
 
 // Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will
 // result
@@ -17,30 +18,32 @@ export class IfStep implements TestStep, StepCreator {
     predicateRaw: string;
     creator: EmbeddableStepCreator;
     results: SummaryResults;
+    reporter: ReportGenerator;
     elseStep: ElseStep;
     type: string = 'IfStep';
 
-    constructor(parent, results, predicate) {
+    constructor(parent, results, reporter, predicate) {
         this.parent = new Parent(parent);
         this.results = results;
+        this.reporter = reporter;
         this.predicate = predicate;
         this.predicateRaw = predicate.toString();
-        this.creator = new EmbeddableStepCreator(results);
+        this.creator = new EmbeddableStepCreator(results, reporter);
     }
 
     /**
      * Steps to execute if the predicate evalutes to false.
-     * 
+     *
      * @returns {ElseStep}
      */
     else() {
-        this.elseStep = new ElseStep(this, this.results);
+        this.elseStep = new ElseStep(this, this.results, this.reporter);
         return this.elseStep;
     }
 
     /**
      * End the if statement and return to the parent step chain.
-     * 
+     *
      * @returns {StepCreator}
      */
     endIf() {

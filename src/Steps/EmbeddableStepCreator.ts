@@ -13,51 +13,55 @@ import {HttpHeadStep} from './Http/HttpHeadStep';
 import {HttpDeleteStep} from './Http/HttpDeleteStep';
 import {RandomPauseStep} from './RandomPauseStep';
 import {ProcessorStep} from './ProcessorStep';
+import {ReportGenerator} from '../Reporters/ReportGenerator';
 
 export class EmbeddableStepCreator implements StepCreator {
 
     results: SummaryResults;
     steps: Array<TestStep>;
 
-    constructor(results) {
+    reporter: ReportGenerator;
+
+    constructor(results, reporter) {
         this.results = results;
+        this.reporter = reporter;
         this.steps = [];
     }
 
     loop(times: number): LoopStep<{}> {
-        let loop = new LoopStep(this, this.results, times);
+        let loop = new LoopStep(this, this.results, this.reporter, times);
         this.addStep(loop);
         return loop;
     }
 
     if(predicate): IfStep {
-        let ifStep = new IfStep(this, this.results, predicate);
+        let ifStep = new IfStep(this, this.results, this.reporter, predicate);
         this.addStep(ifStep);
         return ifStep;
     }
 
     get(url: string, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpGetStep(this.results, url, headers, label));
+        this.addStep(new HttpGetStep(this.results, this.reporter, url, headers, label));
         return this;
     }
 
     post(url: string, body: any, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpPostStep(this.results, url, body, headers, label));
+        this.addStep(new HttpPostStep(this.results, this.reporter, url, body, headers, label));
         return this;
     }
 
     put(url: string, body: any, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpPutStep(this.results, url, body, headers, label));
+        this.addStep(new HttpPutStep(this.results, this.reporter, url, body, headers, label));
         return this;
     }
 
     head(url: string, headers?: string, label?: string): StepCreator {
-        this.addStep(new HttpHeadStep(this.results, url, headers, label));
+        this.addStep(new HttpHeadStep(this.results, this.reporter, url, headers, label));
         return this;
     }
 
     delete(url: string, headers?: string, label?: string): StepCreator {
-        this.addStep(new HttpDeleteStep(this.results, url, headers, label));
+        this.addStep(new HttpDeleteStep(this.results, this.reporter, url, headers, label));
         return this;
     }
 

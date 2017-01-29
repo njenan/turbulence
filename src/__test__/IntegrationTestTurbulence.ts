@@ -156,7 +156,7 @@ describe('Turbulence', () => {
             return TurbulenceCli({args: ['examples/example2.turbulence', '--reporter=JsonReportGenerator']})
                 .then(JSON.parse)
                 .then((report) => {
-                    assert.equal(1, report.requests.length);
+                    assert.equal(1, report.length);
                 });
         });
     });

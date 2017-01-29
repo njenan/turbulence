@@ -23,11 +23,11 @@ export class Turbulence {
 
     /**
      * Start a new test.
-     * 
+     *
      * @returns {TestPlan}
      */
     startUserSteps() {
-        let testPlan = new TestPlan(this, this.http);
+        let testPlan = new TestPlan(this, this.reportGenerator, this.http);
         this.testPlans.unshift(testPlan);
         return testPlan;
     }
@@ -37,6 +37,7 @@ export class Turbulence {
      * @returns {PromiseLike<void>}
      */
     run() {
+        let res;
         return this.executor.run(this.testPlans, this.http)
             .then((results) => {
                 if (this.testPlans[0].breakerFunction) {
@@ -47,6 +48,13 @@ export class Turbulence {
 
                 return results;
             })
-            .then(this.reportGenerator.toReport);
+            // TODO fix this `res=results` hack
+            .then((results) => {
+                res = results;
+            })
+            .then(this.reportGenerator.end.bind(this.reportGenerator))
+            .then(() => {
+                return res;
+            });
     }
 }

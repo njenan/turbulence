@@ -43,7 +43,7 @@ describe('Distributed Turbulence', () => {
             })
                 .then(JSON.parse)
                 .then((data) => {
-                    assert.equal(1, data.requests.length);
+                    assert.equal(1, data.length);
                 })]);
         });
 
@@ -58,7 +58,7 @@ describe('Distributed Turbulence', () => {
             })
                 .then(JSON.parse)
                 .then((data) => {
-                    assert.equal(1, data.requests.length);
+                    assert.equal(1, data.length);
                 })]);
         });
     });

@@ -6,13 +6,21 @@ import {SummaryResults} from '../../../src/Results/SummaryResults';
 export class JadeHtmlReportGenerator implements ReportGenerator {
 
     generator: (locals?: any) => string;
+    results = [];
 
     constructor() {
         // Code is synchronous... shouldn't be a problem because this won't execute during the performance test
         this.generator = Jade.compileFile(__dirname + '/JadeReport.jade');
     }
 
-    toReport(results: SummaryResults) {
+    addResult(result) {
+        this.results.push(result);
+    }
+
+    end() {
+        let results = new SummaryResults(null);
+
+        results.requests = this.results;
         let requests = results.requests.reduce((map, nextRequest) => {
             let key = nextRequest.url;
             if (!map[key]) {

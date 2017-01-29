@@ -6,6 +6,7 @@ import {SummaryResults} from '../../Results/SummaryResults';
 import {IfStep} from './IfStep';
 import {StepCreator} from '../StepCreator';
 import {Parent} from '../../Parent';
+import {ReportGenerator} from '../../Reporters/ReportGenerator';
 
 // Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will
 // result
@@ -17,17 +18,19 @@ export class ElseStep implements TestStep, StepCreator {
     parent: Parent<IfStep>;
     creator: EmbeddableStepCreator;
     results: SummaryResults;
+    reporter: ReportGenerator;
     type: string = 'ElseStep';
 
-    constructor(parent, results) {
+    constructor(parent, results, reporter) {
         this.parent = new Parent(parent);
         this.results = results;
-        this.creator = new EmbeddableStepCreator(results);
+        this.reporter = reporter;
+        this.creator = new EmbeddableStepCreator(results, reporter);
     }
 
     /**
      * End the If statement.
-     * 
+     *
      * @returns {StepCreator}
      */
     endIf() {

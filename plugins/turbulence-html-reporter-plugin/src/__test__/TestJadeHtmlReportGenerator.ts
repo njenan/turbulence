@@ -41,13 +41,16 @@ describe('JadeHtmlReportGenerator', () => {
     it('should report total number of requests', () => {
         let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
 
-        generator.toReport(results);
+        results.requests.forEach((result) => {
+            generator.addResult(result)
+        });
+        generator.end();
 
         let html = data;
         let doc = domParser.parseFromString(html);
@@ -66,16 +69,19 @@ describe('JadeHtmlReportGenerator', () => {
     it('should report each step separately', () => {
         let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8082/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8082/', undefined), new HttpResponse(), undefined, 0)
         );
 
-        generator.toReport(results);
+        results.requests.forEach((result) => {
+            generator.addResult(result)
+        });
+        generator.end();
 
         let html = data;
         let doc = domParser.parseFromString(html);
@@ -88,13 +94,16 @@ describe('JadeHtmlReportGenerator', () => {
     it('should count how many times each url was accessed', () => {
         let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
         );
 
-        generator.toReport(results);
+        results.requests.forEach((result) => {
+            generator.addResult(result)
+        });
+        generator.end();
 
         let html = data;
         let doc = domParser.parseFromString(html);
@@ -105,16 +114,19 @@ describe('JadeHtmlReportGenerator', () => {
     it('should preserve order of url invocations', () => {
         let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8080/', undefined), new HttpResponse(), undefined, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
 
-        generator.toReport(results);
+        results.requests.forEach((result) => {
+            generator.addResult(result)
+        });
+        generator.end();
 
         let html = data;
         let doc = domParser.parseFromString(html);
@@ -128,10 +140,13 @@ describe('JadeHtmlReportGenerator', () => {
     it('should show a 0% error rate if no errors occured', () => {
         let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep('http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
 
-        generator.toReport(results);
+        results.requests.forEach((result) => {
+            generator.addResult(result)
+        });
+        generator.end();
 
         let html = data;
         let doc = domParser.parseFromString(html);
@@ -143,16 +158,19 @@ describe('JadeHtmlReportGenerator', () => {
         let results = new SummaryResults(null);
 
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), undefined, 0)
         );
 
-        generator.toReport(results);
+        results.requests.forEach((result) => {
+            generator.addResult(result)
+        });
+        generator.end();
 
         let html = data;
         let doc = domParser.parseFromString(html);
@@ -163,16 +181,20 @@ describe('JadeHtmlReportGenerator', () => {
     it('should calculate the total average response time', () => {
         let results = new SummaryResults(null);
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8080/', undefined), new HttpResponse(), 10, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8080/', undefined), new HttpResponse(), 10, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8081/', undefined), new HttpResponse(), 20, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8081/', undefined), new HttpResponse(), 20, 0)
         );
         results.requests.push(new HttpRequestRecord(
-            new HttpGetStep(undefined, 'http://localhost:8082/', undefined), new HttpResponse(), 30, 0)
+            new HttpGetStep(undefined, undefined, 'http://localhost:8082/', undefined), new HttpResponse(), 30, 0)
         );
 
-        generator.toReport(results);
+        results.requests.forEach((result) => {
+            generator.addResult(result)
+        });
+        generator.end();
+        generator.end();
 
         let html = data;
         let doc = domParser.parseFromString(html);

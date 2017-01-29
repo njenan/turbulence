@@ -5,6 +5,7 @@ import {EmbeddableStepCreator} from '../EmbeddableStepCreator';
 import {SummaryResults} from '../../Results/SummaryResults';
 import {StepCreator} from '../StepCreator';
 import {Parent} from '../../Parent';
+import {ReportGenerator} from '../../Reporters/ReportGenerator';
 
 // Must implement step creator and not extend embeddable step creator because otherwise a circular dependency will
 // result
@@ -12,15 +13,17 @@ export class LoopStep<T> implements TestStep, StepCreator {
 
     parent: Parent<T>;
     results: SummaryResults;
+    reporter: ReportGenerator;
     times: number;
     creator: EmbeddableStepCreator;
     type: string = 'LoopStep';
 
-    constructor(parent, results, times) {
+    constructor(parent, results, reporter, times) {
         this.parent = new Parent(parent);
         this.results = results;
+        this.reporter = reporter;
         this.times = times;
-        this.creator = new EmbeddableStepCreator(results);
+        this.creator = new EmbeddableStepCreator(results, reporter);
     }
 
     execute(http): Q.Promise<any> {

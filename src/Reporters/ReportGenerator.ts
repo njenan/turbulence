@@ -1,7 +1,16 @@
-import {SummaryResults} from './../Results/SummaryResults';
+import {HttpRequestRecord} from '../Steps/Http/HttpRequestRecord';
 
 export interface ReportGenerator {
 
-    toReport(results: SummaryResults): void;
+    /**
+     * 
+     * @param result
+     */
+    addResult(result: HttpRequestRecord): void;
+
+    /**
+     * Called when the test plan has finished.
+     */
+    end(): void;
 
 }

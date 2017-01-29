@@ -8,8 +8,8 @@ export class HttpPutStep extends AbstractHttpStep implements TestStep {
     headers: any;
     type: string;
 
-    constructor(results, url, body, headers?, label?) {
-        super(results, url, label);
+    constructor(results, reporter, url, body, headers?, label?) {
+        super(results, reporter, url, label);
 
         this.url = url;
         this.body = body;
