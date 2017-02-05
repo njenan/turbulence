@@ -22,10 +22,10 @@ describe('Distributed Turbulence', () => {
         http = new StubHttpClient();
         reporter = new StubReportGenerator();
 
-        turbulence = new Turbulence(http, new RemoteExecutor(), reporter);
-        turbulence2 = new Turbulence(http, new RemoteExecutor(), reporter);
+        turbulence = new Turbulence(http, new RemoteExecutor(reporter), reporter);
+        turbulence2 = new Turbulence(http, new RemoteExecutor(reporter), reporter);
 
-        distributed = new DistributedTurbulence(new LocalExecutor(reporter), http);
+        distributed = new DistributedTurbulence(new LocalExecutor(reporter), reporter, http);
         request = {};
     });
 
@@ -97,9 +97,10 @@ describe('Distributed Turbulence', () => {
 
         return reply1.then((data1) => {
             return reply2.then((data2) => {
-                let firstTime = data1.requests[0].timestamp;
-                let secondTime = data2.requests[0].timestamp;
-                assert.ok(secondTime - firstTime > 100);
+                let firstTime = data1.results[0].timestamp;
+                let secondTime = data2.results[0].timestamp;
+                let difference = secondTime - firstTime;
+                assert.ok('Expected difference to be less than 100 ms, was ' + difference, difference > 100);
             });
         });
     });

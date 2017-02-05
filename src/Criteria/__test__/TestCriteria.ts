@@ -1,18 +1,17 @@
 import assert = require('power-assert');
-
 import {Criteria} from '../Criteria';
-import {SummaryResults} from '../../Results/SummaryResults';
 import {HttpRequestRecord} from '../../Steps/Http/HttpRequestRecord';
 import {HttpGetStep} from '../../Steps/Http/HttpGetStep';
 import {HttpResponse} from '../../Http/HttpResponse';
+import {StubReportGenerator} from '../../Reporters/__test__/StubReportGenerator';
 
 describe('Criteria', () => {
     function getResultsWithAverageResponseTimeOf(averageResponseTime) {
-        let summaryResults = new SummaryResults(null);
+        let reporter = new StubReportGenerator();
         let httpRequestRecord = new HttpRequestRecord(new HttpGetStep(null, null, null, null),
             new HttpResponse(null, 200), averageResponseTime, Date.now());
-        summaryResults.requests.push(httpRequestRecord);
-        return summaryResults;
+        reporter.addResult(httpRequestRecord);
+        return reporter;
     }
 
     describe('Average Response time', () => {

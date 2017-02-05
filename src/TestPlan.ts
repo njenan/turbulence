@@ -3,7 +3,6 @@ import {TestStep} from './Steps/TestStep';
 import {EmbeddableStepCreator} from './Steps/EmbeddableStepCreator';
 import {HttpClient} from './Http/HttpClient';
 import {Turbulence} from './Turbulence';
-import {SummaryResults} from './Results/SummaryResults';
 import {Parent} from './Parent';
 import {HttpGetStep} from './Steps/Http/HttpGetStep';
 import {PauseStep} from './Steps/PauseStep';
@@ -20,7 +19,6 @@ import {ProcessorStep} from './Steps/ProcessorStep';
 import {RandomPauseStep} from './Steps/RandomPauseStep';
 import {ReportGenerator} from './Reporters/ReportGenerator';
 import {Listener} from './Listener';
-import {JsonReportGenerator} from './Reporters/JsonReportGenerator';
 
 /**
  * An individual test plan.  It allows steps of the test to be defined in order.
@@ -33,8 +31,10 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param value
      * @returns {TestPlan}
      */
-    static reviver(key: string, value: any): any {
-        return key === '' ? TestPlan.fromJson(value) : value;
+    static reviver(reporter) {
+        return (key: string, value: any) => {
+            return key === '' ? TestPlan.fromJson(value, reporter) : value;
+        };
     }
 
     /**
@@ -43,33 +43,31 @@ export class TestPlan extends EmbeddableStepCreator {
      * @returns {TestPlan}
      */
 
-    static fromJson(root) {
-        let reporter = new JsonReportGenerator();
+    static fromJson(root, reporter) {
         let testPlan = new TestPlan(root.parent, reporter, root.name);
-        testPlan.results = new SummaryResults(testPlan.breakerFunction);
         let mapStep = (step, parent?): TestStep => {
             switch (step.type) {
                 case 'GET':
-                    return new HttpGetStep(testPlan.results, testPlan.reporter, step.url, step.headers, step.label);
+                    return new HttpGetStep(testPlan.reporter, step.url, step.headers, step.label);
                 case 'HEAD':
-                    return new HttpHeadStep(testPlan.results, testPlan.reporter, step.url, step.headers, step.label);
+                    return new HttpHeadStep(testPlan.reporter, step.url, step.headers, step.label);
                 case 'PUT':
-                    return new HttpPutStep(testPlan.results, testPlan.reporter, step.url, step.body, step.headers,
+                    return new HttpPutStep(testPlan.reporter, step.url, step.body, step.headers,
                         step.label);
                 case 'POST':
-                    return new HttpPostStep(testPlan.results, testPlan.reporter, step.url, step.body, step.headers,
+                    return new HttpPostStep(testPlan.reporter, step.url, step.body, step.headers,
                         step.label);
                 case 'DELETE':
-                    return new HttpDeleteStep(testPlan.results, testPlan.reporter, step.url, step.headers, step.label);
+                    return new HttpDeleteStep(testPlan.reporter, step.url, step.headers, step.label);
 
                 case 'AssertStatusStep':
-                    return new AssertStatusStep(testPlan.results, step.code);
+                    return new AssertStatusStep(testPlan.reporter, step.code);
                 case 'AssertHttpResponseStep':
                     // tslint:disable-next-line:no-eval
-                    return new AssertHttpResponseStep(testPlan.results, eval('(' + step.validatorRaw + ')'));
+                    return new AssertHttpResponseStep(testPlan.reporter, eval('(' + step.validatorRaw + ')'));
 
                 case 'IfStep':
-                    let ifStep = new IfStep(step.parent, testPlan.results, testPlan.reporter,
+                    let ifStep = new IfStep(step.parent, testPlan.reporter,
                         // tslint:disable-next-line:no-eval
                         eval('(' + step.predicateRaw + ')'));
                     ifStep.creator.steps = step.creator.steps.map(mapStep);
@@ -77,11 +75,11 @@ export class TestPlan extends EmbeddableStepCreator {
 
                     return ifStep;
                 case 'ElseStep':
-                    let elseStep = new ElseStep(parent ? parent : step.parent, testPlan.results, testPlan.reporter);
+                    let elseStep = new ElseStep(parent ? parent : step.parent, testPlan.reporter);
                     elseStep.creator.steps = step.creator.steps.map(mapStep);
                     return elseStep;
                 case 'LoopStep':
-                    let loopStep = new LoopStep(step.parent, testPlan.results, testPlan.reporter, step.times);
+                    let loopStep = new LoopStep(step.parent, testPlan.reporter, step.times);
                     loopStep.creator.steps = step.creator.steps ? step.creator.steps.map(mapStep) : [];
                     return loopStep;
 
@@ -130,7 +128,7 @@ export class TestPlan extends EmbeddableStepCreator {
     private rate: number;
 
     constructor(parent, reporter, name?) {
-        super(new SummaryResults(null), reporter);
+        super(reporter);
 
         this.parent = new Parent(parent);
         this.name = name;
@@ -214,7 +212,6 @@ export class TestPlan extends EmbeddableStepCreator {
      */
     breaker(closure: (Criteria) => boolean): TestPlan {
         this.breakerFunction = closure;
-        this.results.breakerFunction = closure;
         return this;
     }
 
@@ -224,14 +221,13 @@ export class TestPlan extends EmbeddableStepCreator {
      * @param reporter
      * @returns {any}
      */
-    run(http: HttpClient, reporter: ReportGenerator): Q.Promise<SummaryResults> {
+    run(http: HttpClient): Q.Promise<SummaryResults> {
         let reject = this.validate();
 
         if (reject) {
             return reject;
         }
 
-        let self = this;
         let promises = [];
 
         this.startTime = Date.now();
@@ -265,7 +261,8 @@ export class TestPlan extends EmbeddableStepCreator {
         let startListeners = () => {
             this.listeners.forEach((listener) => {
                 let nextSample = () => {
-                    this.results.metrics.push(listener.sample());
+                    let metric = listener.sample();
+                    this.reporter.addMetric(metric);
 
                     if (this.running()) {
                         setTimeout(nextSample, listener.interval);
@@ -279,9 +276,7 @@ export class TestPlan extends EmbeddableStepCreator {
         startTestPlans();
         startListeners();
 
-        return this.recursiveAll(promises).then(() => {
-            return self.results;
-        });
+        return this.recursiveAll(promises);
     }
 
     private recursiveAll(promises) {

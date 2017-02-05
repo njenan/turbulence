@@ -1,6 +1,5 @@
 import {TestStep} from './TestStep';
 import {HttpGetStep} from './Http/HttpGetStep';
-import {SummaryResults} from '../Results/SummaryResults';
 import {PauseStep} from './PauseStep';
 import {AssertHttpResponseStep} from './Assertions/AssertHttpResponseStep';
 import {AssertStatusStep} from './Assertions/AssertStatusStep';
@@ -16,52 +15,48 @@ import {ProcessorStep} from './ProcessorStep';
 import {ReportGenerator} from '../Reporters/ReportGenerator';
 
 export class EmbeddableStepCreator implements StepCreator {
-
-    results: SummaryResults;
     steps: Array<TestStep>;
-
     reporter: ReportGenerator;
 
-    constructor(results, reporter) {
-        this.results = results;
+    constructor(reporter) {
         this.reporter = reporter;
         this.steps = [];
     }
 
     loop(times: number): LoopStep<{}> {
-        let loop = new LoopStep(this, this.results, this.reporter, times);
+        let loop = new LoopStep(this, this.reporter, times);
         this.addStep(loop);
         return loop;
     }
 
     if(predicate): IfStep {
-        let ifStep = new IfStep(this, this.results, this.reporter, predicate);
+        let ifStep = new IfStep(this, this.reporter, predicate);
         this.addStep(ifStep);
         return ifStep;
     }
 
     get(url: string, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpGetStep(this.results, this.reporter, url, headers, label));
+        this.addStep(new HttpGetStep(this.reporter, url, headers, label));
         return this;
     }
 
     post(url: string, body: any, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpPostStep(this.results, this.reporter, url, body, headers, label));
+        this.addStep(new HttpPostStep(this.reporter, url, body, headers, label));
         return this;
     }
 
     put(url: string, body: any, headers?: any, label?: string): StepCreator {
-        this.addStep(new HttpPutStep(this.results, this.reporter, url, body, headers, label));
+        this.addStep(new HttpPutStep(this.reporter, url, body, headers, label));
         return this;
     }
 
     head(url: string, headers?: string, label?: string): StepCreator {
-        this.addStep(new HttpHeadStep(this.results, this.reporter, url, headers, label));
+        this.addStep(new HttpHeadStep(this.reporter, url, headers, label));
         return this;
     }
 
     delete(url: string, headers?: string, label?: string): StepCreator {
-        this.addStep(new HttpDeleteStep(this.results, this.reporter, url, headers, label));
+        this.addStep(new HttpDeleteStep(this.reporter, url, headers, label));
         return this;
     }
 
@@ -84,7 +79,7 @@ export class EmbeddableStepCreator implements StepCreator {
     }
 
     assertResponse(predicate): StepCreator {
-        this.addStep(new AssertHttpResponseStep(this.results, predicate));
+        this.addStep(new AssertHttpResponseStep(this.reporter, predicate));
         return this;
     }
 
@@ -94,7 +89,7 @@ export class EmbeddableStepCreator implements StepCreator {
     }
 
     expectStatus(code): StepCreator {
-        this.addStep(new AssertStatusStep(this.results, code));
+        this.addStep(new AssertStatusStep(this.reporter, code));
         return this;
     }
 }

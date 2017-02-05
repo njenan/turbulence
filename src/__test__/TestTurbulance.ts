@@ -27,11 +27,13 @@ types.map((type) => {
         let URL_2 = 'http://localhost:8080/url2';
 
         let turbulence;
+        let reporter;
         let http;
 
         beforeEach(() => {
             http = new StubHttpClient();
-            turbulence = new Turbulence(http, new type.Exec(new StubReportGenerator()), new StubReportGenerator());
+            reporter = new StubReportGenerator();
+            turbulence = new Turbulence(http, new type.Exec(reporter), reporter);
         });
 
         describe('Running Tests', () => {
@@ -60,8 +62,8 @@ types.map((type) => {
                     })
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(0, results.errors);
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
                     });
             });
 
@@ -78,8 +80,8 @@ types.map((type) => {
                     })
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(1, results.errors);
+                    .then(() => {
+                        assert.equal(1, reporter.errors);
                     });
             });
 
@@ -92,8 +94,8 @@ types.map((type) => {
                     .expectStatus(200)
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(1, results.errors);
+                    .then(() => {
+                        assert.equal(1, reporter.errors);
                     });
             });
 
@@ -106,8 +108,8 @@ types.map((type) => {
                     .expectStatus(500)
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(0, results.errors);
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
                     });
             });
 
@@ -128,8 +130,8 @@ types.map((type) => {
                     })
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(1, results.errors);
+                    .then(() => {
+                        assert.equal(1, reporter.errors);
                     });
             });
 
@@ -154,8 +156,8 @@ types.map((type) => {
                     })
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(2, results.errors);
+                    .then(() => {
+                        assert.equal(2, reporter.errors);
                     });
             });
 
@@ -173,8 +175,8 @@ types.map((type) => {
                     .endUserSteps()
 
                     .run()
-                    .then((results) => {
-                        assert.equal(0, results.errors);
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
                     });
             });
 
@@ -212,8 +214,8 @@ types.map((type) => {
                     .endUserSteps()
 
                     .run()
-                    .then((results) => {
-                        assert.equal(2, results.errors);
+                    .then(() => {
+                        assert.equal(2, reporter.errors);
                     });
             });
 
@@ -245,8 +247,8 @@ types.map((type) => {
                     .endUserSteps()
 
                     .run()
-                    .then((results) => {
-                        assert.equal(2, results.errors);
+                    .then(() => {
+                        assert.equal(2, reporter.errors);
                     });
 
             });
@@ -264,8 +266,8 @@ types.map((type) => {
                     })
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.ok(results !== null);
+                    .then(() => {
+                        assert.ok(reporter.results !== null);
                     });
             });
 
@@ -285,8 +287,8 @@ types.map((type) => {
                     })
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(0, results.errors);
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
                     });
             });
 
@@ -307,22 +309,32 @@ types.map((type) => {
                     .assertResponse((Response) => {
                         return Response.rawBody.alpha === 'first';
                     })
-                    .duration(100)
+                    .duration(1000)
                     .endUserSteps()
 
                     .run()
                     .then(() => {
                         let end = Date.now();
 
-                        assert(end - start > 90, 'Expected duration greater than 900, was ' + (end - start));
-                        assert(end - start < 110, 'Expected duration greater than 900, was ' + (end - start));
+                        assert(end - start > 900, 'Expected duration greater than 900, was ' + (end - start));
+                        assert(end - start < 1100, 'Expected duration less than 1100, was ' + (end - start));
                     });
             });
         });
 
         describe('Http options', () => {
-            xit('should allow get requests', () => {
-                return null;
+            it('should allow get requests', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse(undefined, 201));
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .expectStatus(201)
+                    .endUserSteps()
+                    .run()
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
+                    });
             });
 
             it('should allow post requests', () => {
@@ -334,8 +346,8 @@ types.map((type) => {
                     .expectStatus(200)
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(0, results.errors);
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
                     });
             });
 
@@ -349,8 +361,8 @@ types.map((type) => {
                     .expectStatus(200)
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(0, results.errors);
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
                     });
             });
 
@@ -363,8 +375,8 @@ types.map((type) => {
                     .expectStatus(200)
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(0, results.errors);
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
                     });
             });
 
@@ -377,8 +389,8 @@ types.map((type) => {
                     .expectStatus(200)
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(0, results.errors);
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
                     });
             });
 
@@ -399,8 +411,8 @@ types.map((type) => {
                         .expectStatus(200)
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(1, results.errors);
+                        .then(() => {
+                            assert.equal(1, reporter.errors);
                         });
                 });
             });
@@ -428,8 +440,8 @@ types.map((type) => {
                         .expectStatus(200)
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(1, results.errors);
+                        .then(() => {
+                            assert.equal(1, reporter.errors);
                         });
                 });
             });
@@ -438,62 +450,56 @@ types.map((type) => {
         describe('Assertions', () => {
             describe('body parsing', () => {
                 it('should provide a raw response when given "Response"', () => {
-                        http.whenGet(URL_1).thenReturn(new HttpResponse(JSON.stringify({
-                            key: 'value'
-                        })));
+                    http.whenGet(URL_1).thenReturn(new HttpResponse(JSON.stringify({
+                        key: 'value'
+                    })));
 
-                        return turbulence
-                            .startUserSteps()
-                            .get(URL_1)
-                            .assertResponse((Response) => {
-                                return Response.rawBody === JSON.stringify({key: 'value'});
-                            })
-                            .endUserSteps()
-                            .run()
-                            .then((results) => {
-                                assert.equal(0, results.errors);
-                            });
-                    }
-                )
-                ;
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .assertResponse((Response) => {
+                            return Response.rawBody === JSON.stringify({key: 'value'});
+                        })
+                        .endUserSteps()
+                        .run()
+                        .then(() => {
+                            assert.equal(0, reporter.errors);
+                        });
+                });
 
                 it('should parse json when given "JsonBody"', () => {
-                        http.whenGet(URL_1).thenReturn(new HttpResponse(JSON.stringify({
-                            key: 'value'
-                        })));
+                    http.whenGet(URL_1).thenReturn(new HttpResponse(JSON.stringify({
+                        key: 'value'
+                    })));
 
-                        return turbulence
-                            .startUserSteps()
-                            .get(URL_1)
-                            .assertResponse((JsonBody) => {
-                                return JsonBody.key === 'value';
-                            })
-                            .endUserSteps()
-                            .run()
-                            .then((results) => {
-                                assert.equal(0, results.errors);
-                            });
-                    }
-                )
-                ;
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .assertResponse((JsonBody) => {
+                            return JsonBody.key === 'value';
+                        })
+                        .endUserSteps()
+                        .run()
+                        .then(() => {
+                            assert.equal(0, reporter.errors);
+                        });
+                });
 
                 it('should parse xml when given "XmlBody"', () => {
-                        http.whenGet(URL_1).thenReturn(new HttpResponse('<a><b>asdf</b></a>'));
+                    http.whenGet(URL_1).thenReturn(new HttpResponse('<a><b>asdf</b></a>'));
 
-                        return turbulence
-                            .startUserSteps()
-                            .get(URL_1)
-                            .assertResponse((XmlBody) => {
-                                return XmlBody.a.b === 'asdf';
-                            })
-                            .endUserSteps()
-                            .run()
-                            .then((results) => {
-                                assert.equal(0, results.errors);
-                            });
-                    }
-                )
-                ;
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .assertResponse((XmlBody) => {
+                            return XmlBody.b === 'asdf';
+                        })
+                        .endUserSteps()
+                        .run()
+                        .then(() => {
+                            assert.equal(0, reporter.errors);
+                        });
+                });
 
                 it('should inject nothing when no matching args are given', () => {
                     http.whenGet(URL_1).thenReturn(new HttpResponse('response body'));
@@ -506,30 +512,28 @@ types.map((type) => {
                         })
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(0, results.errors);
+                        .then(() => {
+                            assert.equal(0, reporter.errors);
                         });
                 });
 
                 it('should provide a jsonpath evaluator when given "JsonPath"', () => {
-                        http.whenGet(URL_1).thenReturn(new HttpResponse(JSON.stringify({
-                            key: 'value'
-                        })));
+                    http.whenGet(URL_1).thenReturn(new HttpResponse(JSON.stringify({
+                        key: 'value'
+                    })));
 
-                        return turbulence
-                            .startUserSteps()
-                            .get(URL_1)
-                            .assertResponse((JsonPath) => {
-                                return JsonPath('$.key').pop() === 'value';
-                            })
-                            .endUserSteps()
-                            .run()
-                            .then((results) => {
-                                assert.equal(0, results.errors);
-                            });
-                    }
-                )
-                ;
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .assertResponse((JsonPath) => {
+                            return JsonPath('$.key').pop() === 'value';
+                        })
+                        .endUserSteps()
+                        .run()
+                        .then(() => {
+                            assert.equal(0, reporter.errors);
+                        });
+                });
 
                 xit('should provide an xpath evaluator when given "xpath"', () => {
                     return null;
@@ -546,8 +550,8 @@ types.map((type) => {
                         })
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(1, results.errors);
+                        .then(() => {
+                            assert.equal(1, reporter.errors);
                         });
                 });
 
@@ -564,8 +568,8 @@ types.map((type) => {
                         })
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(0, results.errors);
+                        .then(() => {
+                            assert.equal(0, reporter.errors);
                         });
                 });
             });
@@ -607,8 +611,8 @@ types.map((type) => {
                         .endIf()
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(2, results.requests.length);
+                        .then(() => {
+                            assert.equal(2, reporter.results.length);
                         });
                 });
 
@@ -627,8 +631,8 @@ types.map((type) => {
                         .endIf()
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(1, results.requests.length);
+                        .then(() => {
+                            assert.equal(1, reporter.results.length);
                         });
                 });
 
@@ -649,8 +653,8 @@ types.map((type) => {
                         .endIf()
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(2, results.requests.length);
+                        .then(() => {
+                            assert.equal(2, reporter.results.length);
                         });
                 });
 
@@ -681,8 +685,8 @@ types.map((type) => {
                         .endLoop()
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(0, results.errors);
+                        .then(() => {
+                            assert.equal(0, reporter.errors);
                         });
                 });
 
@@ -703,8 +707,8 @@ types.map((type) => {
                         .endLoop()
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(1, results.errors);
+                        .then(() => {
+                            assert.equal(1, reporter.errors);
                         });
                 });
 
@@ -725,8 +729,8 @@ types.map((type) => {
                         .endLoop()
                         .endUserSteps()
                         .run()
-                        .then((results) => {
-                            assert.equal(2, results.errors);
+                        .then(() => {
+                            assert.equal(2, reporter.errors);
                         });
                 });
 
@@ -747,28 +751,13 @@ types.map((type) => {
                     .get(URL_1)
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        let request = results.requests.pop();
+                    .then(() => {
+                        let request = reporter.results.pop();
                         assert.equal('GET', request.type);
                         assert.equal(URL_1, request.url);
                         assert.equal(200, request.status);
                         assert.equal(false, request.error);
                         assert(request.duration > 0, 'duration should be greater than 0');
-                    });
-            });
-
-            it('should report average response time of http requests', () => {
-                http.whenGet(URL_1).thenReturn(new HttpResponse({
-                    key: 'value'
-                })).delayResponse(10);
-
-                return turbulence
-                    .startUserSteps()
-                    .get(URL_1)
-                    .endUserSteps()
-                    .run()
-                    .then((results) => {
-                        assert(results.averageResponseTime());
                     });
             });
         });
@@ -788,12 +777,12 @@ types.map((type) => {
                     .concurrentUsers(10)
                     .endUserSteps()
                     .run()
-                    .then((report) => {
+                    .then(() => {
                         let end = Date.now();
                         let elapsed = end - start;
 
                         assert.equal(true, elapsed < 200);
-                        assert.equal(10, report.requests.length);
+                        assert.equal(10, reporter.results.length);
                     });
             });
 
@@ -811,12 +800,12 @@ types.map((type) => {
                     .rampUpPeriod(1000)
                     .endUserSteps()
                     .run()
-                    .then((report) => {
-                        assert(report.requests[0].timestamp - start < 100, 'Took too long to execute first request');
+                    .then(() => {
+                        assert(reporter.results[0].timestamp - start < 100, 'Took too long to execute first request');
 
                         for (let i = 0; i < 9; i++) {
-                            let current = report.requests[i];
-                            let next = report.requests[i + 1];
+                            let current = reporter.results[i];
+                            let next = reporter.results[i + 1];
 
                             let diff = next.timestamp - current.timestamp;
 
@@ -901,13 +890,13 @@ types.map((type) => {
                         .duration(1000)
                         .endUserSteps()
                         .run()
-                        .then((report) => {
-                            assert.equal(11, report.requests.length);
+                        .then(() => {
+                            assert.equal(11, reporter.results.length);
 
-                            assert.ok(report.requests[0].timestamp - start >= 0);
-                            assert.ok(report.requests[1].timestamp - start >= 100);
+                            assert.ok(reporter.results[0].timestamp - start >= 0);
+                            assert.ok(reporter.results[1].timestamp - start >= 100);
 
-                            assert.ok(report.requests[10].timestamp - start >= 1000);
+                            assert.ok(reporter.results[10].timestamp - start >= 1000);
                         });
                 });
             });
@@ -925,8 +914,8 @@ types.map((type) => {
                     .get(URL_1)
                     .endUserSteps()
                     .run()
-                    .then((report) => {
-                        assert.equal(0, report.metrics.length);
+                    .then(() => {
+                        assert.equal(0, reporter.metrics.length);
                     });
             });
 
@@ -946,8 +935,8 @@ types.map((type) => {
                     })
                     .endUserSteps()
                     .run()
-                    .then((report) => {
-                        assert.equal(1, report.metrics.length);
+                    .then(() => {
+                        assert.equal(1, reporter.metrics.length);
                     });
             });
 
@@ -968,8 +957,8 @@ types.map((type) => {
                     .duration(900)
                     .endUserSteps()
                     .run()
-                    .then((report) => {
-                        assert.equal(10, report.metrics.length);
+                    .then(() => {
+                        assert.equal(10, reporter.metrics.length);
                     });
             });
         });
@@ -995,7 +984,7 @@ types.map((type) => {
                     })
                     .catch((error) => {
                         assert.equal('Average response time was greater than 50 ms, failing the build', error.message);
-                        assert.equal(1, error.results.requests.length);
+                        assert.equal(1, reporter.results.length);
                     });
             });
 
@@ -1019,7 +1008,7 @@ types.map((type) => {
                     })
                     .catch((error) => {
                         assert.equal('Average response time was greater than 75 ms, failing the build', error.message);
-                        assert.equal(1, error.results.requests.length);
+                        assert.equal(1, reporter.results.length);
                     });
             });
 
@@ -1038,8 +1027,8 @@ types.map((type) => {
                     })
                     .endUserSteps()
                     .run()
-                    .then((results) => {
-                        assert.equal(1, results.requests.length);
+                    .then(() => {
+                        assert.equal(1, reporter.results.length);
                     });
             });
 
@@ -1053,7 +1042,7 @@ types.map((type) => {
                     .get(URL_1)
                     .breaker((criteria) => {
                         criteria.predicate((results) => {
-                            return results.requests.length === 2;
+                            return results.length === 2;
                         });
                     })
                     .endUserSteps()
@@ -1063,7 +1052,7 @@ types.map((type) => {
                     })
                     .catch((error) => {
                         assert.equal('Predicate evaluated to false', error.message);
-                        assert.equal(1, error.results.requests.length);
+                        assert.equal(1, reporter.results.length);
                     });
             });
         });

@@ -3,7 +3,6 @@ import Q = require('q');
 import {TestStep} from '../TestStep';
 import {EmbeddableStepCreator} from '../EmbeddableStepCreator';
 import {StepCreator} from '../StepCreator';
-import {SummaryResults} from '../../Results/SummaryResults';
 import {ElseStep} from './ElseStep';
 import {HttpClient} from '../../Http/HttpClient';
 import {Parent} from '../../Parent';
@@ -17,18 +16,16 @@ export class IfStep implements TestStep, StepCreator {
     predicate: (data) => boolean;
     predicateRaw: string;
     creator: EmbeddableStepCreator;
-    results: SummaryResults;
     reporter: ReportGenerator;
     elseStep: ElseStep;
     type: string = 'IfStep';
 
-    constructor(parent, results, reporter, predicate) {
+    constructor(parent, reporter, predicate) {
         this.parent = new Parent(parent);
-        this.results = results;
         this.reporter = reporter;
         this.predicate = predicate;
         this.predicateRaw = predicate.toString();
-        this.creator = new EmbeddableStepCreator(results, reporter);
+        this.creator = new EmbeddableStepCreator(reporter);
     }
 
     /**
@@ -37,7 +34,7 @@ export class IfStep implements TestStep, StepCreator {
      * @returns {ElseStep}
      */
     else() {
-        this.elseStep = new ElseStep(this, this.results, this.reporter);
+        this.elseStep = new ElseStep(this, this.reporter);
         return this.elseStep;
     }
 
@@ -51,17 +48,12 @@ export class IfStep implements TestStep, StepCreator {
     }
 
     execute(http: HttpClient, data): Q.Promise<any> {
-        let self = this;
-
         if (this.predicate(data)) {
             return this.creator.steps.reduce((promise, nextStep) => {
                 return promise.then((chunk) => {
                     return nextStep.execute(http, chunk);
                 });
-            }, Q.resolve(null))
-                .then(() => {
-                    return self.results;
-                });
+            }, Q.resolve(null));
         } else if (this.elseStep) {
             return this.elseStep.execute(http, data);
         }

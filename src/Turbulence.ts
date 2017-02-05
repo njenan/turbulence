@@ -37,24 +37,16 @@ export class Turbulence {
      * @returns {PromiseLike<void>}
      */
     run() {
-        let res;
         return this.executor.run(this.testPlans, this.http)
             .then((results) => {
                 if (this.testPlans[0].breakerFunction) {
                     let criteria = new Criteria();
                     this.testPlans[0].breakerFunction(criteria);
-                    criteria.validate(results);
+                    criteria.validate(this.reportGenerator);
                 }
 
                 return results;
             })
-            // TODO fix this `res=results` hack
-            .then((results) => {
-                res = results;
-            })
-            .then(this.reportGenerator.end.bind(this.reportGenerator))
-            .then(() => {
-                return res;
-            });
+            .then(this.reportGenerator.end.bind(this.reportGenerator));
     }
 }

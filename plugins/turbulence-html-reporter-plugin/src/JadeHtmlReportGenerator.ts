@@ -1,12 +1,12 @@
 import fs = require('fs');
 import Jade = require('pug');
 import {ReportGenerator} from '../../../src/Reporters/ReportGenerator';
-import {SummaryResults} from '../../../src/Results/SummaryResults';
+import {JsonReportGenerator} from '../../../src/Reporters/JsonReportGenerator';
 
 export class JadeHtmlReportGenerator implements ReportGenerator {
 
     generator: (locals?: any) => string;
-    results = [];
+    reporter = new JsonReportGenerator();
 
     constructor() {
         // Code is synchronous... shouldn't be a problem because this won't execute during the performance test
@@ -14,14 +14,23 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
     }
 
     addResult(result) {
-        this.results.push(result);
+        this.reporter.addResult(result);
+    }
+
+    addMetric(result) {
+        this.reporter.addMetric(result);
+    }
+
+    addError() {
+        this.reporter.addError();
+    }
+
+    averageResponseTime() {
+        return this.reporter.averageResponseTime();
     }
 
     end() {
-        let results = new SummaryResults(null);
-
-        results.requests = this.results;
-        let requests = results.requests.reduce((map, nextRequest) => {
+        let requests = this.reporter.results.reduce((map, nextRequest) => {
             let key = nextRequest.url;
             if (!map[key]) {
                 map[key] = {};
@@ -56,12 +65,12 @@ export class JadeHtmlReportGenerator implements ReportGenerator {
         }
 
         fs.writeFile('Report.html', this.generator({
-                averageResponseTime: results.averageResponseTime(),
+                averageResponseTime: this.reporter.averageResponseTime(),
                 chartjsPath: __dirname + '/chart.js',
                 cssPath: __dirname + '/style.css',
                 requests: array,
-                responseTimesData: results.responseTimesByTimestamp(),
-                responsesPerIntervalData: results.responsesPerInterval(1000)
+                responseTimesData: this.reporter.responseTimesByTimestamp(),
+                responsesPerIntervalData: this.reporter.responsesPerInterval(1000)
             })
         );
     }

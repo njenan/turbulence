@@ -7,8 +7,8 @@ export class HttpDeleteStep extends AbstractHttpStep implements TestStep {
     headers: string;
     type: string;
 
-    constructor(results, reporter, url, headers?, label?) {
-        super(results, reporter, url, label);
+    constructor(reporter, url, headers?, label?) {
+        super(reporter, url, label);
 
         this.url = url;
         this.headers = headers;

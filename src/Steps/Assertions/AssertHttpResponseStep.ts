@@ -1,19 +1,19 @@
 import Q = require('q');
 import {TestStep} from '../TestStep';
 import {HttpResponse} from '../../Http/HttpResponse';
-import {SummaryResults} from '../../Results/SummaryResults';
 import {HttpClient} from '../../Http/HttpClient';
 import {Injector} from '../Injector';
+import {ReportGenerator} from '../../Reporters/ReportGenerator';
 
 export class AssertHttpResponseStep implements TestStep {
-    results: SummaryResults;
+    reporter: ReportGenerator;
     validator: any;
     validatorRaw: string;
     injector = new Injector();
     type: string = 'AssertHttpResponseStep';
 
-    constructor(results, validator) {
-        this.results = results;
+    constructor(reporter, validator) {
+        this.reporter = reporter;
         this.validator = validator;
         this.validatorRaw = validator.toString();
     }
@@ -33,10 +33,10 @@ export class AssertHttpResponseStep implements TestStep {
             }
 
             if (!valid) {
-                this.results.errors++;
+                this.reporter.addError();
             }
         }).catch(() => {
-            this.results.errors++;
+            this.reporter.addError();
         }).then(() => {
             return resp;
         });

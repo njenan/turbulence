@@ -15,6 +15,18 @@ export class XmlReportGenerator implements ReportGenerator {
         this.results.push(result);
     }
 
+    addError() {
+
+    }
+
+    addMetric(metric) {
+
+    }
+
+    averageResponseTime() {
+        return 0;
+    }
+
     end(): void {
         console.log(this.builder.buildObject(this.results));
     }

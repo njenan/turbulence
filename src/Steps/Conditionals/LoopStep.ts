@@ -2,7 +2,6 @@ import Q = require('q');
 
 import {TestStep} from '../TestStep';
 import {EmbeddableStepCreator} from '../EmbeddableStepCreator';
-import {SummaryResults} from '../../Results/SummaryResults';
 import {StepCreator} from '../StepCreator';
 import {Parent} from '../../Parent';
 import {ReportGenerator} from '../../Reporters/ReportGenerator';
@@ -12,18 +11,16 @@ import {ReportGenerator} from '../../Reporters/ReportGenerator';
 export class LoopStep<T> implements TestStep, StepCreator {
 
     parent: Parent<T>;
-    results: SummaryResults;
     reporter: ReportGenerator;
     times: number;
     creator: EmbeddableStepCreator;
     type: string = 'LoopStep';
 
-    constructor(parent, results, reporter, times) {
+    constructor(parent, reporter, times) {
         this.parent = new Parent(parent);
-        this.results = results;
         this.reporter = reporter;
         this.times = times;
-        this.creator = new EmbeddableStepCreator(results, reporter);
+        this.creator = new EmbeddableStepCreator(reporter);
     }
 
     execute(http): Q.Promise<any> {

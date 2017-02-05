@@ -8,6 +8,18 @@ export class YamlReportGenerator implements ReportGenerator {
     addResult(result: HttpRequestRecord): void {
         this.results.push(result);
     }
+    
+    addError() {
+
+    }
+
+    addMetric(metric) {
+
+    }
+
+    averageResponseTime() {
+        return 0;
+    }
 
     end(): void {
         console.log(yaml.safeDump(this.results, {skipInvalid: true}));

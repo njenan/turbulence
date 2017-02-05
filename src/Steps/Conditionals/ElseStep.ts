@@ -2,7 +2,6 @@ import Q = require('q');
 
 import {TestStep} from '../TestStep';
 import {EmbeddableStepCreator} from '../EmbeddableStepCreator';
-import {SummaryResults} from '../../Results/SummaryResults';
 import {IfStep} from './IfStep';
 import {StepCreator} from '../StepCreator';
 import {Parent} from '../../Parent';
@@ -17,15 +16,13 @@ export class ElseStep implements TestStep, StepCreator {
 
     parent: Parent<IfStep>;
     creator: EmbeddableStepCreator;
-    results: SummaryResults;
     reporter: ReportGenerator;
     type: string = 'ElseStep';
 
-    constructor(parent, results, reporter) {
+    constructor(parent, reporter) {
         this.parent = new Parent(parent);
-        this.results = results;
         this.reporter = reporter;
-        this.creator = new EmbeddableStepCreator(results, reporter);
+        this.creator = new EmbeddableStepCreator(reporter);
     }
 
     /**
@@ -44,16 +41,11 @@ export class ElseStep implements TestStep, StepCreator {
      * @returns {any}
      */
     execute(http, data): Q.Promise<any> {
-        let self = this;
-
         return this.creator.steps.reduce((promise, nextStep) => {
             return promise.then((chunk) => {
                 return nextStep.execute(http, chunk);
             });
-        }, Q.resolve(null))
-            .then(() => {
-                return self.results;
-            });
+        }, Q.resolve(null));
     }
 
     loop(times: number): StepCreator {

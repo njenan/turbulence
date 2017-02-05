@@ -1,17 +1,14 @@
-import {SummaryResults} from '../../Results/SummaryResults';
 import {HttpResponse} from '../../Http/HttpResponse';
 import {HttpRequestRecord} from './HttpRequestRecord';
 import Q = require('q');
 import {ReportGenerator} from '../../Reporters/ReportGenerator';
 
 export abstract class AbstractHttpStep {
-    results: SummaryResults;
     reporter: ReportGenerator;
     url: string;
     label: string;
 
-    constructor(results, reporter, url, label) {
-        this.results = results;
+    constructor(reporter, url, label) {
         this.reporter = reporter;
         this.url = url;
         this.label = label;
@@ -30,7 +27,6 @@ export abstract class AbstractHttpStep {
             let duration = end - start;
 
             let requestRecord = new HttpRequestRecord(self, resp, duration, Date.now());
-            self.results.requests.push(requestRecord);
             self.reporter.addResult(requestRecord);
             return resp;
         });
