@@ -85,6 +85,24 @@ types.map((type) => {
                     });
             });
 
+            it('should not report an error when the assertion returns null', () => {
+                http.whenGet(URL_1).thenReturn(new HttpResponse({
+                    key: 'value'
+                }));
+
+                return turbulence
+                    .startUserSteps()
+                    .get(URL_1)
+                    .assertResponse((Response) => {
+                        // do nothing
+                    })
+                    .endUserSteps()
+                    .run()
+                    .then(() => {
+                        assert.equal(0, reporter.errors);
+                    });
+            });
+
             it('should report errors when http calls fail', () => {
                 http.whenGet(URL_1).thenReturn(new HttpResponse(undefined, 400));
 

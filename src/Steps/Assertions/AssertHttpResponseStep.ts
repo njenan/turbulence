@@ -23,22 +23,14 @@ export class AssertHttpResponseStep implements TestStep {
         let promise = Q.resolve<any>(args);
         promise = this.injector.inject(promise, resp, this.validator);
 
-        return promise.then(() => {
-            let valid;
-
-            try {
-                valid = this.validator.apply(this, args.args);
-            } catch (e) {
-                valid = false;
-            }
-
-            if (!valid) {
-                this.reporter.addError();
-            }
-        }).catch(() => {
-            this.reporter.addError();
-        }).then(() => {
-            return resp;
-        });
+        return promise
+            .then(() => {
+                if (this.validator.apply(this, args.args) === false) {
+                    this.reporter.addError();
+                }
+            }).catch(this.reporter.addError.bind(this.reporter))
+            .then(() => {
+                return resp;
+            });
     }
 }
