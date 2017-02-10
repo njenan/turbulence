@@ -535,8 +535,21 @@ types.map((type) => {
                         });
                 });
 
-                xit('should provide an xpath evaluator when given "xpath"', () => {
-                    return null;
+                it('should provide an xpath evaluator when given "xpath"', () => {
+                    http.whenGet(URL_1).thenReturn(new HttpResponse('<a><b><c>asdf</c></b></a>'));
+
+                    return turbulence
+                        .startUserSteps()
+                        .get(URL_1)
+                        .assertResponse((XPath) => {
+                            let node = XPath('//c/text()').pop();
+                            return node.data === 'asdf';
+                        })
+                        .endUserSteps()
+                        .run()
+                        .then(() => {
+                            assert.equal(0, reporter.errors);
+                        });
                 });
 
                 it('should record an error if it cannot parse', () => {

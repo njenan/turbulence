@@ -2,7 +2,7 @@
   "name": "turbulence",
   "version": "0.1.10",
   "description": "A plug-in based, distributed performance testing tool for developers",
-  "main": "index.js",
+  "main": "src/Turbulence.js",
   "scripts": {
     "clean": "find ./src -name \"*.js\" -delete",
     "package": "npm run clean && tsc",
@@ -22,8 +22,9 @@
     "publish-docs": "git subtree push --prefix docs origin gh-pages"
   },
   "bin": {
-    "turbulence": "./index.js",
-    "trb": "./index.js"
+    "turbulence": "bin/turbulence",
+    "trb": "bin/turbulence",
+    "hidden-turbulence-do-not-use": "index.js"
   },
   "repository": {
     "type": "git",
@@ -64,6 +65,7 @@
     "typedoc": "^0.5.3",
     "unirest": "^0.5.0",
     "xml2js": "^0.4.17",
+    "xmldom": "^0.1.27",
     "xpath": "0.0.23"
   }
 }
